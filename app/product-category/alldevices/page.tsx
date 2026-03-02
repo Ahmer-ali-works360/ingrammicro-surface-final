@@ -1,0 +1,1147 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { Filter, X, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
+import { Drawer, Skeleton } from "antd";
+import { FaFilter } from "react-icons/fa";
+import { supabase } from "@/lib/supabase/client";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { useAuth } from "@/app/context/AuthContext";
+import { FaMinus, FaPlus } from "react-icons/fa6";
+import { useCart } from "@/app/context/CartContext";
+import { toast } from "sonner";
+import { logActivity } from "@/lib/logger";
+import { PiShoppingCartThin } from "react-icons/pi";
+
+// Hardcoded filters (not from database)
+const HARDCODED_FILTERS = {
+    copilotPC: ["Yes"],
+    fiveGEnabled: ["Yes"],
+};
+
+// Get all filter keys
+const HARDCODED_FILTER_KEYS = Object.keys(HARDCODED_FILTERS);
+
+// Interface for product from database
+interface Product {
+    id: string;
+    product_name: string;
+    slug: string;
+    sku: string;
+    form_factor: string; // Now this is the actual text value, not ID
+    processor: string; // Now this is the actual text value, not ID
+    memory: string; // Now this is the actual text value, not ID
+    storage: string; // Now this is the actual text value, not ID
+    screen_size: string; // Now this is the actual text value, not ID
+    technologies: string;
+    inventory_type: string;
+    total_inventory: number;
+    stock_quantity: number;
+    date: string;
+    copilot: boolean;
+    five_g_Enabled: boolean;
+    post_status: string;
+    description: string;
+    isBundle: boolean;
+    thumbnail: string;
+    gallery: string[];
+    user_id: string;
+    created_at: string;
+}
+
+// Skeleton component for products grid
+const ProductsGridSkeleton = () => {
+    // Check for window only inside component
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        // Check on mount and on resize
+        const checkIfMobile = () => {
+            setIsMobile(window.innerWidth < 640);
+        };
+
+        // Initial check
+        checkIfMobile();
+
+        // Add event listener for resize
+        window.addEventListener('resize', checkIfMobile);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', checkIfMobile);
+    }, []);
+
+    return (
+        <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6">
+            <div className="flex items-center justify-between sm:my-10 my-5">
+                <div className="text-3xl font-semibold">Devices</div>
+            </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
+                {[...Array(8)].map((_, index) => (
+                    <div key={index} className="bg-white border border-gray-300 sm:py-5 p-3">
+                        <Skeleton.Image
+                            active
+                            style={{
+                                width: isMobile ? "135px" : "225px",
+                                height: isMobile ? "100px" : "192px",
+                                marginBottom: "16px",
+                            }}
+                        />
+                        <div className="space-y-2">
+                            <Skeleton active paragraph={{ rows: 2 }} />
+                            <Skeleton active paragraph={{ rows: 1, width: '80%' }} />
+                            <Skeleton.Button active size="default" style={{ width: '100%' }} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    );
+};
+
+// Skeleton component for filters sidebar
+const FiltersSidebarSkeleton = () => (
+    <div className="p-6 space-y-4">
+        {[...Array(7)].map((_, index) => (
+            <div key={index} className="border-b pb-4">
+                <Skeleton active paragraph={{ rows: 0 }} />
+                <div className="mt-3 space-y-2 overflow-hidden">
+                    {[...Array(4)].map((_, i) => (
+                        <Skeleton active paragraph={{ rows: 0 }} style={{ width: 300 }} key={i} />
+                    ))}
+                </div>
+            </div>
+        ))}
+    </div>
+);
+
+export default function Page() {
+    const router = useRouter();
+    const { profile, isLoggedIn, loading, user } = useAuth();
+    const admin = process.env.NEXT_PUBLIC_ADMINISTRATOR;
+    const shopManager = process.env.NEXT_PUBLIC_SHOPMANAGER;
+    const superSubscriber = process.env.NEXT_PUBLIC_SUPERSUBSCRIBER;
+    const subscriber = process.env.NEXT_PUBLIC_SUBSCRIBER;
+    const {
+        addToCart,
+        removeFromCart,
+        isUpdating,
+        addingProductId,
+        isLoading: cartLoading,
+        isUpdating: cartUpdating,
+        isInCart, // Add this
+        cartItems,
+        cartCount,
+        updateQuantity,
+        clearCart,
+        getCartTotal
+    } = useCart()
+
+    // Get stock quantity for a cart item
+    const getItemStockQuantity = (cartItem: any) => {
+        return cartItem.product?.stock_quantity || 0;
+    };
+
+    // State for filter options from products table
+    const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
+    // State for products
+    const [products, setProducts] = useState<Product[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [authChecked, setAuthChecked] = useState(false);
+    const [authInitialized, setAuthInitialized] = useState(false);
+    // Combined filters state
+    const [filters, setFilters] = useState<Record<string, string[]>>({
+        formFactor: [],
+        processor: [],
+        screenSize: [],
+        memory: [],
+        storage: [],
+        copilotPC: [],
+        fiveGEnabled: [],
+    });
+    const [showCartDrawer, setShowCartDrawer] = useState(false);
+
+
+    // Handle clear cart
+    const handleClearCart = async () => {
+        try {
+            await clearCart()
+        } catch (error) {
+        }
+    }
+
+    const handleAddToCart = async (productId: string) => {
+        try {
+            const product = products.find(p => p.id === productId);
+
+            // Log add to cart attempt
+            await logActivity({
+                type: 'product',
+                level: 'info',
+                action: 'add_to_cart_attempt',
+                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku,
+                    userRole: profile?.role,
+                    isPublished: product?.post_status === 'Publish',
+                    stockQuantity: product?.stock_quantity
+                }
+            });
+
+            await addToCart(productId, 1);
+
+            // Log success
+            await logActivity({
+                type: 'product',
+                level: 'success',
+                action: 'add_to_cart_success',
+                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku
+                },
+                status: 'completed'
+            });
+
+            setShowCartDrawer(true);
+
+        } catch (error: any) {
+            let errorMessage = 'Failed to add product to cart. Please try again.';
+
+            await logActivity({
+                type: 'product',
+                level: 'error',
+                action: 'add_to_cart_failed',
+                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    errorCode: error?.code,
+                    errorMessage: error?.message,
+                    errorDetails: error
+                },
+                status: 'failed'
+            });
+
+            if (error?.code === '23505') {
+                errorMessage = 'This product is already in your cart.';
+            } else if (error?.code === '23503') {
+                errorMessage = 'Product not found.';
+            } else if (error?.message?.includes('foreign key constraint')) {
+                errorMessage = 'Invalid product. Please refresh the page and try again.';
+            }
+
+            toast.error(errorMessage, {
+                style: { background: "red", color: "white" },
+            });
+        }
+    };
+
+    // Handle cart item removal
+    const handleRemoveFromCart = async (productId: string) => {
+        const product = products.find(p => p.id === productId);
+
+        // Log removal attempt
+        await logActivity({
+            type: 'product',
+            level: 'info',
+            action: 'remove_from_cart_attempt',
+            message: `User attempted to remove product from cart: ${product?.product_name || 'Unknown product'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                productName: product?.product_name,
+                sku: product?.sku
+            }
+        });
+
+        try {
+            await removeFromCart(productId);
+
+            // Log successful removal
+            await logActivity({
+                type: 'product',
+                level: 'success',
+                action: 'remove_from_cart_success',
+                message: `Product removed from cart successfully: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku
+                },
+                status: 'completed'
+            });
+        } catch (error) {
+            await logActivity({
+                type: 'product',
+                level: 'error',
+                action: 'remove_from_cart_failed',
+                message: `Failed to remove product from cart`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    errorDetails: error
+                },
+                status: 'failed'
+            });
+        }
+    };
+
+    const checkIfInCart = (productId: string): boolean => {
+        return isInCart(productId);
+    };
+
+    const [showFilters, setShowFilters] = useState(false);
+    // Set all filters to be open by default
+    const [openFilters, setOpenFilters] = useState<string[]>([]);
+
+    // Handle auth check - IMPROVED VERSION
+    useEffect(() => {
+        // Only run auth check after auth is fully initialized
+        if (loading) {
+            return;
+        }
+
+        setAuthInitialized(true);
+
+        // Now check authentication status
+        if (!isLoggedIn || profile?.isVerified === false && !profile) {
+            router.replace('/login/?redirect_to=product-category/alldevices');
+        } else {
+            setAuthChecked(true);
+        }
+    }, [loading, isLoggedIn, profile, user, router]);
+
+    // Fetch data only after auth is confirmed AND initialized
+    useEffect(() => {
+        if (!authChecked || !authInitialized) {
+            return; // Don't fetch data until auth is fully checked AND initialized
+        }
+
+        fetchDataFromDatabase();
+    }, [authChecked, authInitialized]);
+
+    const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false)
+
+    const handleCart = () => {
+        router.replace('/cart');
+        setIsCartDrawerOpen(false);
+    };
+
+    const handleCartClick = () => {
+        setIsCartDrawerOpen(true);
+    };
+
+    const handleCheckout = () => {
+        router.push('/checkout');
+        setIsCartDrawerOpen(false);
+    };
+
+    const handleContinueShopping = () => {
+        setIsCartDrawerOpen(false);
+        router.push('/product-category/alldevices');
+    };
+
+    // Fetch all data from database
+    const fetchDataFromDatabase = async () => {
+        if (!authChecked) return;
+
+        console.log("=== FETCH STARTED ===");
+    console.log("authChecked:", authChecked);
+    console.log("isLoggedIn:", isLoggedIn);
+    console.log("profile:", profile);
+
+        await logActivity({
+            type: 'product',
+            level: 'info',
+            action: 'products_fetch_attempt',
+            message: 'Attempting to fetch products from database',
+            userId: user?.id || null,
+            details: {
+                authChecked,
+                authInitialized,
+                isLoggedIn,
+                userRole: profile?.role
+            }
+        });
+
+        const startTime = Date.now();
+        try {
+            setIsLoading(true);
+
+            if (isLoggedIn) {
+                // 1. Fetch products from database
+                const { data: productsData, error: productsError } = await supabase
+                    .from("products")
+                    .select("*")
+                    .order("date", { ascending: false });
+
+                               console.log("Products data:", productsData);
+            console.log("Products error:", productsError);
+            console.log("Products count:", productsData?.length);
+
+                if (productsError) {
+                    await logActivity({
+                        type: 'product',
+                        level: 'error',
+                        action: 'products_fetch_failed',
+                        message: `Failed to fetch products: ${productsError.message}`,
+                        userId: user?.id || null,
+                        details: {
+                            error: productsError,
+                            executionTimeMs: Date.now() - startTime
+                        },
+                        status: 'failed'
+                    });
+                    setProducts([]);
+                } else if (productsData) {
+                    setProducts(productsData);
+
+                    // 2. Extract unique filter options from products data
+                    const extractUniqueValues = (key: keyof Product): string[] => {
+                        const values = productsData
+                            .map(product => product[key])
+                            .filter(value =>
+                                value !== null &&
+                                value !== undefined &&
+                                value !== '' &&
+                                (typeof value === 'string' ? value.trim() !== '' : true)
+                            );
+
+                        // Convert to strings and remove duplicates
+                        return [...new Set(values.map(v => v.toString()))].sort();
+                    };
+
+                    // Map frontend filter keys to database column names
+                    const filterOptionsMap = {
+                        formFactor: extractUniqueValues('form_factor'),
+                        processor: extractUniqueValues('processor'),
+                        memory: extractUniqueValues('memory'),
+                        storage: extractUniqueValues('storage'),
+                        screenSize: extractUniqueValues('screen_size'),
+                    };
+
+                    setFilterOptions(filterOptionsMap);
+
+                    await logActivity({
+                        type: 'product',
+                        level: 'success',
+                        action: 'products_fetch_success',
+                        message: `Successfully fetched ${productsData.length} products from database`,
+                        userId: user?.id || null,
+                        details: {
+                            totalProducts: productsData.length,
+                            publishedProducts: productsData.filter(p => p.post_status === 'Publish').length,
+                            outOfStockProducts: productsData.filter(p => p.stock_quantity === 0).length,
+                            filterOptionsCount: {
+                                formFactor: filterOptionsMap.formFactor.length,
+                                processor: filterOptionsMap.processor.length,
+                                memory: filterOptionsMap.memory.length,
+                                storage: filterOptionsMap.storage.length,
+                                screenSize: filterOptionsMap.screenSize.length,
+                            },
+                            executionTimeMs: Date.now() - startTime
+                        },
+                        status: 'completed'
+                    });
+                }
+
+                // Initialize open filters with all available keys
+                const allFilterKeys = [
+                    'formFactor',
+                    'processor',
+                    'memory',
+                    'storage',
+                    'screenSize',
+                    ...HARDCODED_FILTER_KEYS
+                ];
+                setOpenFilters(allFilterKeys);
+            }
+        } catch (error) {
+            // Log unexpected error
+            await logActivity({
+                type: 'product',
+                level: 'error',
+                action: 'products_fetch_error',
+                message: `Unexpected error while fetching products`,
+                userId: user?.id || null,
+                details: {
+                    error: error,
+                    executionTimeMs: Date.now() - startTime
+                },
+                status: 'failed'
+            });
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // Toggle individual filter open/close state
+    const toggleFilter = (filterType: string) => {
+        setOpenFilters(prev =>
+            prev.includes(filterType)
+                ? prev.filter(f => f !== filterType)
+                : [...prev, filterType]
+        );
+    };
+
+    // Filter products based on selected filters
+    const filteredProducts = products.filter(product => {
+        return Object.entries(filters).every(([key, values]) => {
+            if (values.length === 0) return true;
+
+            // Map filter keys to product property names
+            const keyMapping: Record<string, keyof Product> = {
+                formFactor: "form_factor",
+                fiveGEnabled: "five_g_Enabled",
+                copilotPC: "copilot",
+                processor: "processor",
+                screenSize: "screen_size",
+                memory: "memory",
+                storage: "storage"
+            };
+
+            const productKey = keyMapping[key] || key as keyof Product;
+            const productValue = product[productKey];
+
+            // Handle undefined/null values
+            if (productValue === undefined || productValue === null) {
+                return false;
+            }
+
+            // Handle boolean filters
+            if (key === "copilotPC" || key === "fiveGEnabled") {
+                return values.includes("Yes") ? productValue === true : true;
+            }
+
+            // Handle string values
+            return values.includes(productValue.toString());
+        });
+    });
+
+    // Sort the filtered products
+    filteredProducts.sort((a, b) => {
+        // Priority 1: Post Status (Publish first, then others)
+        const aIsPublished = a.post_status === "Publish";
+        const bIsPublished = b.post_status === "Publish";
+
+        if (aIsPublished && !bIsPublished) return -1;
+        if (!aIsPublished && bIsPublished) return 1;
+
+        // Priority 2: Stock Quantity (non-zero first, zero last)
+        const aHasStock = a.stock_quantity > 0;
+        const bHasStock = b.stock_quantity > 0;
+
+        if (aHasStock && !bHasStock) return -1;
+        if (!aHasStock && bHasStock) return 1;
+
+        // Priority 3: Date (latest first)
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+
+        return dateB - dateA; // Descending order (latest first)
+    });
+
+    // Pehle yeh state update function ko fix karo - line 300 ke around
+    const handleFilterChange = (filterType: string, value: string) => {
+        setFilters(prev => {
+            // Ensure prev[filterType] exists and is an array
+            const currentValues = Array.isArray(prev[filterType]) ? prev[filterType] : [];
+
+            // Check if value exists
+            const newValues = currentValues.includes(value)
+                ? currentValues.filter(v => v !== value)  // Remove if exists
+                : [...currentValues, value];               // Add if doesn't exist
+
+            return {
+                ...prev,
+                [filterType]: newValues
+            };
+        });
+    };
+
+    // Yeh simpler approach hai - just add onClick to label
+    const DatabaseFilterSection = ({ filterKey, title }: { filterKey: string, title: string }) => {
+        const filterOptionsList = filterOptions[filterKey] || [];
+        const currentFilterValues = filters[filterKey] || [];
+
+        const handleCheckboxChange = (item: string) => {
+            handleFilterChange(filterKey, item);
+        };
+
+        if (filterOptionsList.length === 0) return null;
+
+        return (
+            <div className="border-b pb-4">
+                <button
+                    onClick={() => toggleFilter(filterKey)}
+                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1D76BC]"
+                >
+                    {title}
+                    {openFilters.includes(filterKey) ? (
+                        <ChevronUp className="h-4 w-4" />
+                    ) : (
+                        <ChevronDown className="h-4 w-4" />
+                    )}
+                </button>
+                {openFilters.includes(filterKey) && (
+                    <div className="mt-3 space-y-2">
+                        {filterOptionsList.map(item => {
+                            const checkboxId = `${filterKey}-${item}`;
+
+                            return (
+                                <div key={checkboxId} className="flex items-center space-x-3 py-1">
+                                    <input
+                                        type="checkbox"
+                                        id={checkboxId}
+                                        checked={currentFilterValues.includes(item)}
+                                        onChange={() => handleCheckboxChange(item)}
+                                        className="h-4 w-4 text-[#1D76BC] rounded border-gray-300 focus:ring-[#1D76BC]"
+                                    />
+                                    <label
+                                        htmlFor={checkboxId}
+                                        className="text-gray-700 text-sm cursor-pointer flex-1 select-none"
+                                        onClick={(e) => e.stopPropagation()} // Prevent click from reaching parent
+                                    >
+                                        {item}
+                                    </label>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    // Hardcoded filter section ko bhi same pattern par update karo
+    const HardcodedFilterSection = ({ filterKey, title }: { filterKey: string, title: string }) => {
+        const filterOptionsList = HARDCODED_FILTERS[filterKey as keyof typeof HARDCODED_FILTERS] || [];
+
+        // Get current filter values from state
+        const currentFilterValues = filters[filterKey] || [];
+
+        const handleCheckboxChange = (item: string) => {
+            handleFilterChange(filterKey, item);
+        };
+
+        if (filterOptionsList.length === 0) return null;
+
+        return (
+            <div className="border-b pb-4">
+                <button
+                    onClick={() => toggleFilter(filterKey)}
+                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1D76BC]"
+                >
+                    {title}
+                    {openFilters.includes(filterKey) ? (
+                        <ChevronUp className="h-4 w-4" />
+                    ) : (
+                        <ChevronDown className="h-4 w-4" />
+                    )}
+                </button>
+                {openFilters.includes(filterKey) && (
+                    <div className="mt-3 space-y-2">
+                        {filterOptionsList.map(item => {
+                            const checkboxId = `${filterKey}-hardcoded-${item}`;
+
+                            return (
+                                <div key={checkboxId} className="flex items-center space-x-3 cursor-pointer py-1">
+                                    <input
+                                        type="checkbox"
+                                        id={checkboxId}
+                                        checked={currentFilterValues.includes(item)}
+                                        onChange={() => handleCheckboxChange(item)}
+                                        className="h-4 w-4 text-[#1D76BC] rounded border-gray-300 focus:ring-[#1D76BC] pointer-events-auto"
+                                    />
+                                    <label
+                                        htmlFor={checkboxId}
+                                        className="text-gray-700 text-sm cursor-pointer flex-1 select-none"
+                                    >
+                                        {item}
+                                    </label>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    };
+
+    const clearFilters = () => {
+        setFilters({
+            formFactor: [],
+            processor: [],
+            screenSize: [],
+            memory: [],
+            storage: [],
+            copilotPC: [],
+            fiveGEnabled: [],
+        });
+    };
+
+    const getActiveFilterCount = () => {
+        return Object.values(filters).reduce((total, values) => total + values.length, 0);
+    };
+
+    // Get all filter keys for rendering
+    const allFilterKeys = [
+        'formFactor',
+        'processor',
+        'memory',
+        'storage',
+        'screenSize',
+        ...HARDCODED_FILTER_KEYS
+    ];
+
+    // Optional: prevent UI flicker - MUST BE AFTER ALL HOOKS
+    if (isLoggedIn === null) {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC] mx-auto"></div>
+                    <p className="mt-4 text-gray-600">Loading...</p>
+                </div>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen">
+            <div className="flex">
+                {/* Fixed Filter Sidebar - Desktop */}
+                <div className="hidden lg:block w-64 flex-shrink-0 h-full top-0 overflow-y-auto bg-white border-r border-gray-200">
+                    <div className="p-6">
+                        <div className="flex items-center justify-between mb-6">
+                            {getActiveFilterCount() > 0 && (
+                                <button
+                                    onClick={clearFilters}
+                                    className="text-sm text-[#1D76BC] hover:text-[#1660a0]"
+                                >
+                                    Clear all
+                                </button>
+                            )}
+                        </div>
+
+                        {/* Show skeleton only for filter options when loading */}
+                        {isLoading ? (
+                            <FiltersSidebarSkeleton />
+                        ) : (
+                            <div className="space-y-4">
+                                {/* Database Filters from products table */}
+                                <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
+                                <DatabaseFilterSection filterKey="processor" title="Processor" />
+                                <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
+                                <DatabaseFilterSection filterKey="memory" title="Memory" />
+                                <DatabaseFilterSection filterKey="storage" title="Storage" />
+
+                                {/* Hardcoded Filters */}
+                                <HardcodedFilterSection filterKey="copilotPC" title="Copilot + PC" />
+                                <HardcodedFilterSection filterKey="fiveGEnabled" title="5G Enabled" />
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* Main Content Area (right side of sidebar) */}
+                <div className="flex-1 min-h-screen sm:px-0 px-6">
+                    {/* Mobile filter button */}
+                    <div className="lg:hidden p-4 flex items-center justify-between gap-3 px-7">
+                        {/* Mobile Heading */}
+                        <div className="w-6 h-6">
+                        </div>
+                        <h1 className="text-2xl font-bold text-gray-900">
+                            All Devices
+                        </h1>
+
+                        {/* Filter Button */}
+                        <button
+                            onClick={() => setShowFilters(true)}
+                            className="m-2"
+                        >
+                            <FaFilter size={15} />
+                        </button>
+                    </div>
+
+                    {/* Products Section */}
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {/* Results header - Only show when not loading */}
+                        {!isLoading && getActiveFilterCount() > 0 && (
+                            <div className="mb-8">
+                                <div className="flex flex-wrap gap-2 mt-4">
+                                    {Object.entries(filters).map(([key, values]) =>
+                                        values.map(value => (
+                                            <span
+                                                key={`${key}-${value}`}
+                                                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#1D76BC]/10 text-[#1D76BC] text-sm"
+                                            >
+                                                {value}
+                                                <button
+                                                    onClick={() => handleFilterChange(key, value)}
+                                                    className="ml-1 hover:text-red-500"
+                                                >
+                                                    <X size={14} />
+                                                </button>
+                                            </span>
+                                        ))
+                                    )}
+                                    <button
+                                        onClick={clearFilters}
+                                        className="text-sm text-gray-600 hover:text-[#1D76BC]"
+                                    >
+                                        Clear all
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+
+                        {/* Products grid - Show skeleton when loading */}
+                        <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6">
+                            {isLoading || !authChecked ? (
+                                <ProductsGridSkeleton />
+                            ) : filteredProducts.length > 0 ? (
+                                <>
+                                    <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
+                                        {(admin === profile?.role || shopManager === profile?.role) ? (
+                                            <>
+                                                <div className="text-3xl font-semibold">Devices</div>
+                                                <div className="">
+                                                    <div className="flex justify-center md:justify-start">
+                                                        <Link
+                                                            href="/add-device"
+                                                            className="inline-flex items-center justify-center rounded bg-[#1D76BC] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#1660a0]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
+                                                        >
+                                                            <FaPlus className="me-3" />
+                                                            Add New Device
+                                                        </Link>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        ) : (
+                                            <div className="text-3xl font-semibold">Devices</div>
+                                        )}
+                                    </div>
+                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
+                                        {filteredProducts.map(product => {
+                                            // If product is not published, only show to admin/shop_manager
+                                            if (product.post_status !== "Publish") {
+                                                if (subscriber === profile?.role || superSubscriber === profile?.role) {
+                                                    return null; // Don't render this product for non-admin users
+                                                }
+                                            }
+
+                                            const isProductInCart = checkIfInCart(product.id);
+
+                                            return (
+                                                <Link href={`/product/${product.slug}`} key={product.id}>
+                                                    <div className="bg-white border border-gray-300 sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col"
+                                                    >
+                                                        {product.stock_quantity == 0 && (
+                                                            <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
+                                                                Out of stock
+                                                            </div>
+                                                        )}
+
+                                                        {/* 5G Logo - Top Right Corner */}
+                                                        {product.five_g_Enabled && (
+                                                            <div className="absolute top-4 right-3 z-10">
+                                                                <img
+                                                                    src="/5g-logo.png"
+                                                                    alt="5G Enabled"
+                                                                    className="w-10 h-10 object-contain"
+                                                                />
+                                                            </div>
+                                                        )}
+
+                                                        {/* Show Private badge only for admin/shop manager users when product is not published */}
+                                                        {product.post_status !== "Publish" && (
+                                                            <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1D76BC]">
+                                                                Private
+                                                            </div>
+                                                        )}
+
+                                                        {/* Image Container - Fixed Height */}
+                                                        <div className="flex items-center justify-center transition-colors h-48 min-h-[12rem] sm:mt-0 -mt-12 relative">
+                                                            {product.thumbnail ? (
+                                                                <img
+                                                                    src={product.thumbnail}
+                                                                    alt={product.product_name}
+                                                                    className="object-contain h-full w-full p-2"
+                                                                />
+                                                            ) : (
+                                                                <div className="flex items-center justify-center h-full w-full text-gray-400">
+                                                                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                                    </svg>
+                                                                </div>
+                                                            )}
+                                                        </div>
+
+                                                        {/* Product Info Container - Flexible but with constraints */}
+                                                        <div className="flex flex-col flex-grow space-y-2 text-center sm:mt-4 -mt-7">
+                                                            {/* Title with fixed lines */}
+                                                            <h3 className="text-gray-800 sm:text-md text-sm line-clamp-1 min-h-14 flex items-center justify-center">
+                                                                {product.product_name}
+                                                            </h3>
+
+                                                            {/* SKU Info - Fixed height */}
+                                                            <div className="text-gray-500 text-xs sm:py-3 py-1 space-y-1">
+                                                                <p><b>SKU:</b> {product.sku}</p>
+                                                            </div>
+
+                                                            {/* Spacer to push button to bottom */}
+                                                            <div className="flex-grow"></div>
+
+                                                            {/* Button Container - Fixed at bottom */}
+                                                            <div className="sm:pt-4 sm:mb-2 mt-auto">
+                                                                {product.stock_quantity != 0 && product.post_status === "Publish" ? (
+                                                                    <>
+                                                                        {isProductInCart ? (
+                                                                            // Remove from cart button
+                                                                            <div className="flex flex-col items-center space-y-2">
+
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.preventDefault(); // Prevent Link navigation
+                                                                                        e.stopPropagation();
+                                                                                        handleRemoveFromCart(product.id);
+                                                                                    }}
+                                                                                    disabled={isUpdating}
+                                                                                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm text-red-600 hover:text-white border border-red-600 rounded-sm cursor-pointer hover:bg-red-500 hover:border-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                                                                                >
+                                                                                    Remove
+                                                                                </button>
+                                                                            </div>
+                                                                        ) : (
+                                                                            // Add to cart button
+                                                                            <button
+                                                                                onClick={(e) => {
+                                                                                    e.preventDefault(); // Prevent Link navigation
+                                                                                    e.stopPropagation();
+                                                                                    handleAddToCart(product.id);
+                                                                                }}
+                                                                                disabled={isUpdating && addingProductId === product.id}
+                                                                                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1D76BC] border border-[#1D76BC] rounded-sm cursor-pointer hover:bg-[#1D76BC] hover:text-white transition-colors disabled:opacity-50"
+                                                                            >
+                                                                                {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
+                                                                            </button>
+                                                                        )}
+                                                                    </>
+                                                                ) : (
+                                                                    <button
+                                                                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb] transition-colors"
+                                                                    >
+                                                                        Read More
+                                                                    </button>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            );
+                                        })}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-center py-12">
+                                    <p className="text-gray-600 text-lg">
+                                        {products.length === 0 ? "No products found." : "No products found matching your filters."}
+                                    </p>
+                                    {products.length > 0 && (
+                                        <button
+                                            onClick={clearFilters}
+                                            className="mt-4 text-[#1D76BC] hover:text-[#1660a0] font-medium"
+                                        >
+                                            Clear all filters
+                                        </button>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* Mobile filters drawer */}
+            <Drawer
+                title={
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-bold">Filters</span>
+                        {getActiveFilterCount() > 0 && (
+                            <button
+                                onClick={clearFilters}
+                                className="text-sm text-[#1D76BC] hover:text-[#1660a0]"
+                            >
+                                Clear all
+                            </button>
+                        )}
+                    </div>
+                }
+                placement="right"
+                onClose={() => setShowFilters(false)}
+                open={showFilters}
+                size={300}
+                className="filter-drawer"
+            >
+                <div className="space-y-6">
+                    {/* Database Filters from products table */}
+                    <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
+                    <DatabaseFilterSection filterKey="processor" title="Processor" />
+                    <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
+                    <DatabaseFilterSection filterKey="memory" title="Memory" />
+                    <DatabaseFilterSection filterKey="storage" title="Storage" />
+
+                    {/* Hardcoded Filters */}
+                    <HardcodedFilterSection filterKey="copilotPC" title="Copilot + PC" />
+                    <HardcodedFilterSection filterKey="fiveGEnabled" title="5G Enabled" />
+                </div>
+            </Drawer>
+
+            {/* Cart Drawer - isLoggedIn check ke saath */}
+            {isLoggedIn && (
+                <Drawer
+                    title={
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+                                <span className="text-lg font-semibold">Your Cart</span>
+                                {cartCount > 0 && (
+                                    <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+                                        {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                                    </span>
+                                )}
+                            </div>
+                            {cartItems.length > 0 && (
+                                <button
+                                    onClick={handleClearCart}
+                                    disabled={cartUpdating}
+                                    className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                >
+                                    {cartUpdating ? 'Clearing...' : 'Clear All'}
+                                </button>
+                            )}
+                        </div>
+                    }
+                    placement="right"
+                    onClose={() => setShowCartDrawer(false)}  // <-- onClose mein showCartDrawer false karein
+                    open={showCartDrawer}  // <-- open ko showCartDrawer se control karein
+                    size={400}
+                    className="cart-drawer"
+                >
+                    {cartLoading ? (
+                        <div className="flex flex-col items-center justify-center h-full py-12">
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC]"></div>
+                            <p className="mt-4 text-gray-500">Loading cart...</p>
+                        </div>
+                    ) : cartItems.length === 0 ? (
+                        <div className="flex flex-col items-center justify-center h-full py-12">
+                            <PiShoppingCartThin className="text-gray-300 mb-4" size={64} />
+                            <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
+                            <p className="text-gray-500 text-center mb-6">
+                                Looks like you haven't added any products to your cart yet.
+                            </p>
+                            <button
+                                onClick={handleContinueShopping}
+                                className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
+                            >
+                                Continue
+                            </button>
+                        </div>
+                    ) : (
+                        <div className="flex flex-col h-full">
+                            {/* Cart Items List */}
+                            <div className="flex-1 overflow-y-auto pr-2">
+                                {cartItems.map((item) => {
+                                    const stockQuantity = getItemStockQuantity(item);
+                                    const productName = item.product?.product_name || 'Unknown Product';
+                                    const sku = item.product?.sku || 'N/A';
+                                    const thumbnail = item.product?.thumbnail;
+                                    const price = item.product?.price || 0;
+                                    const productSlug = item.product?.slug || '';
+
+                                    return (
+                                        <div key={item.id} className="border-b border-gray-200 py-4">
+                                            <div className="flex items-start space-x-3">
+                                                {/* Product Image */}
+                                                <div
+                                                    className="w-15 h-15 bg-gray-100 rounded-md flex items-center justify-center shrink-0 cursor-pointer hover:bg-gray-200 transition-colors"
+                                                    onClick={() => productSlug && router.push(`/product/${productSlug}`)}
+                                                >
+                                                    {thumbnail ? (
+                                                        <img
+                                                            src={thumbnail}
+                                                            alt={productName}
+                                                            className="w-full h-full object-contain p-1"
+                                                        />
+                                                    ) : (
+                                                        <PiShoppingCartThin className="text-gray-400" size={24} />
+                                                    )}
+                                                </div>
+
+                                                {/* Product Details */}
+                                                <div className="flex-1 min-w-0">
+                                                    <h4
+                                                        className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
+                                                        onClick={() => productSlug && router.push(`/product/${productSlug}`)}
+                                                    >
+                                                        {productName}
+                                                    </h4>
+                                                    <p className="text-xs text-gray-500">SKU: {sku}</p>
+
+                                                </div>
+
+                                                {/* Price and Remove Button */}
+                                                <div className="flex flex-col items-end space-y-2">
+                                                    <button
+                                                        onClick={() => handleRemoveFromCart(item.product_id)}
+                                                        disabled={cartUpdating}
+                                                        className="text-gray-400 hover:text-red-500 p-1 transition-colors 
+                                          disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                                    >
+                                                        <Trash2 size={16} />
+                                                    </button>
+                                                    {price > 0 && (
+                                                        <p className="text-sm font-medium text-gray-900">
+                                                            ${(price * item.quantity).toFixed(2)}
+                                                        </p>
+                                                    )}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+
+                            {/* Cart Summary */}
+                            <div className="border-t border-gray-200 pt-4 mt-4">
+
+                                <div className="space-y-3">
+                                    <button
+                                        onClick={handleCart}
+                                        className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
+                                    >
+                                        View Cart Details
+                                    </button>
+                                    <button
+                                        onClick={handleCheckout}
+                                        disabled={cartUpdating}
+                                        className="w-full py-3 cursor-pointer bg-[#1D76BC] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
+                                        {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </Drawer>
+            )}
+        </div>
+    );
+}
