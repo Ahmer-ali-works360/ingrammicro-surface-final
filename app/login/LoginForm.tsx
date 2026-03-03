@@ -155,7 +155,7 @@ export default function LoginForm() {
               {/* Logo */}
               <div className="flex justify-center mb-8">
                 <img
-                  src="/ingram_micro_logo.png"
+                  src="/Ingram_micro_logo.png"
                   alt="Company Logo"
                   className="h-10 object-contain"
                 />
@@ -229,7 +229,7 @@ export default function LoginForm() {
               {/* Logo */}
               <div className="flex justify-center mb-8">
                 <img
-                  src="/logo.png"
+                  src="/Ingram_micro_logo.png"
                   alt="Company Logo"
                   className="h-10 object-contain"
                 />

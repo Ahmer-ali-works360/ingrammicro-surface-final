@@ -258,7 +258,7 @@ export const emailTemplates = {
                                 <tr>
                                     <td align="center"
                                         style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
-                                        <a href="http://localhost:3000/pending-users${userData.formId ? `?formId=${userData.formId}` : ''}"
+                                        <a href="https://ingrammicro-surface-final.vercel.app/pending-users${userData.formId ? `?formId=${userData.formId}` : ''}"
                                             style="color:#ffffff; text-decoration:none; font-size:20px; font-family:Arial, sans-serif; display:inline-block;">
                                             Review Pending User(s)
                                         </a>
@@ -1088,7 +1088,7 @@ export const emailTemplates = {
                         <tr>
                             <td style="padding:0 30px 30px;">
                                 <div style="text-align:center; margin:30px 0;">
-                                    <a href="http://localhost:3000/order-details/${orderNumber}" style="
+                                    <a href="https://ingrammicro-surface-final.vercel.app/order-details/${orderNumber}" style="
                                             background:#1D76BC;
                                             color:#ffffff;
                                             padding:14px 34px;
