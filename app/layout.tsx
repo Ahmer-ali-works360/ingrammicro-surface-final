@@ -3,7 +3,7 @@ import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
-import { Toaster } from "@/components/ui/sonner";
+import ToasterClient from "./components/ToasterClient";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
 
@@ -37,7 +37,8 @@ export default function RootLayout({
         suppressHydrationWarning
         className={`${inter.className} ${outfit.variable} antialiased`}
       >
-        <Toaster position="top-right" />
+        <ToasterClient />
+
         <AuthProvider>
           <CartProvider>
             <Navbar />

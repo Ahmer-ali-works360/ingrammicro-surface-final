@@ -41,7 +41,6 @@ const menuItems = [
 ]
 
 const authMenuItems = [
-  { name: 'Edit Profile', href: '/edit-profile' },
   { name: 'Orders', href: '/order-details' },
   { name: 'Password reset', href: '/password-reset' },
   { name: 'Logout', href: 'logout' },
