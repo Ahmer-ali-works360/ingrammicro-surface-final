@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
 
         const emailResult = await sendCronEmail({
           to: entry.email,
-          cc: BackInStockCCEmail,
+          // cc: BackInStockCCEmail,
           subject: template.subject,
           html: template.html,
           text: template.text,

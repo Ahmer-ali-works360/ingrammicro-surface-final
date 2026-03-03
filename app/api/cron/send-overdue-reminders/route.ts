@@ -248,7 +248,7 @@ export async function GET(request: NextRequest) {
                 // 5️⃣ Send email
                 const emailResult = await sendCronEmail({
                     to: mergedEmails,
-                    cc: "",
+                    // cc: "",
                     subject: template.subject,
                     text: template.text,
                     html: template.html,
