@@ -1058,7 +1058,7 @@ export default function Page() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -1114,12 +1114,12 @@ export default function Page() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#0A4647] hover:bg-[#0A4647]">
+                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -1225,7 +1225,7 @@ export default function Page() {
                         <Button
                             onClick={handleUpdateWin}
                             disabled={isSubmitting}
-                            className="flex items-center bg-[#0A4647] hover:bg-[#093636]"
+                            className="flex items-center bg-[#1D76BC] hover:bg-[#1660a0]"
                         >
                             <Save className="mr-2 h-4 w-4" />
                             {isSubmitting ? "Saving..." : "Save Changes"}
@@ -1238,7 +1238,7 @@ export default function Page() {
                         {/* Basic Information Section */}
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Basic Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1307,7 +1307,7 @@ export default function Page() {
                         {/* Device Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Device Information
                             </h3>
                             <div className="space-y-4">
@@ -1348,7 +1348,7 @@ export default function Page() {
                         {/* Deal Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Deal Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1392,7 +1392,7 @@ export default function Page() {
                         {/* Purchase Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Purchase Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1435,7 +1435,7 @@ export default function Page() {
                         {/* Notes Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Additional Information
                             </h3>
                             <div className="space-y-2">

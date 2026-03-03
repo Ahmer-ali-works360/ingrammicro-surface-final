@@ -296,6 +296,9 @@ export default function LoginForm() {
         password,
       });
 
+      console.log("normalAuthError:", normalAuthError);
+console.log("normalAuthData:", normalAuthData);
+
       if (!normalAuthError && normalAuthData?.user) {
         await handleSuccessfulLogin(normalAuthData.user.id, trimmedEmail, startTime, false);
         return;

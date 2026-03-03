@@ -261,7 +261,7 @@ export default function Page() {
         return (
             <div className="flex items-center justify-center min-h-screen">
                 <div className="flex flex-col items-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#35c8dc]" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#1d76bc]" />
                     <p className="mt-2 text-gray-600">Loading profile...</p>
                 </div>
             </div>
@@ -287,7 +287,7 @@ export default function Page() {
                         value={formData.firstName}
                         onChange={handleInputChange}
                         placeholder="Enter your first name"
-                        className="focus:ring-2 focus:ring-[#35c8dc] focus:border-transparent selection:bg-blue-500"
+                        className="focus:ring-2 focus:ring-[#1d76bc] focus:border-transparent selection:bg-blue-500"
                         required
                     />
                 </div>
@@ -303,7 +303,7 @@ export default function Page() {
                         value={formData.lastName}
                         onChange={handleInputChange}
                         placeholder="Enter your last name"
-                        className="focus:ring-2 focus:ring-[#35c8dc] focus:border-transparent selection:bg-blue-500"
+                        className="focus:ring-2 focus:ring-[#1d76bc] focus:border-transparent selection:bg-blue-500"
                         required
                     />
                 </div>
@@ -334,7 +334,7 @@ export default function Page() {
                         value={formData.reseller}
                         onChange={handleInputChange}
                         placeholder="Enter reseller information"
-                        className="focus:ring-2 focus:ring-[#35c8dc] focus:border-transparent selection:bg-blue-500"
+                        className="focus:ring-2 focus:ring-[#1d76bc] focus:border-transparent selection:bg-blue-500"
                     />
                 </div>
 
@@ -345,16 +345,16 @@ export default function Page() {
                         disabled={isUpdating}
                         className="w-full py-3 text-white cursor-pointer font-medium rounded-lg transition-colors duration-200"
                         style={{
-                            backgroundColor: '#35c8dc',
-                            backgroundImage: 'linear-gradient(to right, #35c8dc, #2db4c8)'
+                            backgroundColor: '#1d76bc',
+                            backgroundImage: 'linear-gradient(to right, #1d76bc, #1660a0)'
                         }}
                         onMouseEnter={(e) => {
-                            e.currentTarget.style.backgroundColor = '#2db4c8';
-                            e.currentTarget.style.backgroundImage = 'linear-gradient(to right, #2db4c8, #26a0b4)';
+                            e.currentTarget.style.backgroundColor = '#1660a0';
+                            e.currentTarget.style.backgroundImage = 'linear-gradient(to right, #1660a0, #26a0b4)';
                         }}
                         onMouseLeave={(e) => {
-                            e.currentTarget.style.backgroundColor = '#35c8dc';
-                            e.currentTarget.style.backgroundImage = 'linear-gradient(to right, #35c8dc, #2db4c8)';
+                            e.currentTarget.style.backgroundColor = '#1d76bc';
+                            e.currentTarget.style.backgroundImage = 'linear-gradient(to right, #1d76bc, #1660a0)';
                         }}
                     >
                         {isUpdating ? (
@@ -374,7 +374,7 @@ export default function Page() {
                         type="button"
                         variant="outline"
                         onClick={handlePasswordReset}
-                        className="w-full flex items-center cursor-pointer justify-center gap-2 border-[#35c8dc] text-[#2eacbd] hover:bg-[#35c8dc] hover:text-white transition-colors"
+                        className="w-full flex items-center cursor-pointer justify-center gap-2 border-[#1d76bc] text-[#2eacbd] hover:bg-[#1d76bc] hover:text-white transition-colors"
                     >
                         <Lock className="h-4 w-4" />
                         Reset Password

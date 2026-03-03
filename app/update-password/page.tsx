@@ -115,7 +115,7 @@ export default function Page() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-[#3ba1da] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#41abd6] disabled:opacity-50"
+              className="w-full rounded-md bg-[#1D76BC] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#41abd6] disabled:opacity-50"
             >
               {loading ? "Updating..." : "Update Password"}
             </button>

@@ -550,7 +550,7 @@ export default function Page() {
                             e.stopPropagation();
                             router.push(`/product/${product.slug}`);
                         }}
-                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#0a4647] border border-[#0a4647] rounded-sm cursor-pointer hover:bg-[#0a4647] hover:text-white transition-colors"
+                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors"
                     >
                         Read More
                     </button>
@@ -600,7 +600,7 @@ export default function Page() {
                         handleAddToCart(product.id);
                     }}
                     disabled={isUpdating && addingProductId === product.id}
-                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#0a4647] border border-[#0a4647] rounded-sm cursor-pointer hover:bg-[#0a4647] hover:text-white transition-colors disabled:opacity-50"
+                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                 >
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                 </button>
@@ -1273,7 +1273,7 @@ export default function Page() {
                                                     Please login to join the waitlist
                                                 </p>
                                                 <Link href={`/login/?redirect_to=product/${slug}`}>
-                                                    <button className="px-6 py-3 bg-[#0A4647] text-white rounded-md hover:bg-[#08393a] transition-colors">
+                                                    <button className="px-6 py-3 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660A0] transition-colors">
                                                         Login to Continue
                                                     </button>
                                                 </Link>
@@ -1295,7 +1295,7 @@ export default function Page() {
                                                 <button
                                                     onClick={handleAddToWaitlist}
                                                     disabled={isAddingToWaitlist}
-                                                    className="w-full px-6 py-3 bg-[#0A4647] cursor-pointer text-white rounded-md hover:bg-[#08393a] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
+                                                    className="w-full px-6 py-3 bg-[#1D76BC] cursor-pointer text-white rounded-md hover:bg-[#1660A0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
                                                 >
                                                     {isAddingToWaitlist ? (
                                                         <>

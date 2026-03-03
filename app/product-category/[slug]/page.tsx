@@ -989,7 +989,7 @@ export default function Page() {
                                                 <div className="flex justify-center md:justify-start">
                                                     <Link
                                                         href="/add-device"
-                                                        className="inline-flex items-center justify-center rounded bg-[#35c8dc] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#33aaba] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#3791b4]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
+                                                        className="inline-flex items-center justify-center rounded bg-[#1d76bc] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#3791b4]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
                                                     >
                                                         <FaPlus className="me-3" />
                                                         Add New Device
@@ -1083,7 +1083,7 @@ export default function Page() {
                                                                                     handleAddToCart(product.id)
                                                                                 }}
                                                                                 disabled={isUpdating && addingProductId === product.id}
-                                                                                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#0a4647] border border-[#0a4647] rounded-sm cursor-pointer hover:bg-[#0a4647] hover:text-white transition-colors disabled:opacity-50"
+                                                                                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                                                                             >
                                                                                 {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                                                                             </button>
@@ -1157,10 +1157,10 @@ export default function Page() {
                     title={
                         <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-2">
-                                <PiShoppingCartThin className="text-[#35c8dc]" size={20} />
+                                <PiShoppingCartThin className="text-[#1d76bc]" size={20} />
                                 <span className="text-lg font-semibold">Your Cart</span>
                                 {cartCount > 0 && (
-                                    <span className="bg-[#35c8dc] text-white text-xs px-2 py-1 rounded-full">
+                                    <span className="bg-[#1d76bc] text-white text-xs px-2 py-1 rounded-full">
                                         {cartCount} {cartCount === 1 ? 'item' : 'items'}
                                     </span>
                                 )}
@@ -1175,7 +1175,7 @@ export default function Page() {
                 >
                     {cartLoading ? (
                         <div className="flex flex-col items-center justify-center h-full py-12">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#35c8dc]"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1d76bc]"></div>
                             <p className="mt-4 text-gray-500">Loading cart...</p>
                         </div>
                     ) : cartItems.length === 0 ? (
@@ -1187,7 +1187,7 @@ export default function Page() {
                             </p>
                             <button
                                 onClick={handleContinueShopping}
-                                className="px-6 py-2 bg-[#35c8dc] text-white rounded-md hover:bg-[#33aaba] transition-colors cursor-pointer"
+                                className="px-6 py-2 bg-[#1d76bc] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                             >
                                 Continue
                             </button>
@@ -1222,7 +1222,7 @@ export default function Page() {
 
                                                 <div className="flex-1 min-w-0">
                                                     <h4
-                                                        className="text-sm font-medium text-gray-900 truncate hover:text-[#35c8dc] cursor-pointer transition-colors"
+                                                        className="text-sm font-medium text-gray-900 truncate hover:text-[#1d76bc] cursor-pointer transition-colors"
                                                         onClick={() => productSlug && router.push(`/product/${productSlug}`)}
                                                     >
                                                         {productName}
@@ -1255,14 +1255,14 @@ export default function Page() {
                                 <div className="space-y-3">
                                     <button
                                         onClick={handleCart}
-                                        className="w-full py-2.5 border-2 cursor-pointer border-[#35c8dc] text-[#35c8dc] font-medium hover:bg-gray-50 transition-colors rounded-md"
+                                        className="w-full py-2.5 border-2 cursor-pointer border-[#1d76bc] text-[#1d76bc] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
                                         View Cart Details
                                     </button>
                                     <button
                                         onClick={handleCheckout}
                                         disabled={cartUpdating}
-                                        className="w-full py-3 cursor-pointer bg-[#35c8dc] text-white font-medium hover:bg-[#2db4c8] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full py-3 cursor-pointer bg-[#1d76bc] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
                                     </button>

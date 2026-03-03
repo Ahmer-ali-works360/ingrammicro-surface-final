@@ -710,7 +710,7 @@ export default function Page() {
     const getErrorClass = (fieldName: string) => {
         return editErrors[fieldName]
             ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-            : "border-gray-300 focus:ring-[#0A4647] focus:border-[#0A4647]";
+            : "border-gray-300 focus:ring-[#1D76BC] focus:border-[#1D76BC]";
     };
 
     const columns: ColumnDef<Order>[] = [
@@ -1406,7 +1406,7 @@ export default function Page() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -1464,12 +1464,12 @@ export default function Page() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#0A4647] hover:bg-[#0A4647]">
+                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -1701,7 +1701,7 @@ export default function Page() {
                 title={
                     <div>
                         <div className="text-xl font-bold text-gray-800">
-                            Edit Order #<span className="text-[#0A4647]">{selectedOrder?.order_no}</span>
+                            Edit Order #<span className="text-[#1D76BC]">{selectedOrder?.order_no}</span>
                         </div>
                         <div className="text-gray-600 text-sm mt-1">
                             Update order information. All fields marked with * are required.
@@ -1726,7 +1726,7 @@ export default function Page() {
                             onClick={handleUpdateOrder}
                             loading={isSubmitting}
                             icon={<SaveOutlined />}
-                            className="!bg-[#0A4647] !border-[#0A4647] hover:!bg-[#093636]"
+                            className="!bg-[#1D76BC] !border-[#1D76BC] hover:!bg-[#1660a0]"
                         >
                             Save Changes
                         </AntButton>
@@ -1740,7 +1740,7 @@ export default function Page() {
                         {/* Basic Information Section */}
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Basic Information
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1793,7 +1793,7 @@ export default function Page() {
                         {/* Team Details Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Team Details
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1875,7 +1875,7 @@ export default function Page() {
                         {/* Opportunity Details Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Opportunity Details
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1975,7 +1975,7 @@ export default function Page() {
                         {/* Technical Details Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Technical Details
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2118,7 +2118,7 @@ export default function Page() {
                         {/* Shipping Details Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Shipping Details
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2314,7 +2314,7 @@ export default function Page() {
                         {/* Tracking & Return Details Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Tracking & Return Details
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2427,7 +2427,7 @@ export default function Page() {
                         {/* Additional Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Additional Information
                             </h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

@@ -983,7 +983,7 @@ export default function Page() {
   const getErrorClass = (fieldName: string) => {
     return errors[fieldName]
       ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-      : "border-gray-300 focus:ring-[#0A4647] focus:border-[#0A4647]";
+      : "border-gray-300 focus:ring-[#1D76BC] focus:border-[#1D76BC]";
   };
 
   return (
@@ -1003,7 +1003,7 @@ export default function Page() {
               </p>
               <Link
                 href="/product-category/alldevices"
-                className="bg-[#35c8dc] text-white py-2 px-5 rounded-md font-semibold hover:bg-[#2db4c8] transition duration-200 inline-block"
+                className="bg-[#1d76bc] text-white py-2 px-5 rounded-md font-semibold hover:bg-[#1660a0] transition duration-200 inline-block"
               >
                 Continue Shopping
               </Link>
@@ -1071,7 +1071,7 @@ export default function Page() {
                   <div className="flex flex-col sm:flex-row gap-4">
                     <Link
                       href="/cart"
-                      className="px-8 py-3 bg-[#0A4647] text-white font-semibold rounded-lg hover:bg-[#0a5c5e] transition-colors duration-200 flex items-center justify-center gap-2"
+                      className="px-8 py-3 bg-[#1D76BC] text-white font-semibold rounded-lg hover:bg-[#1660a0] transition-colors duration-200 flex items-center justify-center gap-2"
                     >
                       <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -1122,7 +1122,7 @@ export default function Page() {
 
               {/* Team Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#0A4647]">
+                <div className="bg-[#1D76BC]">
                   <h2 className="text-xl text-white font-bold py-2 px-4">Team Details</h2>
                 </div>
                 <div className="px-7 py-8">
@@ -1234,7 +1234,7 @@ export default function Page() {
 
               {/* Opportunity Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#0A4647]">
+                <div className="bg-[#1D76BC]">
                   <h2 className="text-xl text-white font-bold py-2 px-4">Opportunity Details</h2>
                 </div>
                 <div className="px-7 py-8">
@@ -1591,7 +1591,7 @@ export default function Page() {
 
               {/* Shipping Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#0A4647]">
+                <div className="bg-[#1D76BC]">
                   <h2 className="text-xl text-white font-bold py-2 px-4">Shipping Details</h2>
                 </div>
 
@@ -1844,7 +1844,7 @@ export default function Page() {
                         rows={3}
                         value={formData.notes}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#0A4647]"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
                       />
                     </div>
                   </div>
@@ -1856,7 +1856,7 @@ export default function Page() {
                       id="terms"
                       checked={formData.isTerms}
                       onChange={handleInputChange}
-                      className={`h-4 w-4 ${errors.isTerms ? 'text-red-500 focus:ring-red-500' : 'text-[#0A4647] focus:ring-[#0A4647]'} border-gray-300 rounded`}
+                      className={`h-4 w-4 ${errors.isTerms ? 'text-red-500 focus:ring-red-500' : 'text-[#1D76BC] focus:ring-[#1D76BC]'} border-gray-300 rounded`}
                       required
                     />
                     <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
@@ -1864,7 +1864,7 @@ export default function Page() {
                       <Link
                         href="/Terms-and-conditions.pdf"
                         target="_blank"
-                        className="text-[#0A4647] hover:text-[#093c3d] hover:underline font-medium underline"
+                        className="text-[#1D76BC] hover:text-[#1660a0] hover:underline font-medium underline"
                         onClick={(e) => e.stopPropagation()}
                       >
                         Terms & Conditions
@@ -1883,7 +1883,7 @@ export default function Page() {
 
               {/* Product Order Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#0A4647]">
+                <div className="bg-[#1D76BC]">
                   <h2 className="text-xl text-white font-bold py-2 px-4">Your Order ({cartItems.length} items)</h2>
                 </div>
 
@@ -1906,7 +1906,7 @@ export default function Page() {
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting || cartLoading}
-                  className="px-12 py-3 bg-[#0A4647] text-white cursor-pointer font-semibold rounded-md hover:bg-[#0a5c5e] focus:outline-none focus:ring-1 focus:ring-[#0A4647] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-12 py-3 bg-[#1D76BC] text-white cursor-pointer font-semibold rounded-md hover:bg-[#1660a0] focus:outline-none focus:ring-1 focus:ring-[#1D76BC] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Placing Order...' : 'Place Order'}
                 </button>

@@ -632,7 +632,7 @@ export default function EOLPage() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                         <TbFileTypeCsv className="mr-2" />
                         Export CSV
                     </Button>
@@ -687,7 +687,7 @@ export default function EOLPage() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#0A4647] hover:bg-[#0A4647]">
+                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
                                     {headerGroup.headers.map((header) => (
                                         <TableHead
                                             key={header.id}
@@ -824,7 +824,7 @@ export default function EOLPage() {
                         {/* Items Section */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
-                                <div className="h-6 w-1 bg-[#0A4647] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                                 Submitted Items ({selectedSubmission.item_count})
                             </h3>
 

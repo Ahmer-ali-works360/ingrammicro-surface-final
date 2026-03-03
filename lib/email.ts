@@ -3702,7 +3702,7 @@ Best regards,
         <tr>
             <td style="padding:10px; border:1px solid #ddd;">
                 ${product.slug
-                    ? `<a href="${productLink}" style="color:#0A4647; text-decoration:none;">${product.name}</a>`
+                    ? `<a href="${productLink}" style="color:#1D76BC; text-decoration:none;">${product.name}</a>`
                     : product.name
                 }
             </td>

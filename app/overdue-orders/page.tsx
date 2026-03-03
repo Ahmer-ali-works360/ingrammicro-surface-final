@@ -888,7 +888,7 @@ export default function Page() {
     const getErrorClass = (fieldName: string) => {
         return editErrors[fieldName]
             ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-            : "border-gray-300 focus:ring-[#0A4647] focus:border-[#0A4647]";
+            : "border-gray-300 focus:ring-[#1D76BC] focus:border-[#1D76BC]";
     };
 
     // Define columns for orders
@@ -904,7 +904,7 @@ export default function Page() {
                         {Object.keys(selectedRows).length === orders.length &&
                             orders.length > 0 &&
                             Object.values(selectedRows).every(Boolean) ? (
-                            <CheckSquare className="h-5 w-5 text-[#0A4647]" />
+                            <CheckSquare className="h-5 w-5 text-[#1D76BC]" />
                         ) : (
                             <Square className="h-5 w-5 text-gray-400" />
                         )}
@@ -919,7 +919,7 @@ export default function Page() {
                             type="checkbox"
                             checked={!!selectedRows[order.id]}
                             onChange={() => handleSelectRow(order.id)}
-                            className="h-4 w-4 rounded border-gray-300 text-[#0A4647] focus:ring-[#0A4647] cursor-pointer"
+                            className="h-4 w-4 rounded border-gray-300 text-[#1D76BC] focus:ring-[#1D76BC] cursor-pointer"
                         />
                     </div>
                 )
@@ -1405,7 +1405,7 @@ export default function Page() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -1493,12 +1493,12 @@ export default function Page() {
                     <Table className="border">
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#0A4647] hover:bg-[#0A4647]">
+                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null

@@ -1065,7 +1065,7 @@ export default function Page() {
           </Button>
           <Button
             onClick={handleExportCSV}
-            className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer"
+            className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
           >
             <TbFileTypeCsv />
             Export CSV
@@ -1073,7 +1073,7 @@ export default function Page() {
           {isActionAuthorized && (
             <Button
               onClick={handleAddProduct}
-              className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer"
+              className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
             >
               <PlusOutlined />
               Add Product
@@ -1139,7 +1139,7 @@ export default function Page() {
                   },
                 });
               }}
-              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#0A4647] transition-all"
+              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#1D76BC] transition-all"
             />
             {globalFilter && (
               <button
@@ -1157,7 +1157,7 @@ export default function Page() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#0A4647] hover:bg-[#0A4647]"
+                  className="bg-[#1D76BC] hover:bg-[#1660a0]"
                 >
                   {headerGroup.headers.map((header) => {
                     return (
@@ -1518,7 +1518,7 @@ export default function Page() {
                     ))}
                     <SelectItem
                       value="__custom__"
-                      className="text-[#3ba1da] font-medium"
+                      className="text-[#1D76BC] font-medium"
                     >
                       + Add Custom
                     </SelectItem>
@@ -1537,7 +1537,7 @@ export default function Page() {
             </Button>
             <Button
               onClick={handleSaveEdit}
-              className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer"
+              className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
             >
               Save changes
             </Button>

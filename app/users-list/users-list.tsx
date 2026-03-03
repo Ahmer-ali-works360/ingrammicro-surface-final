@@ -536,7 +536,7 @@ export default function UsersList() {
 
             const result = await sendEmail({
                 to: userEmail,
-                cc: AprovedUserCC,
+                // cc: AprovedUserCC,
                 subject: template.subject,
                 text: template.text,
                 html: template.html,
@@ -586,7 +586,7 @@ export default function UsersList() {
 
             const result = await sendEmail({
                 to: userEmail,
-                cc: "",
+                // cc: "",
                 subject: template.subject,
                 text: template.text,
                 html: template.html,
@@ -1174,7 +1174,7 @@ export default function UsersList() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -1244,12 +1244,12 @@ export default function UsersList() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#0A4647] hover:bg-[#0A4647]">
+                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1D76BC]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -1475,7 +1475,7 @@ export default function UsersList() {
                         }} className="cursor-pointer">
                             Cancel
                         </Button>
-                        <Button onClick={handleSaveEdit} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                        <Button onClick={handleSaveEdit} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                             Save changes
                         </Button>
                     </DialogFooter>
@@ -1529,7 +1529,7 @@ export default function UsersList() {
                         }} className="cursor-pointer">
                             Cancel
                         </Button>
-                        <Button onClick={handleSaveRole} className="bg-[#0A4647] hover:bg-[#093636] cursor-pointer">
+                        <Button onClick={handleSaveRole} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
                             Update Role
                         </Button>
                     </DialogFooter>

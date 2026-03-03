@@ -275,7 +275,7 @@ export default function WinDetailsPage() {
                 <Table className="border">
                     <TableHeader>
                         <TableRow>
-                            <TableHead style={{ backgroundColor: '#0A4647', color: 'white' }} colSpan={2}>
+                            <TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>
                                 Win Form Details
                             </TableHead>
                         </TableRow>

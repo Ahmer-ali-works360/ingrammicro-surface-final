@@ -358,7 +358,7 @@ export default function Page() {
                                         {/* Product Details */}
                                         <div className="sm:w-3/4">
                                             <Link href={`/product/${item.product?.slug}`}>
-                                                <h3 className="text-md font-semibold text-cyan-800 mb-2">
+                                                <h3 className="text-md font-semibold text-[#1D76BC] mb-2">
                                                     {item.product?.product_name || 'Product Name Not Available'}
                                                 </h3>
                                             </Link>
@@ -476,7 +476,7 @@ export default function Page() {
                                 onClick={handleCheckout}
                                 className={`w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${cartItems.length > 1 || cartItems.some(item => item.quantity > 1)
                                         ? 'bg-gray-400 hover:bg-gray-400'
-                                        : 'bg-[#35c8dc] hover:bg-[#2db4c8] text-white'
+                                        : 'bg-[#1d76bc] hover:bg-[#1660a0] text-white'
                                     }`}
                                 disabled={
                                     isUpdating ||
