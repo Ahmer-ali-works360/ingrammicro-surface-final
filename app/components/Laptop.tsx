@@ -155,7 +155,7 @@ export default function Laptop() {
                     <div className="group">
                         <div className="mb-8 text-center">
                             <Image
-                                src="/image-five.Webp"
+                                src="/image-five.webp"
                                 alt="Surface Laptop"
                                 width={600}
                                 height={400}
