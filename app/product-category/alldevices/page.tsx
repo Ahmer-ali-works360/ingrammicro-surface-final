@@ -808,7 +808,7 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-                                    {/* <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
+                                    <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
                                         {(admin === profile?.role || shopManager === profile?.role) ? (
                                             <>
                                                 <div className="text-3xl font-semibold">Devices</div>
@@ -827,8 +827,8 @@ export default function Page() {
                                         ) : (
                                             <div className="text-3xl font-semibold">Devices</div>
                                         )}
-                                    </div> */}
-                                    <div className="grid grid-cols-2 py-2 lg:grid-cols-4 gap-3 sm:gap-10">
+                                    </div>
+                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
                                             // If product is not published, only show to admin/shop_manager
                                             if (product.post_status !== "Publish") {
