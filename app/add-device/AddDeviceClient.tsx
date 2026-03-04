@@ -1,1187 +1,1421 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Filter, X, ChevronDown, ChevronUp, Trash2 } from "lucide-react";
-import { Drawer, Skeleton } from "antd";
-import { FaFilter } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { useAuth } from "@/app/context/AuthContext";
-import { FaMinus, FaPlus } from "react-icons/fa6";
-import { useCart } from "@/app/context/CartContext";
 import { toast } from "sonner";
-import { logActivity } from "@/lib/logger";
-import { PiShoppingCartThin } from "react-icons/pi";
-import { IoCheckmark } from "react-icons/io5";
+import { useAuth } from "@/app/context/AuthContext";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Loader2, ArrowLeft } from "lucide-react";
+import {
+    logActivity,
+    logError,
+    logSuccess,
+    logInfo,
+    logWarning,
+    logDb
+} from "@/lib/logger";
 
-// Hardcoded filters (not from database)
-const HARDCODED_FILTERS = {
-    copilotPC: ["Yes"],
-    fiveGEnabled: ["Yes"],
-};
-
-// Get all filter keys
-const HARDCODED_FILTER_KEYS = Object.keys(HARDCODED_FILTERS);
-
-// Interface for product from database
-interface Product {
-    id: string;
-    product_name: string;
-    slug: string;
+interface FormData {
+    productName: string;
     sku: string;
-    form_factor: string; // Now this is the actual text value, not ID
-    processor: string; // Now this is the actual text value, not ID
-    memory: string; // Now this is the actual text value, not ID
-    storage: string; // Now this is the actual text value, not ID
-    screen_size: string; // Now this is the actual text value, not ID
+    formFactor: string;
+    processor: string;
+    memory: string;
+    storage: string;
+    screenSize: string;
     technologies: string;
-    inventory_type: string;
-    total_inventory: number;
-    stock_quantity: number;
-    date: string;
-    copilot: boolean;
-    five_g_Enabled: boolean;
-    post_status: string;
+    totalInventory: string;
+    stockQuantity: string;
+    currentDate: string;
+    inventoryType: string;
     description: string;
-    isBundle: boolean;
-    thumbnail: string;
-    gallery: string[];
-    user_id: string;
-    created_at: string;
+    copilotPC: string;
+    fiveGEnabled: string;
+    postStatus: string;
 }
 
-// Skeleton component for products grid
-const ProductsGridSkeleton = () => {
-    // Check for window only inside component
-    const [isMobile, setIsMobile] = useState(false);
+interface CustomInputs {
+    formFactor: string;
+    processor: string;
+    memory: string;
+    storage: string;
+    screenSize: string;
+}
 
-    useEffect(() => {
-        // Check on mount and on resize
-        const checkIfMobile = () => {
-            setIsMobile(window.innerWidth < 640);
-        };
+interface FilterOptions {
+    formfactor: string[];
+    processor: string[];
+    memory: string[];
+    storage: string[];
+    screenSizesize: string[];
+}
 
-        // Initial check
-        checkIfMobile();
-
-        // Add event listener for resize
-        window.addEventListener('resize', checkIfMobile);
-
-        // Cleanup
-        return () => window.removeEventListener('resize', checkIfMobile);
-    }, []);
-
-    return (
-        <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6">
-            <div className="flex items-center justify-between sm:my-10 my-5">
-                <div className="text-3xl font-semibold">Devices</div>
-            </div>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
-                {[...Array(8)].map((_, index) => (
-                    <div key={index} className="bg-white border border-gray-300 sm:py-5 p-3">
-                        <Skeleton.Image
-                            active
-                            style={{
-                                width: isMobile ? "135px" : "225px",
-                                height: isMobile ? "100px" : "192px",
-                                marginBottom: "16px",
-                            }}
-                        />
-                        <div className="space-y-2">
-                            <Skeleton active paragraph={{ rows: 2 }} />
-                            <Skeleton active paragraph={{ rows: 1, width: '80%' }} />
-                            <Skeleton.Button active size="default" style={{ width: '100%' }} />
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
-    );
-};
-
-// Skeleton component for filters sidebar
-const FiltersSidebarSkeleton = () => (
-    <div className="p-6 space-y-4">
-        {[...Array(7)].map((_, index) => (
-            <div key={index} className="border-b pb-4">
-                <Skeleton active paragraph={{ rows: 0 }} />
-                <div className="mt-3 space-y-2 overflow-hidden">
-                    {[...Array(4)].map((_, i) => (
-                        <Skeleton active paragraph={{ rows: 0 }} style={{ width: 300 }} key={i} />
-                    ))}
-                </div>
-            </div>
-        ))}
-    </div>
-);
-
-export default function Page() {
+export default function AddDeviceClient() {
     const router = useRouter();
-    const { profile, isLoggedIn, loading, user } = useAuth();
-    const admin = process.env.NEXT_PUBLIC_ADMINISTRATOR;
-    const shopManager = process.env.NEXT_PUBLIC_SHOPMANAGER;
-    const superSubscriber = process.env.NEXT_PUBLIC_SUPERSUBSCRIBER;
-    const subscriber = process.env.NEXT_PUBLIC_SUBSCRIBER;
-    const {
-        addToCart,
-        removeFromCart,
-        isUpdating,
-        addingProductId,
-        isLoading: cartLoading,
-        isUpdating: cartUpdating,
-        isInCart, // Add this
-        cartItems,
-        cartCount,
-        updateQuantity,
-        clearCart,
-        getCartTotal
-    } = useCart()
+    const searchParams = useSearchParams();
+    const editSlug = searchParams.get('_');
 
-    // Get stock quantity for a cart item
-    const getItemStockQuantity = (cartItem: any) => {
-        return cartItem.product?.stock_quantity || 0;
+    // State for form fields
+    const [primaryImage, setPrimaryImage] = useState<File | null>(null);
+    const [primaryImagePreview, setPrimaryImagePreview] = useState<string | null>(null);
+    const [additionalImages, setAdditionalImages] = useState<File[]>([]);
+    const [additionalImagesPreview, setAdditionalImagesPreview] = useState<string[]>([]);
+    const [removedExistingImages, setRemovedExistingImages] = useState<string[]>([]);
+
+    // Helper function to get field section for logging
+    const getFieldSection = (field: string): string => {
+        const sections: Record<string, string> = {
+            productName: 'basic_info',
+            sku: 'basic_info',
+            formFactor: 'specifications',
+            processor: 'specifications',
+            memory: 'specifications',
+            storage: 'specifications',
+            screenSize: 'specifications',
+            technologies: 'specifications',
+            totalInventory: 'inventory',
+            stockQuantity: 'inventory',
+            inventoryType: 'inventory',
+            currentDate: 'basic_info',
+            description: 'details',
+            copilotPC: 'features',
+            fiveGEnabled: 'features',
+            postStatus: 'publishing'
+        };
+        return sections[field] || 'other';
     };
 
-    // State for filter options from products table
-    const [filterOptions, setFilterOptions] = useState<Record<string, string[]>>({});
-    // State for products
-    const [products, setProducts] = useState<Product[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [authChecked, setAuthChecked] = useState(false);
-    const [authInitialized, setAuthInitialized] = useState(false);
-    // Combined filters state
-    const [filters, setFilters] = useState<Record<string, string[]>>({
-        formFactor: [],
+    const getTodayDate = () => {
+        return new Date().toISOString().split('T')[0];
+    };
+
+    const [formData, setFormData] = useState<FormData>({
+        productName: "",
+        sku: "",
+        formFactor: "",
+        processor: "",
+        memory: "",
+        storage: "",
+        screenSize: "",
+        technologies: "",
+        totalInventory: "",
+        stockQuantity: "",
+        currentDate: getTodayDate(),
+        inventoryType: "",
+        description: "",
+        copilotPC: "No",
+        fiveGEnabled: "No",
+        postStatus: "Publish",
+    });
+
+    // Custom input states
+    const [customInputs, setCustomInputs] = useState<CustomInputs>({
+        formFactor: "",
+        processor: "",
+        memory: "",
+        storage: "",
+        screenSize: "",
+    });
+
+    // Filter options from existing products
+    const [filterOptions, setFilterOptions] = useState<FilterOptions>({
+        formfactor: [],
         processor: [],
-        screenSize: [],
         memory: [],
         storage: [],
-        copilotPC: [],
-        fiveGEnabled: [],
+        screenSizesize: [],
     });
-    const [showCartDrawer, setShowCartDrawer] = useState(false);
 
-    const CART_LIMIT = 1;
+    // Loading states
+    const [isLoading, setIsLoading] = useState(true);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isLoadingProduct, setIsLoadingProduct] = useState(false);
+    const [isFormLoading, setIsFormLoading] = useState(false);
+    const [productId, setProductId] = useState<string | null>(null);
 
+    // Static options
+    const inventoryTypes = ["Program", "Global"];
+    const yesNoOptions = ["Yes", "No"];
+    const postStatusOptions = ["Publish", "Private"];
+    const { profile, isLoggedIn, loading, user } = useAuth();
+    const [authChecked, setAuthChecked] = useState(false);
+    const [authInitialized, setAuthInitialized] = useState(false);
+    const smRole = process.env.NEXT_PUBLIC_SHOPMANAGER;
+    const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
+    const superSubscriberRole = process.env.NEXT_PUBLIC_SUPERSUBSCRIBER;
+    const subscriberRole = process.env.NEXT_PUBLIC_SUBSCRIBER;
 
-    const isCartLimitReached = () => {
-        return cartItems.length >= CART_LIMIT;
-    };
+    // Role options for select
+    const roleOptions = [
+        { label: "Admin", value: adminRole || "Administrator" },
+        { label: "Super Subscriber", value: superSubscriberRole || "Super-Subscriber" },
+        { label: "Shop Manager", value: smRole || "Shop-Manager" },
+        { label: "Subscriber", value: subscriberRole || "Subscriber" }
+    ];
 
+    const allowedRoles = [smRole, adminRole].filter(Boolean); // Remove undefined values
 
-    const wouldExceedCartLimit = (productId: string) => {
+    // Check if current user is authorized
+    const isAuthorized = profile?.role && allowedRoles.includes(profile.role);
 
-        if (isInCart(productId)) {
-            return false;
-        }
-
-        return cartItems.length >= CART_LIMIT;
-    };
-
-
-    const handleAddToCart = async (productId: string) => {
-        try {
-
-            if (wouldExceedCartLimit(productId)) {
-                toast.error(`You can only add ${CART_LIMIT} product to your cart at a time.`, {
-                    duration: 4000,
-                    style: { background: "#f44336", color: "white" },
-                    action: {
-                        label: "View Cart",
-                        onClick: () => setShowCartDrawer(true),
-                    }
-                });
-
-                // Log the attempt
-                await logActivity({
-                    type: 'cart',
-                    level: 'warning',
-                    action: 'cart_limit_reached',
-                    message: `User attempted to add another product while cart limit (${CART_LIMIT}) is reached`,
-                    userId: user?.id || null,
-                    productId: productId,
-                    details: {
-                        currentCartCount: cartItems.length,
-                        cartLimit: CART_LIMIT,
-                        attemptedProductId: productId
-                    }
-                });
-
-                return;
-            }
-
-            const product = products.find(p => p.id === productId);
-
-            // Log add to cart attempt
-            await logActivity({
-                type: 'product',
-                level: 'info',
-                action: 'add_to_cart_attempt',
-                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku,
-                    userRole: profile?.role,
-                    isPublished: product?.post_status === 'Publish',
-                    stockQuantity: product?.stock_quantity
-                }
-            });
-
-            await addToCart(productId, 1);
-
-            // Log success
-            await logActivity({
-                type: 'product',
-                level: 'success',
-                action: 'add_to_cart_success',
-                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku
-                },
-                status: 'completed'
-            });
-
-            setShowCartDrawer(true);
-
-        } catch (error: any) {
-            let errorMessage = 'Failed to add product to cart. Please try again.';
-
-            await logActivity({
-                type: 'product',
-                level: 'error',
-                action: 'add_to_cart_failed',
-                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    errorCode: error?.code,
-                    errorMessage: error?.message,
-                    errorDetails: error
-                },
-                status: 'failed'
-            });
-
-            if (error?.code === '23505') {
-                errorMessage = 'This product is already in your cart.';
-            } else if (error?.code === '23503') {
-                errorMessage = 'Product not found.';
-            } else if (error?.message?.includes('foreign key constraint')) {
-                errorMessage = 'Invalid product. Please refresh the page and try again.';
-            }
-
-            toast.error(errorMessage, {
-                style: { background: "red", color: "white" },
-                action: {
-                    label: "Clear",
-                    onClick: () => console.log("Undo"),
-                }
-            });
-        }
-    };
-
-    // Handle cart item removal
-    const handleRemoveFromCart = async (productId: string) => {
-        const product = products.find(p => p.id === productId);
-
-        // Log removal attempt
-        await logActivity({
-            type: 'product',
-            level: 'info',
-            action: 'remove_from_cart_attempt',
-            message: `User attempted to remove product from cart: ${product?.product_name || 'Unknown product'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                productName: product?.product_name,
-                sku: product?.sku
-            }
-        });
-
-        try {
-            await removeFromCart(productId);
-
-            // Log successful removal
-            await logActivity({
-                type: 'product',
-                level: 'success',
-                action: 'remove_from_cart_success',
-                message: `Product removed from cart successfully: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku
-                },
-                status: 'completed'
-            });
-        } catch (error) {
-            await logActivity({
-                type: 'product',
-                level: 'error',
-                action: 'remove_from_cart_failed',
-                message: `Failed to remove product from cart`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    errorDetails: error
-                },
-                status: 'failed'
-            });
-        }
-    };
-
-    const checkIfInCart = (productId: string): boolean => {
-        return isInCart(productId);
-    };
-
-    const [showFilters, setShowFilters] = useState(false);
-    // Set all filters to be open by default
-    const [openFilters, setOpenFilters] = useState<string[]>([]);
-
-    // Handle auth check - IMPROVED VERSION
     useEffect(() => {
-        // Only run auth check after auth is fully initialized
-        if (loading) {
+        if (!isAuthorized) {
+            router.replace('/product-category/alldevices');
+            return;
+        }
+    }, [isAuthorized, router]);
+
+    // Handle auth check
+    useEffect(() => {
+        if (loading) return;
+
+        if (!isLoggedIn || !profile?.isVerified) {
+            logActivity({
+                type: 'auth',
+                level: 'warning',
+                action: 'unauthorized_device_access_attempt',
+                message: 'User attempted to access device page without proper authentication',
+                userId: profile?.userId || null,
+                details: {
+                    isLoggedIn,
+                    isVerified: profile?.isVerified,
+                    userRole: profile?.role,
+                    redirectTo: editSlug ? `add-device?_=${editSlug}` : 'add-device'
+                },
+                status: 'failed'
+            });
+            if (!editSlug) {
+                router.replace('/login/?redirect_to=add-device');
+            } else {
+                router.replace(`/login/?redirect_to=add-device?_=${editSlug}`);
+            }
             return;
         }
 
-        setAuthInitialized(true);
-
-        // Now check authentication status
-        if (!isLoggedIn || profile?.isVerified === false && !profile) {
-            router.replace('/login/?redirect_to=product-category/alldevices');
-        } else {
-            setAuthChecked(true);
+        // Check if user has permission to access this page
+        if (!isAuthorized) {
+            logActivity({
+                type: 'auth',
+                level: 'warning',
+                action: 'unauthorized_role_device_access',
+                message: 'User attempted to access device page without proper role',
+                userId: profile.userId || null,
+                details: {
+                    userRole: profile.role,
+                    allowedRoles,
+                    isEditing,
+                    editSlug
+                },
+                status: 'failed'
+            });
+            router.replace('/product-category/alldevices');
+            return;
         }
-    }, [loading, isLoggedIn, profile, user, router]);
 
-    // Fetch data only after auth is confirmed AND initialized
+    }, [loading, isLoggedIn, profile, router, isAuthorized]);
+
+    // Check if we're in edit mode
     useEffect(() => {
-        if (!authChecked || !authInitialized) {
-            return; // Don't fetch data until auth is fully checked AND initialized
+        if (editSlug) {
+            setIsEditing(true);
+            fetchProductForEdit(editSlug);
+        } else {
+            fetchFilterOptions();
         }
+    }, [editSlug]);
 
-        fetchDataFromDatabase();
-    }, [authChecked, authInitialized]);
+    // Fetch product data for editing
+    const fetchProductForEdit = async (slug: string) => {
+        try {
+            setIsLoadingProduct(true);
 
-    const [isCartDrawerOpen, setIsCartDrawerOpen] = useState(false)
+            // Fetch product by slug
+            const { data: product, error } = await supabase
+                .from("products")
+                .select("*")
+                .eq("slug", slug)
+                .single();
 
-    const handleCart = () => {
-        router.replace('/cart');
-        setIsCartDrawerOpen(false);
-    };
-
-    const handleCartClick = () => {
-        setIsCartDrawerOpen(true);
-    };
-
-    const handleCheckout = () => {
-        router.push('/checkout');
-        setIsCartDrawerOpen(false);
-    };
-
-    const handleContinueShopping = () => {
-        setIsCartDrawerOpen(false);
-        router.push('/product-category/alldevices');
-    };
-
-    // Fetch all data from database
-    const fetchDataFromDatabase = async () => {
-        if (!authChecked) return;
-        await logActivity({
-            type: 'product',
-            level: 'info',
-            action: 'products_fetch_attempt',
-            message: 'Attempting to fetch products from database',
-            userId: user?.id || null,
-            details: {
-                authChecked,
-                authInitialized,
-                isLoggedIn,
-                userRole: profile?.role
+            if (error || !product) {
+                toast.error("Product not found", {
+                    style: { background: "red", color: "white" }
+                });
+                router.push('/add-device');
+                return;
             }
-        });
 
-        const startTime = Date.now();
+            // Set product ID for updates
+            setProductId(product.id);
+
+            // Set primary image preview
+            if (product.thumbnail) {
+                setPrimaryImagePreview(product.thumbnail);
+            }
+
+            // Set additional images preview
+            if (product.gallery) {
+                let galleryArray: string[] = [];
+
+                if (Array.isArray(product.gallery)) {
+                    galleryArray = product.gallery;
+                } else if (typeof product.gallery === 'string') {
+                    try {
+                        const parsed = JSON.parse(product.gallery);
+                        if (Array.isArray(parsed)) {
+                            galleryArray = parsed;
+                        } else if (typeof parsed === 'string') {
+                            try {
+                                const reParsed = JSON.parse(parsed);
+                                if (Array.isArray(reParsed)) {
+                                    galleryArray = reParsed;
+                                }
+                            } catch {
+                                // If re-parsing fails, treat as string
+                                if (parsed.includes(',')) {
+                                    galleryArray = parsed.split(',').map(url => url.trim());
+                                } else if (parsed.trim()) {
+                                    galleryArray = [parsed.trim()];
+                                }
+                            }
+                        }
+                    } catch {
+                        if (product.gallery.includes('[')) {
+                            const cleaned = product.gallery
+                                .replace(/[\[\]"]/g, '')
+                                .split(',')
+                                .map((url: string) => url.trim())
+                                .filter((url: string) => url.length > 0);
+
+                            galleryArray = cleaned;
+
+                        } else if (product.gallery.includes(',')) {
+                            galleryArray = product.gallery
+                                .split(',')
+                                .map((url: string) => url.trim());
+
+                        } else if (product.gallery.trim()) {
+                            galleryArray = [product.gallery.trim()];
+                        }
+
+                    }
+                }
+
+                setAdditionalImagesPreview(galleryArray);
+            }
+
+            // Set form data with product values - directly using text values
+            setFormData({
+                productName: product.product_name || "",
+                sku: product.sku || "",
+                formFactor: product.form_factor || "",
+                processor: product.processor || "",
+                memory: product.memory || "",
+                storage: product.storage || "",
+                screenSize: product.screen_size || "",
+                technologies: product.technologies || "",
+                totalInventory: product.total_inventory?.toString() || "",
+                stockQuantity: product.stock_quantity?.toString() || "",
+                currentDate: product.date?.split('T')[0] || getTodayDate(),
+                inventoryType: product.inventory_type || "",
+                description: product.description || "",
+                copilotPC: product.copilot ? "Yes" : "No",
+                fiveGEnabled: product.five_g_Enabled ? "Yes" : "No",
+                postStatus: product.post_status || "Publish",
+            });
+
+            // Fetch filter options after setting form data
+            await fetchFilterOptions();
+
+        } catch (error) {
+            toast.error("Failed to load product for editing", {
+                style: { background: "red", color: "white" }
+            });
+            router.push('/add-device');
+        } finally {
+            setIsLoadingProduct(false);
+        }
+    };
+
+    // Fetch unique filter options from existing products
+    const fetchFilterOptions = async () => {
         try {
             setIsLoading(true);
 
-            if (isLoggedIn) {
-                // 1. Fetch products from database
-                const { data: productsData, error: productsError } = await supabase
-                    .from("products")
-                    .select("*")
-                    .order("date", { ascending: false });
+            // Fetch distinct values for each filter column from products table
+            const { data: formFactorData } = await supabase
+                .from("products")
+                .select("form_factor")
+                .not("form_factor", "is", null)
+                .not("form_factor", "eq", "");
 
-                if (productsError) {
-                    await logActivity({
-                        type: 'product',
-                        level: 'error',
-                        action: 'products_fetch_failed',
-                        message: `Failed to fetch products: ${productsError.message}`,
-                        userId: user?.id || null,
-                        details: {
-                            error: productsError,
-                            executionTimeMs: Date.now() - startTime
-                        },
-                        status: 'failed'
-                    });
-                    setProducts([]);
-                } else if (productsData) {
-                    setProducts(productsData);
+            const { data: processorData } = await supabase
+                .from("products")
+                .select("processor")
+                .not("processor", "is", null)
+                .not("processor", "eq", "");
 
-                    // 2. Extract unique filter options from products data
-                    const extractUniqueValues = (key: keyof Product): string[] => {
-                        const values = productsData
-                            .map(product => product[key])
-                            .filter(value =>
-                                value !== null &&
-                                value !== undefined &&
-                                value !== '' &&
-                                (typeof value === 'string' ? value.trim() !== '' : true)
-                            );
+            const { data: memoryData } = await supabase
+                .from("products")
+                .select("memory")
+                .not("memory", "is", null)
+                .not("memory", "eq", "");
 
-                        // Convert to strings and remove duplicates
-                        return [...new Set(values.map(v => v.toString()))].sort();
-                    };
+            const { data: storageData } = await supabase
+                .from("products")
+                .select("storage")
+                .not("storage", "is", null)
+                .not("storage", "eq", "");
 
-                    // Map frontend filter keys to database column names
-                    const filterOptionsMap = {
-                        formFactor: extractUniqueValues('form_factor'),
-                        processor: extractUniqueValues('processor'),
-                        memory: extractUniqueValues('memory'),
-                        storage: extractUniqueValues('storage'),
-                        screenSize: extractUniqueValues('screen_size'),
-                    };
+            const { data: screenSizeData } = await supabase
+                .from("products")
+                .select("screen_size")
+                .not("screen_size", "is", null)
+                .not("screen_size", "eq", "");
 
-                    setFilterOptions(filterOptionsMap);
+            // Extract unique values
+            const formFactorOptions = [...new Set(formFactorData?.map(item => item.form_factor) || [])].sort();
+            const processorOptions = [...new Set(processorData?.map(item => item.processor) || [])].sort();
+            const memoryOptions = [...new Set(memoryData?.map(item => item.memory) || [])].sort();
+            const storageOptions = [...new Set(storageData?.map(item => item.storage) || [])].sort();
+            const screenSizeOptions = [...new Set(screenSizeData?.map(item => item.screen_size) || [])].sort();
 
-                    await logActivity({
-                        type: 'product',
-                        level: 'success',
-                        action: 'products_fetch_success',
-                        message: `Successfully fetched ${productsData.length} products from database`,
-                        userId: user?.id || null,
-                        details: {
-                            totalProducts: productsData.length,
-                            publishedProducts: productsData.filter(p => p.post_status === 'Publish').length,
-                            outOfStockProducts: productsData.filter(p => p.stock_quantity === 0).length,
-                            filterOptionsCount: {
-                                formFactor: filterOptionsMap.formFactor.length,
-                                processor: filterOptionsMap.processor.length,
-                                memory: filterOptionsMap.memory.length,
-                                storage: filterOptionsMap.storage.length,
-                                screenSize: filterOptionsMap.screenSize.length,
-                            },
-                            executionTimeMs: Date.now() - startTime
-                        },
-                        status: 'completed'
-                    });
-                }
+            setFilterOptions({
+                formfactor: [...formFactorOptions, "Custom"],
+                processor: [...processorOptions, "Custom"],
+                memory: [...memoryOptions, "Custom"],
+                storage: [...storageOptions, "Custom"],
+                screenSizesize: [...screenSizeOptions, "Custom"],
+            });
 
-                // Initialize open filters with all available keys
-                const allFilterKeys = [
-                    'formFactor',
-                    'processor',
-                    'memory',
-                    'storage',
-                    'screenSize',
-                    ...HARDCODED_FILTER_KEYS
-                ];
-                setOpenFilters(allFilterKeys);
-            }
         } catch (error) {
-            // Log unexpected error
-            await logActivity({
-                type: 'product',
-                level: 'error',
-                action: 'products_fetch_error',
-                message: `Unexpected error while fetching products`,
-                userId: user?.id || null,
-                details: {
-                    error: error,
-                    executionTimeMs: Date.now() - startTime
-                },
-                status: 'failed'
+            toast.error("Failed to load filter options", {
+                style: { background: "black", color: "white" }
             });
         } finally {
             setIsLoading(false);
         }
     };
 
-    // Toggle individual filter open/close state
-    const toggleFilter = (filterType: string) => {
-        setOpenFilters(prev =>
-            prev.includes(filterType)
-                ? prev.filter(f => f !== filterType)
-                : [...prev, filterType]
-        );
+    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>, type: 'primary' | 'additional') => {
+        const files = event.target.files;
+        if (!files) return;
+
+        if (type === 'primary') {
+            const file = files[0];
+            if (file) {
+                setPrimaryImage(file);
+                const imageUrl = URL.createObjectURL(file);
+                setPrimaryImagePreview(imageUrl);
+            }
+        } else {
+            const newImages: File[] = [];
+            const newPreviews: string[] = [];
+            const maxImages = Math.min(files.length, 6 - additionalImages.length);
+
+            for (let i = 0; i < maxImages; i++) {
+                const file = files[i];
+                newImages.push(file);
+                const imageUrl = URL.createObjectURL(file);
+                newPreviews.push(imageUrl);
+            }
+
+            setAdditionalImages(prev => [...prev, ...newImages]);
+            setAdditionalImagesPreview(prev => [...prev, ...newPreviews]);
+
+            if (files.length > maxImages) {
+                toast.warning(`Maximum 6 images allowed. ${maxImages} images added.`, {
+                    style: { background: "black", color: "white" }
+                });
+            }
+        }
     };
 
-    // Filter products based on selected filters
-    const filteredProducts = products.filter(product => {
-        return Object.entries(filters).every(([key, values]) => {
-            if (values.length === 0) return true;
+    const removeAdditionalImage = (index: number) => {
+        const imageUrl = additionalImagesPreview[index];
 
-            // Map filter keys to product property names
-            const keyMapping: Record<string, keyof Product> = {
-                formFactor: "form_factor",
-                fiveGEnabled: "five_g_Enabled",
-                copilotPC: "copilot",
-                processor: "processor",
-                screenSize: "screen_size",
-                memory: "memory",
-                storage: "storage"
-            };
+        // Check if this is an existing image (URL) or a new upload (blob URL)
+        const isExistingImage = imageUrl?.startsWith('http');
 
-            const productKey = keyMapping[key] || key as keyof Product;
-            const productValue = product[productKey];
+        if (isExistingImage) {
+            setRemovedExistingImages(prev => [...prev, imageUrl]);
+            toast.info("Existing image marked for removal. Save to apply changes.", {
+                style: { background: "black", color: "white" }
+            });
+        }
 
-            // Handle undefined/null values
-            if (productValue === undefined || productValue === null) {
+        setAdditionalImages(prev => prev.filter((_, i) => i !== index));
+        setAdditionalImagesPreview(prev => prev.filter((_, i) => i !== index));
+    };
+
+    const createSlug = (text: string) => {
+        // Generate random 10-character string
+        const generateRandomString = (length: number) => {
+            const characters = 'abcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        };
+
+        const randomString = generateRandomString(10);
+
+        // Create base slug from text
+        const baseSlug = text
+            .toLowerCase()
+            .replace(/[^\w\s-]/g, '')
+            .replace(/\s+/g, '-')
+            .replace(/--+/g, '-')
+            .trim();
+
+        // Remove trailing dash if exists
+        const cleanBaseSlug = baseSlug.replace(/-$/, '');
+
+        // Combine with random string
+        return `${cleanBaseSlug}-${randomString}`;
+    };
+
+    const handleInputChange = (field: keyof FormData, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+
+        const fieldMap: Record<string, keyof CustomInputs> = {
+            formFactor: "formFactor",
+            processor: "processor",
+            memory: "memory",
+            storage: "storage",
+            screenSize: "screenSize",
+        };
+
+        if (fieldMap[field] && value !== "Custom") {
+            setCustomInputs(prev => ({ ...prev, [fieldMap[field]]: "" }));
+        }
+    };
+
+    const handleRadioChange = (field: keyof FormData, value: string) => {
+        setFormData(prev => ({ ...prev, [field]: value }));
+    };
+
+    const handleCustomInputChange = (field: keyof CustomInputs, value: string) => {
+        setCustomInputs(prev => ({ ...prev, [field]: value }));
+    };
+
+    const uploadImagesToSupabase = async () => {
+        const imageUrls: { primary: string | null; additional: string[] } = {
+            primary: null,
+            additional: []
+        };
+
+        try {
+            // Upload primary image only if new image is selected
+            if (primaryImage) {
+                const fileExt = primaryImage.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+                const filePath = `devices/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('ingram')
+                    .upload(filePath, primaryImage);
+
+                if (uploadError) {
+                    throw uploadError;
+                }
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('ingram')
+                    .getPublicUrl(filePath);
+
+                imageUrls.primary = publicUrl;
+            } else if (primaryImagePreview && !primaryImage) {
+                imageUrls.primary = primaryImagePreview;
+            }
+
+            // Upload new additional images
+            for (const image of additionalImages) {
+                const fileExt = image.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+                const filePath = `devices/gallery/${fileName}`;
+
+                const { error: uploadError } = await supabase.storage
+                    .from('ingram')
+                    .upload(filePath, image);
+
+                if (uploadError) {
+                    throw uploadError;
+                }
+
+                const { data: { publicUrl } } = supabase.storage
+                    .from('ingram')
+                    .getPublicUrl(filePath);
+
+                imageUrls.additional.push(publicUrl);
+            }
+
+            // Add existing additional images in edit mode (excluding removed ones and blob URLs)
+            if (isEditing) {
+                const existingImages = additionalImagesPreview.filter(img =>
+                    !img.startsWith('blob:') &&
+                    (img.startsWith('http://') || img.startsWith('https://')) &&
+                    !removedExistingImages.includes(img)
+                );
+
+                imageUrls.additional = [...imageUrls.additional, ...existingImages];
+            }
+
+            return imageUrls;
+        } catch (error) {
+            throw error;
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const submitStartTime = Date.now();
+        setIsFormLoading(true);
+
+        try {
+            await logActivity({
+                type: 'product',
+                level: 'info',
+                action: 'product_form_submission_attempt',
+                message: `Product form submission ${isEditing ? 'update' : 'create'} attempt`,
+                userId: profile?.userId || null,
+                details: {
+                    isEditing,
+                    productName: formData.productName,
+                    sku: formData.sku,
+                    userRole: profile?.role
+                },
+                status: 'processing'
+            });
+
+            // Check for required fields
+            const requiredFields = [
+                { field: 'productName', label: 'Product Name', value: formData.productName },
+                { field: 'sku', label: 'SKU', value: formData.sku },
+                // { field: 'formFactor', label: 'Form Factor', value: formData.formFactor },
+                // { field: 'processor', label: 'Processor', value: formData.processor },
+                // { field: 'memory', label: 'Memory', value: formData.memory },
+                // { field: 'storage', label: 'Storage', value: formData.storage },
+                // { field: 'screenSize', label: 'Screen Size', value: formData.screenSize },
+                { field: 'inventoryType', label: 'Inventory Type', value: formData.inventoryType },
+                { field: 'totalInventory', label: 'Total Inventory', value: formData.totalInventory },
+                { field: 'stockQuantity', label: 'Stock Quantity', value: formData.stockQuantity },
+                { field: 'copilotPC', label: 'Copilot + PC', value: formData.copilotPC },
+                { field: 'fiveGEnabled', label: '5G Enabled', value: formData.fiveGEnabled },
+                { field: 'postStatus', label: 'Post Status', value: formData.postStatus },
+            ];
+
+            const emptyFields = requiredFields.filter(field => {
+                if (!field.value || field.value.trim() === '') {
+                    return true;
+                }
+
+                if (field.value === "Custom") {
+                    const customFieldMap: Record<string, keyof CustomInputs> = {
+                        formFactor: "formFactor",
+                        processor: "processor",
+                        memory: "memory",
+                        storage: "storage",
+                        screenSize: "screenSize",
+                    };
+
+                    if (customFieldMap[field.field as keyof typeof customFieldMap] &&
+                        !customInputs[customFieldMap[field.field as keyof typeof customFieldMap]]?.trim()) {
+                        return true;
+                    }
+                }
+
                 return false;
+            });
+
+            if (emptyFields.length > 0) {
+                const fieldNames = emptyFields.map(field => field.label).join(', ');
+                toast.error(`Please fill in the following required fields: ${fieldNames}`, {
+                    style: { background: "red", color: "white" }
+                });
+                setIsFormLoading(false);
+                return;
             }
 
-            // Handle boolean filters
-            if (key === "copilotPC" || key === "fiveGEnabled") {
-                return values.includes("Yes") ? productValue === true : true;
+            // Check if "Custom" is selected but custom input is empty
+            const customFieldsToCheck = [
+                { field: 'formFactor' as const, customField: 'formFactor' as const },
+                { field: 'processor' as const, customField: 'processor' as const },
+                { field: 'memory' as const, customField: 'memory' as const },
+                { field: 'storage' as const, customField: 'storage' as const },
+                { field: 'screenSize' as const, customField: 'screenSize' as const },
+            ];
+
+            const missingCustomInputs = customFieldsToCheck.filter(({ field, customField }) => {
+                const formValue = formData[field];
+                const customValue = customInputs[customField];
+                return formValue === "Custom" && (!customValue || customValue.trim() === '');
+            });
+
+            if (missingCustomInputs.length > 0) {
+                const fieldNames = missingCustomInputs.map(({ field }) => {
+                    const labelMap: Record<string, string> = {
+                        formFactor: "Form Factor",
+                        processor: "Processor",
+                        memory: "Memory",
+                        storage: "Storage",
+                        screenSize: "Screen Size",
+                    };
+                    return labelMap[field] || field;
+                }).join(', ');
+
+                toast.error(`Please enter custom values for: ${fieldNames}`, {
+                    style: { background: "red", color: "white" }
+                });
+                setIsFormLoading(false);
+                return;
             }
 
-            // Handle string values
-            return values.includes(productValue.toString());
-        });
-    });
+            // Check if primary image is uploaded (for new products only)
+            if (!isEditing && !primaryImage) {
+                toast.error("Please upload a primary image", {
+                    style: { background: "red", color: "white" }
+                });
+                setIsFormLoading(false);
+                return;
+            }
 
-    // Sort the filtered products
-    filteredProducts.sort((a, b) => {
-        // Priority 1: Post Status (Publish first, then others)
-        const aIsPublished = a.post_status === "Publish";
-        const bIsPublished = b.post_status === "Publish";
+            // Validate numeric fields
+            if (formData.totalInventory) {
+                const totalInv = parseInt(formData.totalInventory);
+                if (isNaN(totalInv) || totalInv < 0) {
+                    toast.error("Total Inventory must be a valid positive number", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+            }
 
-        if (aIsPublished && !bIsPublished) return -1;
-        if (!aIsPublished && bIsPublished) return 1;
+            if (formData.stockQuantity) {
+                const stockQty = parseInt(formData.stockQuantity);
+                if (isNaN(stockQty) || stockQty < 0) {
+                    toast.error("Stock Quantity must be a valid positive number", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+            }
 
-        // Priority 2: Stock Quantity (non-zero first, zero last)
-        const aHasStock = a.stock_quantity > 0;
-        const bHasStock = b.stock_quantity > 0;
+            // Check if stock quantity is less than or equal to total inventory
+            if (formData.totalInventory && formData.stockQuantity) {
+                const totalInv = parseInt(formData.totalInventory);
+                const stockQty = parseInt(formData.stockQuantity);
 
-        if (aHasStock && !bHasStock) return -1;
-        if (!aHasStock && bHasStock) return 1;
+                if (stockQty > totalInv) {
+                    toast.error("Stock quantity cannot be greater than total inventory", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+            }
 
-        // Priority 3: Date (latest first)
-        const dateA = a.date ? new Date(a.date).getTime() : 0;
-        const dateB = b.date ? new Date(b.date).getTime() : 0;
+            // Check if date is valid
+            if (formData.currentDate) {
+                const selectedDate = new Date(formData.currentDate);
+                const today = new Date();
 
-        return dateB - dateA; // Descending order (latest first)
-    });
+                selectedDate.setHours(0, 0, 0, 0);
+                today.setHours(0, 0, 0, 0);
 
-    // Pehle yeh state update function ko fix karo - line 300 ke around
-    const handleFilterChange = (filterType: string, value: string) => {
-        setFilters(prev => {
-            // Ensure prev[filterType] exists and is an array
-            const currentValues = Array.isArray(prev[filterType]) ? prev[filterType] : [];
+                if (selectedDate > today) {
+                    toast.error("Date cannot be in the future", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+            }
 
-            // Check if value exists
-            const newValues = currentValues.includes(value)
-                ? currentValues.filter(v => v !== value)  // Remove if exists
-                : [...currentValues, value];               // Add if doesn't exist
+            // Upload images
+            const imageUrls = await uploadImagesToSupabase();
 
-            return {
-                ...prev,
-                [filterType]: newValues
+            // Create slug
+            const slug = createSlug(formData.productName);
+
+            // Prepare final data with direct text values
+            // For custom fields, use the custom input value if "Custom" is selected
+            const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): string => {
+                if (formData[field] === "Custom") {
+                    return customInputs[customField] || formData[field];
+                }
+                return formData[field];
             };
+
+            const finalFormData = {
+                productName: formData.productName,
+                sku: formData.sku,
+                formFactor: getFieldValue('formFactor', 'formFactor'),
+                processor: getFieldValue('processor', 'processor'),
+                memory: getFieldValue('memory', 'memory'),
+                storage: getFieldValue('storage', 'storage'),
+                screenSize: getFieldValue('screenSize', 'screenSize'),
+                technologies: formData.technologies,
+                inventoryType: formData.inventoryType,
+                totalInventory: formData.totalInventory ? parseInt(formData.totalInventory) : null,
+                stockQuantity: formData.stockQuantity ? parseInt(formData.stockQuantity) : null,
+                currentDate: formData.currentDate,
+                copilotPC: formData.copilotPC,
+                fiveGEnabled: formData.fiveGEnabled,
+                postStatus: formData.postStatus,
+                description: formData.description,
+            };
+
+            const toBool = (value?: string) => value === "Yes";
+
+            if (isEditing && productId) {
+
+                const { data: pRowSKU } = await supabase
+                    .from("products")
+                    .select("sku")
+                    .eq("sku", finalFormData.sku.trim())
+                    .neq("id", productId)
+                    .single();
+
+                if (pRowSKU) {
+                    toast.error("Unable to update the device because a device with the same SKU already exists.", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+
+                // Get existing product data to preserve existing images
+                const { data: existingProduct } = await supabase
+                    .from("products")
+                    .select("gallery")
+                    .eq("id", productId)
+                    .single();
+
+                let finalGallery: string[] = [...imageUrls.additional];
+
+                // Helper function to parse existing gallery
+                const parseExistingGallery = (galleryData: any): string[] => {
+                    if (!galleryData) return [];
+
+                    try {
+                        if (Array.isArray(galleryData)) return galleryData;
+                        if (typeof galleryData === 'string') {
+                            try {
+                                const parsed = JSON.parse(galleryData);
+                                if (Array.isArray(parsed)) return parsed;
+                                if (typeof parsed === 'string') {
+                                    const reParsed = JSON.parse(parsed);
+                                    if (Array.isArray(reParsed)) return reParsed;
+                                    return [reParsed];
+                                }
+                                return [parsed];
+                            } catch {
+                                // Handle comma-separated string
+                                return galleryData.split(',').map((url: string) => url.trim()).filter((url: string) => url);
+                            }
+                        }
+                        return [];
+                    } catch {
+                        return [];
+                    }
+                };
+
+                // Add existing images that aren't being removed
+                if (existingProduct?.gallery) {
+                    const existingGallery = parseExistingGallery(existingProduct.gallery);
+                    existingGallery.forEach((url: string) => {
+                        if (!removedExistingImages.includes(url) && !finalGallery.includes(url)) {
+                            finalGallery.push(url);
+                        }
+                    });
+                }
+
+                // Update device - directly store text values
+                const { error } = await supabase
+                    .from("products")
+                    .update({
+                        product_name: finalFormData.productName,
+                        slug: slug,
+                        sku: finalFormData.sku,
+                        form_factor: finalFormData.formFactor,
+                        processor: finalFormData.processor,
+                        memory: finalFormData.memory,
+                        storage: finalFormData.storage,
+                        screen_size: finalFormData.screenSize,
+                        technologies: finalFormData.technologies,
+                        inventory_type: finalFormData.inventoryType,
+                        total_inventory: finalFormData.totalInventory,
+                        stock_quantity: finalFormData.stockQuantity,
+                        date: finalFormData.currentDate,
+                        copilot: toBool(finalFormData.copilotPC),
+                        five_g_Enabled: toBool(finalFormData.fiveGEnabled),
+                        post_status: finalFormData.postStatus,
+                        description: finalFormData.description,
+                        thumbnail: imageUrls.primary,
+                        gallery: finalGallery,
+                        updated_at: new Date().toISOString(),
+                    })
+                    .eq("id", productId);
+
+                if (error) {
+                    toast.error("Failed to update device. Please try again.", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+
+                toast.success("Device updated successfully!", {
+                    style: { background: "black", color: "white" }
+                });
+
+                // Log validation passed
+                await logActivity({
+                    type: 'validation',
+                    level: 'success',
+                    action: 'form_validation_passed',
+                    message: 'Product form validation passed',
+                    userId: profile?.userId || null,
+                    details: {
+                        validationTimeMs: Date.now() - submitStartTime,
+                        hasPrimaryImage: !isEditing ? !!primaryImage : true,
+                        additionalImagesCount: additionalImages.length
+                    },
+                    status: 'completed'
+                });
+
+                router.push(`/product/${slug}`);
+
+            } else {
+
+                const { data: pRowSKU } = await supabase
+                    .from("products")
+                    .select("sku")
+                    .eq("sku", finalFormData.sku.trim())
+                    .single();
+
+                if (pRowSKU) {
+                    toast.error("Unable to add the device because a device with the same SKU already exists.", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+
+                // Insert new device - directly store text values
+                const { error } = await supabase
+                    .from("products")
+                    .insert({
+                        product_name: finalFormData.productName,
+                        slug: slug,
+                        sku: finalFormData.sku,
+                        form_factor: finalFormData.formFactor,
+                        processor: finalFormData.processor,
+                        memory: finalFormData.memory,
+                        storage: finalFormData.storage,
+                        screen_size: finalFormData.screenSize,
+                        technologies: finalFormData.technologies,
+                        inventory_type: finalFormData.inventoryType,
+                        total_inventory: finalFormData.totalInventory,
+                        stock_quantity: finalFormData.stockQuantity,
+                        withCustomer: '0',
+                        date: finalFormData.currentDate,
+                        copilot: toBool(finalFormData.copilotPC),
+                        five_g_Enabled: toBool(finalFormData.fiveGEnabled),
+                        post_status: finalFormData.postStatus,
+                        description: finalFormData.description,
+                        isBundle: false,
+                        isInStock: true,
+                        thumbnail: imageUrls.primary,
+                        gallery: imageUrls.additional,
+                        user_id: profile?.userId,
+                    });
+
+                if (error) {
+                    toast.error("Failed to add device. Please try again.", {
+                        style: { background: "red", color: "white" }
+                    });
+                    setIsFormLoading(false);
+                    return;
+                }
+
+                toast.success("Device added successfully!", {
+                    style: { background: "black", color: "white" }
+                });
+
+                resetForm();
+                router.push("/product-category/alldevices/");
+            }
+
+            setIsFormLoading(false);
+
+        } catch (error) {
+            toast.error("Failed to process device. Please try again.", {
+                style: { background: "red", color: "white" }
+            });
+            setIsFormLoading(false);
+        }
+    };
+
+    const resetForm = () => {
+        setFormData({
+            productName: "",
+            sku: "",
+            formFactor: "",
+            processor: "",
+            memory: "",
+            storage: "",
+            screenSize: "",
+            technologies: "",
+            totalInventory: "",
+            stockQuantity: "",
+            currentDate: getTodayDate(),
+            inventoryType: "",
+            description: "",
+            copilotPC: "No",
+            fiveGEnabled: "No",
+            postStatus: "Publish",
+        });
+
+        setCustomInputs({
+            formFactor: "",
+            processor: "",
+            memory: "",
+            storage: "",
+            screenSize: "",
+        });
+
+        setPrimaryImage(null);
+        setPrimaryImagePreview(null);
+        setAdditionalImages([]);
+        setAdditionalImagesPreview([]);
+        setRemovedExistingImages([]);
+
+        const fileInputs = document.querySelectorAll('input[type="file"]');
+        fileInputs.forEach(input => {
+            (input as HTMLInputElement).value = '';
         });
     };
 
-    // Yeh simpler approach hai - just add onClick to label
-    const DatabaseFilterSection = ({ filterKey, title }: { filterKey: string, title: string }) => {
-        const filterOptionsList = filterOptions[filterKey] || [];
-        const currentFilterValues = filters[filterKey] || [];
-
-        const handleCheckboxChange = (item: string) => {
-            handleFilterChange(filterKey, item);
-        };
-
-        if (filterOptionsList.length === 0) return null;
+    const renderFieldWithCustom = (
+        label: string,
+        field: keyof FormData,
+        options: string[],
+        customField: keyof CustomInputs,
+        type: string
+    ) => {
+        const safeOptions = options || [];
+        const showCustomInput = formData[field] === "Custom";
 
         return (
-            <div className="border-b pb-4">
-                <button
-                    onClick={() => toggleFilter(filterKey)}
-                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#3ba1da]"
-                >
-                    {title}
-                    {openFilters.includes(filterKey) ? (
-                        <ChevronUp className="h-4 w-4" />
-                    ) : (
-                        <ChevronDown className="h-4 w-4" />
-                    )}
-                </button>
-                {openFilters.includes(filterKey) && (
-                    <div className="mt-3 space-y-2">
-                        {filterOptionsList.map(item => {
-                            const checkboxId = `${filterKey}-${item}`;
+            <div>
+                <label className="block text-gray-700 text-sm font-medium mb-2">
+                    {label}
+                </label>
 
-                            return (
-                                <div key={checkboxId} className="flex items-center space-x-3 py-1">
-                                    <input
-                                        type="checkbox"
-                                        id={checkboxId}
-                                        checked={currentFilterValues.includes(item)}
-                                        onChange={() => handleCheckboxChange(item)}
-                                        className="h-4 w-4 text-[#3ba1da] rounded border-gray-300 focus:ring-[#3ba1da]"
-                                    />
-                                    <label
-                                        htmlFor={checkboxId}
-                                        className="text-gray-700 text-sm cursor-pointer flex-1 select-none"
-                                        onClick={(e) => e.stopPropagation()} // Prevent click from reaching parent
-                                    >
-                                        {item}
-                                    </label>
-                                </div>
-                            );
-                        })}
+                {isLoading ? (
+                    <div className="animate-pulse flex space-x-2">
+                        <div className="h-9 bg-gray-200 rounded w-24"></div>
+                        <div className="h-9 bg-gray-200 rounded w-24"></div>
+                        <div className="h-9 bg-gray-200 rounded w-24"></div>
+                    </div>
+                ) : (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                        {safeOptions.map((option) => (
+                            <button
+                                key={option}
+                                type="button"
+                                onClick={() => handleInputChange(field, option)}
+                                className={`px-3 py-1.5 text-sm rounded-md cursor-pointer transition-colors ${formData[field] === option
+                                    ? "bg-[#1D76BC] text-white border border-[#1660a0]"
+                                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-transparent"
+                                    }`}
+                            >
+                                {option}
+                            </button>
+                        ))}
+                    </div>
+                )}
+
+                {showCustomInput && (
+                    <div className="mt-2">
+                        <input
+                            type="text"
+                            placeholder={`Enter custom ${label.toLowerCase()}`}
+                            value={customInputs[customField]}
+                            onChange={(e) =>
+                                handleCustomInputChange(customField, e.target.value)
+                            }
+                            className="w-full px-4 py-2 border border-gray-300 rounded-md
+                focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                        />
+                        <p className="text-xs text-gray-500 mt-1">
+                            Custom value will be saved when you submit the form
+                        </p>
                     </div>
                 )}
             </div>
         );
     };
 
-    // Hardcoded filter section ko bhi same pattern par update karo
-    const HardcodedFilterSection = ({ filterKey, title }: { filterKey: string, title: string }) => {
-        const filterOptionsList = HARDCODED_FILTERS[filterKey as keyof typeof HARDCODED_FILTERS] || [];
-
-        // Get current filter values from state
-        const currentFilterValues = filters[filterKey] || [];
-
-        const handleCheckboxChange = (item: string) => {
-            handleFilterChange(filterKey, item);
-        };
-
-        if (filterOptionsList.length === 0) return null;
-
+    if (isLoadingProduct) {
         return (
-            <div className="border-b pb-4">
-                <button
-                    onClick={() => toggleFilter(filterKey)}
-                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#3ba1da]"
-                >
-                    {title}
-                    {openFilters.includes(filterKey) ? (
-                        <ChevronUp className="h-4 w-4" />
-                    ) : (
-                        <ChevronDown className="h-4 w-4" />
-                    )}
-                </button>
-                {openFilters.includes(filterKey) && (
-                    <div className="mt-3 space-y-2">
-                        {filterOptionsList.map(item => {
-                            const checkboxId = `${filterKey}-hardcoded-${item}`;
-
-                            return (
-                                <div key={checkboxId} className="flex items-center space-x-3 cursor-pointer py-1">
-                                    <input
-                                        type="checkbox"
-                                        id={checkboxId}
-                                        checked={currentFilterValues.includes(item)}
-                                        onChange={() => handleCheckboxChange(item)}
-                                        className="h-4 w-4 text-[#3ba1da] rounded border-gray-300 focus:ring-[#3ba1da] pointer-events-auto"
-                                    />
-                                    <label
-                                        htmlFor={checkboxId}
-                                        className="text-gray-700 text-sm cursor-pointer flex-1 select-none"
-                                    >
-                                        {item}
-                                    </label>
-                                </div>
-                            );
-                        })}
-                    </div>
-                )}
-            </div>
-        );
-    };
-
-    const clearFilters = () => {
-        setFilters({
-            formFactor: [],
-            processor: [],
-            screenSize: [],
-            memory: [],
-            storage: [],
-            copilotPC: [],
-            fiveGEnabled: [],
-        });
-    };
-
-    const getActiveFilterCount = () => {
-        return Object.values(filters).reduce((total, values) => total + values.length, 0);
-    };
-
-    // Get all filter keys for rendering
-    const allFilterKeys = [
-        'formFactor',
-        'processor',
-        'memory',
-        'storage',
-        'screenSize',
-        ...HARDCODED_FILTER_KEYS
-    ];
-
-    // Optional: prevent UI flicker - MUST BE AFTER ALL HOOKS
-    if (isLoggedIn === null) {
-        return (
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#3ba1da] mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading...</p>
+                    <Loader2 className="h-8 w-8 animate-spin text-[#1D76BC] mx-auto" />
+                    <p className="mt-4 text-gray-600">Loading product data...</p>
                 </div>
             </div>
         );
     }
 
+    if (!isAuthorized) {
+        return (
+            <>
+            </>
+        )
+    }
+
     return (
-        <div className="min-h-screen">
-            <div className="flex">
-                {/* Fixed Filter Sidebar - Desktop */}
-                <div className="hidden lg:block w-64 flex-shrink-0 h-full top-0 overflow-y-auto bg-white border-r border-gray-200">
-                    <div className="p-6">
-                        <div className="flex items-center justify-between mb-6">
-                            {getActiveFilterCount() > 0 && (
-                                <button
-                                    onClick={clearFilters}
-                                    className="text-sm text-[#3ba1da] hover:text-[#41abd6]"
-                                >
-                                    Clear all
-                                </button>
-                            )}
-                        </div>
-
-                        {/* Show skeleton only for filter options when loading */}
-                        {isLoading ? (
-                            <FiltersSidebarSkeleton />
-                        ) : (
-                            <div className="space-y-4">
-                                {/* Database Filters from products table */}
-                                <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
-                                <DatabaseFilterSection filterKey="processor" title="Processor" />
-                                <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
-                                <DatabaseFilterSection filterKey="memory" title="Memory" />
-                                <DatabaseFilterSection filterKey="storage" title="Storage" />
-
-                                {/* Hardcoded Filters */}
-                                <HardcodedFilterSection filterKey="fiveGEnabled" title="5G Enabled" />
-                            </div>
-                        )}
-                    </div>
-                </div>
-
-                {/* Main Content Area (right side of sidebar) */}
-                <div className="flex-1 min-h-screen sm:px-0 px-6">
-                    {/* Mobile filter button */}
-                    <div className="lg:hidden p-4 flex items-center justify-between gap-3 px-7">
-                        {/* Mobile Heading */}
-                        <div className="w-6 h-6">
-                        </div>
-                        <h1 className="text-2xl font-bold text-gray-900">
-                            All Devices
-                        </h1>
-
-                        {/* Filter Button */}
+        <div className="min-h-screen bg-gray-50">
+            <div className="p-6 max-w-7xl mx-auto">
+                <div className="flex items-center justify-between mb-6">
+                    <div className="flex items-center gap-4">
                         <button
-                            onClick={() => setShowFilters(true)}
-                            className="m-2"
+                            onClick={() => router.back()}
+                            className="flex items-center text-gray-600 hover:text-gray-900"
                         >
-                            <FaFilter size={15} />
+                            <ArrowLeft className="h-5 w-5 mr-2" />
+                            Back
                         </button>
+                        <h1 className="text-2xl font-normal text-gray-900">
+                            {isEditing ? 'Edit Device' : 'Add New Device'}
+                        </h1>
                     </div>
+                </div>
 
-                    {/* Products Section */}
-                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        {/* Results header - Only show when not loading */}
-                        {!isLoading && getActiveFilterCount() > 0 && (
-                            <div className="mb-8">
-                                <div className="flex flex-wrap gap-2 mt-4">
-                                    {Object.entries(filters).map(([key, values]) =>
-                                        values.map(value => (
-                                            <span
-                                                key={`${key}-${value}`}
-                                                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#3ba1da]/10 text-[#3ba1da] text-sm"
+                <form onSubmit={handleSubmit} className="space-y-8">
+                    {/* Product Images Section */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <h2 className="text-lg font-medium text-gray-900 mb-4">Product Images</h2>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            {/* Primary Image */}
+                            <div>
+                                <div className="flex items-center space-x-2 mb-3">
+                                    <span className="text-gray-700 font-medium">Primary</span>
+                                    <span className="text-xs text-gray-500">Thumbnail Image</span>
+                                </div>
+                                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                                    {primaryImagePreview ? (
+                                        <div className="relative">
+                                            <img src={primaryImagePreview} alt="Primary" className="max-h-48 mx-auto rounded" />
+                                            <button
+                                                type="button"
+                                                onClick={() => {
+                                                    setPrimaryImage(null);
+                                                    setPrimaryImagePreview(null);
+                                                }}
+                                                className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600"
                                             >
-                                                {value}
-                                                <button
-                                                    onClick={() => handleFilterChange(key, value)}
-                                                    className="ml-1 hover:text-red-500"
-                                                >
-                                                    <X size={14} />
-                                                </button>
-                                            </span>
-                                        ))
-                                    )}
-                                    <button
-                                        onClick={clearFilters}
-                                        className="text-sm text-gray-600 hover:text-[#3ba1da]"
-                                    >
-                                        Clear all
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-
-                        {/* Products grid - Show skeleton when loading */}
-                        <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6 my-10">
-                            {isLoading || !authChecked ? (
-                                <ProductsGridSkeleton />
-                            ) : filteredProducts.length > 0 ? (
-                                <>
-                                    {/* <div className={`flex items-center sm:my-6 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
-                                        {(admin === profile?.role || shopManager === profile?.role) && (
-                                            <>
-                                                <div className="text-3xl font-semibold">Devices</div>
-                                                <div className="">
-                                                    <div className="flex justify-center md:justify-start">
-                                                        <Link
-                                                            href="/add-device"
-                                                            className="inline-flex items-center justify-center rounded bg-[#003031] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#005758] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#3791b4]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
-                                                        >
-                                                            <FaPlus className="me-3" />
-                                                            Add New Device
-                                                        </Link>
-                                                    </div>
-                                                </div>
-                                            </>
-                                        )}
-                                    </div> */}
-                                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
-                                        {filteredProducts.map(product => {
-                                            // If product is not published, only show to admin/shop_manager
-                                            if (product.post_status !== "Publish") {
-                                                if (subscriber === profile?.role || superSubscriber === profile?.role) {
-                                                    return null; // Don't render this product for non-admin users
-                                                }
-                                            }
-
-                                            const isProductInCart = checkIfInCart(product.id);
-
-                                            return (
-                                                <Link href={`/product/${product.slug}`} key={product.id}>
-                                                    <div className="bg-white border border-gray-300 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col"
-                                                    >
-                                                        {product.stock_quantity == 0 && (
-                                                            <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
-                                                                Out of stock
-                                                            </div>
-                                                        )}
-
-                                                        {/* 5G Logo - Top Right Corner */}
-                                                        {product.five_g_Enabled && (
-                                                            <div className="absolute top-4 right-3 z-10">
-                                                                <img
-                                                                    src="/5g-logo.png"
-                                                                    alt="5G Enabled"
-                                                                    className="w-6 h-6 object-contain"
-                                                                />
-                                                            </div>
-                                                        )}
-
-                                                        {/* Show Private badge only for admin/shop manager users when product is not published */}
-                                                        {product.post_status !== "Publish" && (
-                                                            <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#003031]">
-                                                                Private
-                                                            </div>
-                                                        )}
-
-                                                        {/* Image Container - Fixed Height */}
-                                                        <div className="flex items-center justify-center transition-colors h-48 min-h-48 sm:mt-0 -mt-12 relative">
-                                                            {product.thumbnail ? (
-                                                                <img
-                                                                    src={product.thumbnail}
-                                                                    alt={product.product_name}
-                                                                    className="sm:object-cover object-contain h-full w-full sm:p-5 p-2 sm:-mt-14"
-                                                                />
-                                                            ) : (
-                                                                <div className="flex items-center justify-center h-full w-full text-gray-400">
-                                                                    <svg className="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                                                                    </svg>
-                                                                </div>
-                                                            )}
-                                                        </div>
-
-                                                        {/* Product Info Container - Flexible but with constraints */}
-                                                        <div className="flex flex-col flex-grow text-center -mt-8 mb-4">
-                                                            {/* Title with fixed lines */}
-                                                            <h3 className="text-gray-800 text-xs flex items-center justify-center">
-                                                                {product.product_name}
-                                                            </h3>
-
-                                                            {/* SKU Info - Fixed height */}
-                                                            <div className="text-gray-500 text-xs py-3 space-y-1">
-                                                                <p><b>SKU:</b> {product.sku}</p>
-                                                            </div>
-
-                                                            {/* Spacer to push button to bottom */}
-                                                            <div className="flex-grow"></div>
-
-                                                            {/* Button Container - Fixed at bottom */}
-                                                            <div className="sm:my-2 sm:mb-1 mt-auto">
-                                                                {product.stock_quantity != 0 && product.post_status === "Publish" ? (
-                                                                    <>
-                                                                        {isProductInCart ? (
-                                                                            // Add to cart button
-                                                                            <button
-                                                                                className="sm:px-4 px-3 sm:py-2 py-1.5 text-sm font-medium text-[#003031] border border-[#003031] rounded-sm cursor-pointer hover:bg-[#005758] hover:text-white transition-colors disabled:opacity-50"
-                                                                            >
-                                                                                <div className="flex items-center gap-2">
-                                                                                    <span>
-                                                                                        Add to Cart
-                                                                                    </span>
-                                                                                    <span>
-                                                                                        <IoCheckmark />
-                                                                                    </span>
-                                                                                </div>
-                                                                            </button>
-                                                                        ) : (
-                                                                            // Add to cart button
-                                                                            <button
-                                                                                onClick={(e) => {
-                                                                                    e.preventDefault(); // Prevent Link navigation
-                                                                                    e.stopPropagation();
-                                                                                    handleAddToCart(product.id);
-                                                                                }}
-                                                                                disabled={isUpdating && addingProductId === product.id}
-                                                                                className="sm:px-4 px-3 sm:py-2 py-1.5 text-sm font-medium text-[#003031] border border-[#003031] rounded-sm cursor-pointer hover:bg-[#005758] hover:text-white transition-colors disabled:opacity-50"
-                                                                            >
-                                                                                {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
-                                                                            </button>
-                                                                        )}
-                                                                    </>
-                                                                ) : (
-                                                                    <button
-                                                                        className="sm:px-4 px-3 sm:py-2 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb] transition-colors"
-                                                                    >
-                                                                        Read More
-                                                                    </button>
-                                                                )}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </Link>
-                                            );
-                                        })}
-                                    </div>
-                                </>
-                            ) : (
-                                <div className="text-center py-12">
-                                    <p className="text-gray-600 text-lg">
-                                        {products.length === 0 ? "No products found." : "No products found matching your filters."}
-                                    </p>
-                                    {products.length > 0 && (
-                                        <button
-                                            onClick={clearFilters}
-                                            className="mt-4 text-[#3ba1da] hover:text-[#41abd6] font-medium"
-                                        >
-                                            Clear all filters
-                                        </button>
-                                    )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Mobile filters drawer */}
-            <Drawer
-                title={
-                    <div className="flex items-center justify-between">
-                        <span className="text-xl font-bold">Filters</span>
-                        {getActiveFilterCount() > 0 && (
-                            <button
-                                onClick={clearFilters}
-                                className="text-sm text-[#3ba1da] hover:text-[#41abd6]"
-                            >
-                                Clear all
-                            </button>
-                        )}
-                    </div>
-                }
-                placement="right"
-                onClose={() => setShowFilters(false)}
-                open={showFilters}
-                size={300}
-                className="filter-drawer"
-            >
-                <div className="space-y-6">
-                    {/* Database Filters from products table */}
-                    <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
-                    <DatabaseFilterSection filterKey="processor" title="Processor" />
-                    <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
-                    <DatabaseFilterSection filterKey="memory" title="Memory" />
-                    <DatabaseFilterSection filterKey="storage" title="Storage" />
-
-                    {/* Hardcoded Filters */}
-                    <HardcodedFilterSection filterKey="fiveGEnabled" title="5G Enabled" />
-                </div>
-            </Drawer>
-
-            {/* Cart Drawer - isLoggedIn check ke saath */}
-            {
-                isLoggedIn && (
-                    <Drawer
-                        placement="right"
-                        onClose={() => setShowCartDrawer(false)}  // <-- onClose mein showCartDrawer false karein
-                        open={showCartDrawer}
-                        width={320}
-                        closeIcon={null}
-                        styles={{
-                            header: {
-                                display: 'none !important',
-                                height: 0,
-                                padding: 0,
-                                margin: 0,
-                                minHeight: 0
-                            },
-                            body: {
-                                padding: 0,
-                                margin: 0,
-                                height: '100%'  // Add this
-                            },
-                            wrapper: {
-                                padding: 0
-                            },
-                            content: {
-                                padding: 0,
-                                height: '100%'  // Add this
-                            }
-                        }}
-                        className="cart-drawer"
-                    >
-                        {/* Custom Header with Close Button on Right */}
-                        <div className="flex items-center justify-between border-b border-gray-200 px-4 py-2">
-                            <div className="flex items-center space-x-2">
-                                {/* Optional: Add title here if needed */}
-                            </div>
-                            <button
-                                onClick={() => setShowCartDrawer(false)}
-                                className="p-1 hover:bg-gray-100 rounded-full transition-colors cursor-pointer"
-                            >
-                                <X size={18} className="text-gray-600" />
-                            </button>
-                        </div>
-
-                        {cartLoading ? (
-                            <div className="flex flex-col items-center justify-center h-[calc(100%-53px)] py-12">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#003031]"></div>
-                                <p className="mt-4 text-gray-500">Loading cart...</p>
-                            </div>
-                        ) : cartItems.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center h-[calc(100%-53px)] py-12">
-                                <PiShoppingCartThin className="text-gray-300 mb-4" size={64} />
-                                <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
-                                <p className="text-gray-500 text-center mb-6 mx-2">
-                                    Looks like you haven't added any products to your cart yet.
-                                </p>
-                                <button
-                                    onClick={handleContinueShopping}
-                                    className="px-6 py-2 bg-[#003031] text-white rounded-md hover:bg-[#005758] transition-colors cursor-pointer"
-                                >
-                                    Continue
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-col h-[calc(100%-53px)]">
-                                {/* Cart Items List - Scrollable */}
-                                <div className="flex-1 overflow-y-auto px-4">
-                                    {cartItems.map((item) => {
-                                        const stockQuantity = getItemStockQuantity(item);
-                                        const productName = item.product?.product_name || 'Unknown Product';
-                                        const sku = item.product?.sku || 'N/A';
-                                        const thumbnail = item.product?.thumbnail;
-                                        const price = item.product?.price || 0;
-                                        const productSlug = item.product?.slug || '';
-
-                                        return (
-                                            <div key={item.id} className="border-b border-gray-200 py-4">
-                                                <div className="flex items-start space-x-3">
-                                                    {/* Product Image */}
-                                                    <div
-                                                        className="w-20 h-20 rounded-md flex items-center justify-center shrink-0 cursor-pointer transition-colors"
-                                                        onClick={() => productSlug && router.push(`/product/${productSlug}`)}
-                                                    >
-                                                        {thumbnail ? (
-                                                            <img
-                                                                src={thumbnail}
-                                                                alt={productName}
-                                                                className="w-full h-full object-contain p-1"
-                                                            />
-                                                        ) : (
-                                                            <PiShoppingCartThin className="text-gray-400" size={24} />
-                                                        )}
-                                                    </div>
-
-                                                    {/* Product Details */}
-                                                    <div className="flex-1 min-w-0">
-                                                        <h3
-                                                            className="text-sm text-gray-900 leading-6 hover:text-[#003031] cursor-pointer transition-colors line-clamp-1 flex items-center font-medium"
-                                                            onClick={() => productSlug && router.push(`/product/${productSlug}`)}
-                                                        >
-                                                            {productName}
-                                                        </h3>
-                                                        <p className="text-xs text-gray-500 mt-2 leading-5">SKU: {sku}</p>
-                                                    </div>
-
-                                                    {/* Price and Remove Button */}
-                                                    <div className="flex flex-col items-end justify-center min-h-[80px]">
-                                                        <button
-                                                            onClick={() => handleRemoveFromCart(item.product_id)}
-                                                            disabled={cartUpdating}
-                                                            className="text-gray-400 hover:text-red-500 p-1 transition-colors 
-                                                disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer flex items-center justify-center"
-                                                        >
-                                                            <Trash2 size={16} />
-                                                        </button>
-                                                        {price > 0 && (
-                                                            <p className="text-sm font-medium text-gray-900 mt-2 leading-5">
-                                                                ${(price * item.quantity).toFixed(2)}
-                                                            </p>
-                                                        )}
-                                                    </div>
-                                                </div>
+                                                ×
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <>
+                                            <div className="text-gray-400 mb-3">
+                                                <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                                </svg>
                                             </div>
-                                        );
-                                    })}
-                                </div>
-
-                                {/* Cart Summary - Bottom */}
-                                <div className="bg-white border-t border-gray-200 p-4">
-                                    <div className="space-y-3">
-                                        <button
-                                            onClick={handleCart}
-                                            className="w-full py-2.5 border cursor-pointer border-[#003031] text-[#003031] font-medium hover:bg-gray-50 transition-colors rounded-md"
-                                        >
-                                            View Cart
-                                        </button>
-                                        <button
-                                            onClick={handleCheckout}
-                                            disabled={cartUpdating}
-                                            className="w-full py-3 cursor-pointer bg-[#003031] text-white font-medium hover:bg-[#005758] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                                        >
-                                            {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
-                                        </button>
-                                    </div>
+                                            <label className="cursor-pointer inline-block">
+                                                <input
+                                                    type="file"
+                                                    className="hidden"
+                                                    accept="image/*"
+                                                    onChange={(e) => handleImageUpload(e, 'primary')}
+                                                />
+                                                <span className="text-[#1D76BC] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
+                                                    Click to upload
+                                                </span>
+                                            </label>
+                                            <p className="text-xs text-gray-500 mt-2">Maximum file size: 10MB</p>
+                                            <p className="text-xs text-gray-500">Supported: PNG, JPG, WEBP</p>
+                                        </>
+                                    )}
                                 </div>
                             </div>
-                        )}
-                    </Drawer>
-                )
-            }
-        </div >
+
+                            {/* Additional Images */}
+                            <div>
+                                <div className="flex items-center space-x-2 mb-3">
+                                    <span className="text-gray-700 font-medium">Gallery</span>
+                                    <span className="text-xs text-gray-500">Additional Images</span>
+                                </div>
+
+                                {additionalImagesPreview.length === 0 ? (
+                                    <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+                                        <div className="text-gray-400 mb-3">
+                                            <svg className="w-12 h-12 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        <label className="cursor-pointer inline-block">
+                                            <input
+                                                type="file"
+                                                className="hidden"
+                                                accept="image/*"
+                                                multiple
+                                                onChange={(e) => handleImageUpload(e, 'additional')}
+                                            />
+                                            <span className="text-[#1D76BC] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
+                                                Click to upload
+                                            </span>
+                                        </label>
+                                        <p className="text-xs text-gray-500 mt-2">Upload up to 6 images at once</p>
+                                        <p className="text-xs text-gray-500">Maximum file size: 10MB each</p>
+                                        <p className="text-xs text-gray-500">Supported: PNG, JPG, WEBP</p>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="grid grid-cols-3 gap-3 mb-4">
+                                            {additionalImagesPreview.map((img, index) => (
+                                                <div key={index} className="relative border rounded-lg overflow-hidden">
+                                                    <img src={img} alt={`Additional ${index + 1}`} className="w-full h-24 object-cover" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeAdditionalImage(index)}
+                                                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600"
+                                                    >
+                                                        ×
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            {additionalImagesPreview.length < 6 && (
+                                                <label className="border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-gray-400 transition-colors">
+                                                    <input
+                                                        type="file"
+                                                        className="hidden"
+                                                        accept="image/*"
+                                                        multiple
+                                                        onChange={(e) => handleImageUpload(e, 'additional')}
+                                                    />
+                                                    <span className="text-3xl text-gray-400">+</span>
+                                                    <span className="text-xs text-gray-500 mt-1">Add more</span>
+                                                </label>
+                                            )}
+                                        </div>
+                                        <p className="text-xs text-gray-500">Click + to add more images (max 6)</p>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Product Details Form */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {/* Product Name */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    Product Name <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter product name"
+                                    value={formData.productName}
+                                    onChange={(e) => handleInputChange('productName', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    required
+                                />
+                            </div>
+
+                            {/* SKU */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    SKU <span className="text-red-500">*</span>
+                                </label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter SKU"
+                                    value={formData.sku}
+                                    onChange={(e) => handleInputChange('sku', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    required
+                                />
+                            </div>
+
+                            {/* Form Factor */}
+                            {renderFieldWithCustom("Form Factor", "formFactor", filterOptions.formfactor, "formFactor", "form_factor")}
+
+                            {/* Processor */}
+                            {renderFieldWithCustom("Processor", "processor", filterOptions.processor, "processor", "processor")}
+
+                            {/* Memory */}
+                            {renderFieldWithCustom("Memory", "memory", filterOptions.memory, "memory", "memory")}
+
+                            {/* Storage */}
+                            {renderFieldWithCustom("Storage", "storage", filterOptions.storage, "storage", "storage")}
+
+                            {/* Screen Size */}
+                            {renderFieldWithCustom("Screen Size", "screenSize", filterOptions.screenSizesize, "screenSize", "screen_size")}
+
+                            {/* Technologies */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Technologies</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter technologies (comma separated)"
+                                    value={formData.technologies}
+                                    onChange={(e) => handleInputChange('technologies', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Example: Wi-Fi 6, Bluetooth 5.3, vPro</p>
+                            </div>
+
+                            {/* Inventory Type */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Inventory Type</label>
+                                <select
+                                    value={formData.inventoryType}
+                                    onChange={(e) => handleInputChange('inventoryType', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                >
+                                    <option value="">Select inventory type</option>
+                                    {inventoryTypes.map((type) => (
+                                        <option key={type} value={type}>{type}</option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Total Inventory */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Total Inventory</label>
+                                <input
+                                    type="number"
+                                    placeholder="Enter total inventory"
+                                    value={formData.totalInventory}
+                                    onChange={(e) => handleInputChange('totalInventory', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
+                            </div>
+
+                            {/* Stock Quantity */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Stock Quantity</label>
+                                <input
+                                    type="number"
+                                    placeholder="Enter stock quantity"
+                                    value={formData.stockQuantity}
+                                    onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
+                            </div>
+
+                            {/* Upload Date */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Date</label>
+                                <input
+                                    type="date"
+                                    value={formData.currentDate}
+                                    onChange={(e) => handleInputChange('currentDate', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
+                            </div>
+
+                            {/* Copilot + PC */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Copilot + PC</label>
+                                <div className="flex gap-4">
+                                    {yesNoOptions.map((option) => (
+                                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="copilotPC"
+                                                value={option}
+                                                checked={formData.copilotPC === option}
+                                                onChange={(e) => handleRadioChange('copilotPC', e.target.value)}
+                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                            />
+                                            <span className="text-gray-700">{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* 5G Enabled */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">5G Enabled</label>
+                                <div className="flex gap-4">
+                                    {yesNoOptions.map((option) => (
+                                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="fiveGEnabled"
+                                                value={option}
+                                                checked={formData.fiveGEnabled === option}
+                                                onChange={(e) => handleRadioChange('fiveGEnabled', e.target.value)}
+                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                            />
+                                            <span className="text-gray-700">{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Post Status */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Post Status</label>
+                                <div className="flex gap-4">
+                                    {postStatusOptions.map((option) => (
+                                        <label key={option} className="flex items-center space-x-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="postStatus"
+                                                value={option}
+                                                checked={formData.postStatus === option}
+                                                onChange={(e) => handleRadioChange('postStatus', e.target.value)}
+                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                            />
+                                            <span className="text-gray-700">{option}</span>
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Description */}
+                            <div className="md:col-span-2">
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Description</label>
+                                <textarea
+                                    placeholder="Enter device description"
+                                    rows={4}
+                                    value={formData.description}
+                                    onChange={(e) => handleInputChange('description', e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
+                                <p className="text-xs text-gray-500 mt-1">Add details like condition, highlights, notes.</p>
+                            </div>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="mt-8 pt-6 border-t border-gray-200 flex justify-center cursor-default">
+                            <button
+                                type="submit"
+                                disabled={isFormLoading}
+                                className={`px-12 py-3 bg-[#1D76BC] text-white font-medium rounded-md 
+                  focus:outline-none focus:ring-2 focus:ring-[#1660a0] focus:ring-offset-2
+                  transition-colors 
+                  ${isFormLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#1660a0] cursor-pointer'}`}
+                            >
+                                {isFormLoading ? (isEditing ? 'Updating...' : 'Submitting...') : (isEditing ? 'Update Device' : 'Submit')}
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     );
 }
