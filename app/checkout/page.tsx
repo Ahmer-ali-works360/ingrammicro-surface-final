@@ -33,23 +33,27 @@ export default function Page() {
   const [formData, setFormData] = useState({
     sales_executive: "",
     se_email: "",
-    sales_manager: "",
-    sm_email: "",
-    reseller: "",
+    // sales_manager: "",
+    // sm_email: "",
+    // reseller: "",
     dev_opportunity: "",
     dev_budget: 1800,
     rev_opportunity: 1800,
-    crm_account: "",
+    ingram_account: "",
     segment: "",
     order_status: "pending",
-    vertical: "",
+    // vertical: "",
     current_manufacturer: "",
-    use_case: "",
-    currently_running: "",
-    licenses: "",
-    isCopilot: "",
-    isSecurity: "",
-    current_protection: "",
+    quote_number: "",
+    is_competitive: "",
+    estimated_close_date: "",
+    wants_5g_sim: "",
+    // use_case: "",
+    // currently_running: "",
+    // licenses: "",
+    // isCopilot: "",
+    // isSecurity: "",
+    // current_protection: "",
     company_name: "",
     contact_name: "",
     email: "",
@@ -63,6 +67,10 @@ export default function Page() {
   });
 
   const cartItem = cartItems[0]?.product;
+
+  const has5GAddon = cartItems.some(item =>
+  item.product?.sku === "AT&T-5G-SIM"
+);
 
   // Format date to PostgreSQL timestamp with timezone
   const formatToTimestamp = (dateString: string) => {
@@ -98,7 +106,7 @@ export default function Page() {
         ...prev,
         sales_executive: `${profile.firstName || ""} ${profile.lastName || ""}`.trim(),
         se_email: profile.email || "",
-        reseller: profile.reseller || ""
+        // reseller: profile.reseller || ""
       }));
     }
   }, [profile]);
@@ -299,13 +307,29 @@ export default function Page() {
       return `Sales Executive email is required`;
     }
 
-    if (name === 'sm_email' && (value <= 0 || value === "")) {
-      return `Sales Manager email is required`;
-    }
+    // if (name === 'sm_email' && (value <= 0 || value === "")) {
+    //   return `Sales Manager email is required`;
+    // }
 
-    if (name === 'currently_running' && (value <= 0 || value === "")) {
-      return `This field is required`;
-    }
+    // if (name === 'currently_running' && (value <= 0 || value === "")) {
+    //   return `This field is required`;
+    // }
+
+    if (name === 'quote_number' && (value === "")) {
+  return `Quote number is required`;
+}
+
+if (name === 'is_competitive' && value === "") {
+  return "This field is required";
+}
+
+if (name === 'estimated_close_date' && value === "") {
+  return "This field is required";
+}
+
+if (name === 'wants_5g_sim' && has5GAddon && value === "") {
+  return "This field is required";
+}
 
     if (name === 'dev_opportunity' && (value <= 0 || value === "")) {
       return `Device Opportunity must be greater than 0`;
@@ -323,9 +347,9 @@ export default function Page() {
       return "Please enter a valid email address";
     }
 
-    if (name === 'sm_email' && value && !/^\S+@\S+\.\S+$/.test(value)) {
-      return "Please enter a valid email address";
-    }
+    // if (name === 'sm_email' && value && !/^\S+@\S+\.\S+$/.test(value)) {
+    //   return "Please enter a valid email address";
+    // }
 
     if (name === 'desired_date') {
       const selectedDate = new Date(value);
@@ -492,10 +516,18 @@ export default function Page() {
   // Validate entire form
   const validateForm = (): boolean => {
     const requiredFields = [
-      'sales_executive', 'se_email', 'sales_manager', 'sm_email', 'reseller',
-      'dev_opportunity', 'dev_budget', 'crm_account', 'segment', 'vertical',
-      'current_manufacturer', 'use_case', 'currently_running', 'licenses',
-      'isCopilot', 'isSecurity', 'current_protection', 'company_name',
+      'sales_executive', 'se_email',
+      //  'sales_manager', 'sm_email', 'reseller',
+      'dev_opportunity', 'dev_budget', 'ingram_account', 'segment',
+      //  'vertical',
+      'current_manufacturer',
+      'quote_number',
+      'is_competitive',
+      'estimated_close_date',
+      ...(has5GAddon ? ['wants_5g_sim'] : []),
+      //  'use_case', 'currently_running', 'licenses',
+      // 'isCopilot', 'isSecurity', 'current_protection',
+      'company_name',
       'contact_name', 'email', 'address', 'state', 'city', 'zip', 'desired_date',
       'isTerms'
     ];
@@ -570,22 +602,27 @@ export default function Page() {
       order_by: profile?.id || "",
       sales_executive: formData.sales_executive,
       se_email: formData.se_email,
-      sales_manager: formData.sales_manager,
-      sm_email: formData.sm_email,
-      reseller: formData.reseller,
+
+      // sales_manager: formData.sales_manager,
+      // sm_email: formData.sm_email,
+      // reseller: formData.reseller,
       dev_opportunity: formData.dev_opportunity,
       dev_budget: formData.dev_budget,
       rev_opportunity: formData.rev_opportunity,
-      crm_account: formData.crm_account,
+      ingram_account: formData.ingram_account,
       segment: formData.segment,
-      vertical: formData.vertical,
+      // vertical: formData.vertical,
       current_manufacturer: formData.current_manufacturer,
-      use_case: formData.use_case,
-      currently_running: formData.currently_running,
-      licenses: formData.licenses,
-      isCopilot: formData.isCopilot,
-      isSecurity: formData.isSecurity,
-      current_protection: formData.current_protection,
+      quote_number: formData.quote_number,
+      is_competitive: formData.is_competitive,
+      estimated_close_date: formatToTimestamp(formData.estimated_close_date),
+      wants_5g_sim: has5GAddon ? formData.wants_5g_sim : null,
+      // use_case: formData.use_case,
+      // currently_running: formData.currently_running,
+      // licenses: formData.licenses,
+      // isCopilot: formData.isCopilot,
+      // isSecurity: formData.isSecurity,
+      // current_protection: formData.current_protection,
       company_name: formData.company_name,
       contact_name: formData.contact_name,
       email: formData.email,
@@ -607,6 +644,9 @@ export default function Page() {
   };
 
   const handleSubmit = async () => {
+    if (isSubmitting) {
+    return;
+  }
     const startTime = Date.now();
 
     // Log submission attempt
@@ -792,9 +832,11 @@ export default function Page() {
         total: totals.total,
         salesExecutive: formData.sales_executive,
         salesExecutiveEmail: formData.se_email,
-        salesManager: formData.sales_manager,
-        salesManagerEmail: formData.sm_email,
-        reseller: formData.reseller,
+        // salesManager: formData.sales_manager,
+        // salesManagerEmail: formData.sm_email,
+        // reseller: formData.reseller,
+        
+
         companyName: formData.company_name,
         contactName: formData.contact_name,
         contactEmail: formData.email,
@@ -806,15 +848,19 @@ export default function Page() {
         deviceUnits: formData.dev_opportunity,
         budgetPerDevice: formData.dev_budget,
         revenue: formData.rev_opportunity,
-        crmAccount: formData.crm_account,
-        vertical: formData.vertical,
+        ingramAccount: formData.ingram_account,
+        quoteNumber: formData.quote_number,
+        competitiveOpportunity: formData.is_competitive,
+        estimatedCloseDate: formatToTimestamp(formData.estimated_close_date) ?? "",
+        wants5gSim: has5GAddon ? formData.wants_5g_sim : "No",
+        // vertical: formData.vertical,
         segment: formData.segment,
-        useCase: formData.use_case,
-        currentDevices: formData.currently_running,
-        licenses: formData.licenses,
-        usingCopilot: formData.isCopilot,
-        securityFactor: formData.isSecurity,
-        deviceProtection: formData.current_protection,
+        // useCase: formData.use_case,
+        // currentDevices: formData.currently_running,
+        // licenses: formData.licenses,
+        // usingCopilot: formData.isCopilot,
+        // securityFactor: formData.isSecurity,
+        // deviceProtection: formData.current_protection,
         note: formData.notes || "",
       });
 
@@ -851,9 +897,10 @@ export default function Page() {
         products: products,
         salesExecutive: formData.sales_executive,
         salesExecutiveEmail: formData.se_email,
-        salesManager: formData.sales_manager,
-        salesManagerEmail: formData.sm_email,
-        reseller: formData.reseller,
+        // salesManager: formData.sales_manager,
+        // salesManagerEmail: formData.sm_email,
+        // reseller: formData.reseller,
+
         companyName: formData.company_name,
         contactName: formData.contact_name,
         contactEmail: formData.email,
@@ -865,15 +912,19 @@ export default function Page() {
         deviceUnits: formData.dev_opportunity,
         budgetPerDevice: formData.dev_budget,
         revenue: formData.rev_opportunity,
-        crmAccount: formData.crm_account,
-        vertical: formData.vertical,
+        ingramAccount: formData.ingram_account,
+        quoteNumber: formData.quote_number,
+        competitiveOpportunity: formData.is_competitive,
+        estimatedCloseDate: formatToTimestamp(formData.estimated_close_date) ?? "",
+        wants5gSim: has5GAddon ? formData.wants_5g_sim : "No",
+        // vertical: formData.vertical,
         segment: formData.segment,
-        useCase: formData.use_case,
-        currentDevices: formData.currently_running,
-        licenses: formData.licenses,
-        usingCopilot: formData.isCopilot,
-        securityFactor: formData.isSecurity,
-        deviceProtection: formData.current_protection,
+        // useCase: formData.use_case,
+        // currentDevices: formData.currently_running,
+        // licenses: formData.licenses,
+        // usingCopilot: formData.isCopilot,
+        // securityFactor: formData.isSecurity,
+        // deviceProtection: formData.current_protection,
         note: formData.notes || "",
       });
 
@@ -1167,7 +1218,7 @@ export default function Page() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Sales Manager <span className="text-red-600">*</span>
@@ -1228,7 +1279,7 @@ export default function Page() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -1347,25 +1398,46 @@ export default function Page() {
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
-                        CRM Account # <span className="text-red-600">*</span>
+                        INGRAM Account # <span className="text-red-600">*</span>
                       </label>
                       <input
-                        name="crm_account"
+                        name="ingram_account"
                         type="text"
-                        value={formData.crm_account}
+                        value={formData.ingram_account}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('crm_account')}`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('ingram_account')}`}
                         required
                       />
-                      {errors.crm_account && (
+                      {errors.ingram_account && (
                         <p className="mt-1 text-sm text-red-600">
-                          CRM Account is required
+                          INGRAM Account is required
                         </p>
                       )}
                     </div>
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Quote # <span className="text-red-600">*</span>
+  </label>
+
+  <input
+    name="quote_number"
+    type="text"
+    value={formData.quote_number}
+    onChange={handleInputChange}
+    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('quote_number')}`}
+    required
+  />
+
+  {errors.quote_number && (
+    <p className="mt-1 text-sm text-red-600">
+      Quote number is required
+    </p>
+  )}
+</div>
+                    
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Segment <span className="text-red-600">*</span>
@@ -1392,7 +1464,7 @@ export default function Page() {
                       )}
                     </div>
 
-                    <div>
+                    {/* <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Vertical <span className="text-red-600">*</span>
                       </label>
@@ -1416,7 +1488,7 @@ export default function Page() {
                           {errors.vertical.includes(' is') ? ' is required' : ''}
                         </p>
                       )}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -1450,6 +1522,29 @@ export default function Page() {
                       )}
                     </div>
                     <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Is this a competitive opportunity? <span className="text-red-600">*</span>
+  </label>
+
+  <select
+    name="is_competitive"
+    value={formData.is_competitive}
+    onChange={handleInputChange}
+    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('is_competitive')}`}
+    required
+  >
+    <option value=""></option>
+    <option value="Yes">Yes</option>
+    <option value="No">No</option>
+  </select>
+
+  {errors.is_competitive && (
+    <p className="mt-1 text-sm text-red-600">
+      This field is required
+    </p>
+  )}
+</div>
+                    {/* <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Use Case for this Demo Request <span className="text-red-600">*</span>
                       </label>
@@ -1470,10 +1565,59 @@ export default function Page() {
                           This field is required
                         </p>
                       )}
-                    </div>
+                    </div> */}
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                    {has5GAddon && (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      Do you want a 5G sim by AT&T loaded on your demo device(s)? 
+      <span className="text-red-600">*</span>
+    </label>
+
+    <select
+      name="wants_5g_sim"
+      value={formData.wants_5g_sim}
+      onChange={handleInputChange}
+      className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('wants_5g_sim')}`}
+      required
+    >
+      <option value=""></option>
+      <option value="Yes">Yes</option>
+      <option value="No">No</option>
+    </select>
+
+    {errors.wants_5g_sim && (
+      <p className="mt-1 text-sm text-red-600">
+        This field is required
+      </p>
+    )}
+  </div>
+)}
+                    <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Estimated Close Date <span className="text-red-600">*</span>
+  </label>
+
+  <input
+    name="estimated_close_date"
+    type="date"
+    value={formData.estimated_close_date}
+    onChange={handleInputChange}
+    className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('estimated_close_date')}`}
+    required
+  />
+
+  {errors.estimated_close_date && (
+    <p className="mt-1 text-sm text-red-600">
+      This field is required
+    </p>
+  )}
+</div>
+                  </div>
+
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         What are you currently running on your devices? <span className="text-red-600">*</span>
@@ -1519,9 +1663,9 @@ export default function Page() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </div> */}
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                  {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Are you currently using Copilot? <span className="text-red-600">*</span>
@@ -1585,7 +1729,7 @@ export default function Page() {
                         </p>
                       )}
                     </div>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
