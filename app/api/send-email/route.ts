@@ -41,6 +41,11 @@ export async function POST(request: NextRequest) {
 
     const info = await transporter.sendMail({ from, to,  subject, text, html });
 
+    console.log("Email sent to:", to);
+console.log("Message ID:", info.messageId);
+console.log("Accepted:", info.accepted);
+console.log("Rejected:", info.rejected);
+
     return NextResponse.json({ success: true, message: "Email sent successfully" });
   } catch (err: any) {
     console.error("Nodemailer Error:", err);
