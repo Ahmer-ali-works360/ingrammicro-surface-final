@@ -118,6 +118,14 @@ export type Order = {
   case_type: string | null;
   password: string | null;
   return_label: string | null;
+  ingram_account: string | null;
+quote_number: string | null;
+is_competitive: string | null;
+estimated_close_date: string | null;
+wants_5g_sim: string | null;
+addon_sim: boolean | null;
+
+
 };
 
 export default function OrderDetails() {
@@ -473,36 +481,30 @@ export default function OrderDetails() {
   const validateEditForm = (): boolean => {
     if (!selectedOrder) return false;
 
-    const requiredFields = [
-      "order_no",
-      "order_date",
-      "order_status",
-      "crm_account",
-      "company_name",
-      "se_email",
-      "sales_executive",
-      "sales_manager",
-      "sm_email",
-      "reseller",
-      "dev_opportunity",
-      "dev_budget",
-      "segment",
-      "vertical",
-      "current_manufacturer",
-      "use_case",
-      "currently_running",
-      "licenses",
-      "isCopilot",
-      "isSecurity",
-      "current_protection",
-      "contact_name",
-      "email",
-      "address",
-      "state",
-      "city",
-      "zip",
-      "desired_date",
-    ];
+  const requiredFields = [
+    "order_no",
+    "order_date",
+    "order_status",
+    "crm_account",
+    "company_name",
+    "se_email",
+    "sales_executive",
+    "dev_opportunity",
+    "dev_budget",
+    "segment",
+    "ingram_account",
+    "quote_number",
+    "is_competitive",
+    "estimated_close_date",
+    "current_manufacturer",
+    "contact_name",
+    "email",
+    "address",
+    "state",
+    "city",
+    "zip",
+    "desired_date",
+  ];
 
     const newErrors: Record<string, string> = {};
     let isValid = true;
@@ -798,26 +800,26 @@ export default function OrderDetails() {
         return <div className="text-left ps-2">{amount}</div>;
       },
     },
-    {
-      accessorKey: "crm_account",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-          >
-            Account #
-            <ArrowUpDown className="ml-2 h-4 w-4" />
-          </Button>
-        );
-      },
-      cell: ({ row }) => (
-        <div className="text-left ps-2">
-          {row.getValue("crm_account") || "-"}
-        </div>
-      ),
-    },
+    // {
+    //   accessorKey: "crm_account",
+    //   header: ({ column }) => {
+    //     return (
+    //       <Button
+    //         variant="ghost"
+    //         className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+    //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    //       >
+    //         Account #
+    //         <ArrowUpDown className="ml-2 h-4 w-4" />
+    //       </Button>
+    //     );
+    //   },
+    //   cell: ({ row }) => (
+    //     <div className="text-left ps-2">
+    //       {row.getValue("crm_account") || "-"}
+    //     </div>
+    //   ),
+    // },
     {
       accessorKey: "se_email",
       header: ({ column }) => {
@@ -1716,7 +1718,7 @@ export default function OrderDetails() {
                     </p>
                   )}
                 </div>
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     CRM Account # *
                   </label>
@@ -1731,7 +1733,7 @@ export default function OrderDetails() {
                       {editErrors.crm_account}
                     </p>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -1775,7 +1777,7 @@ export default function OrderDetails() {
                     </p>
                   )}
                 </div>
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Sales Manager *
                   </label>
@@ -1823,121 +1825,148 @@ export default function OrderDetails() {
                       {editErrors.reseller}
                     </p>
                   )}
-                </div>
+                </div> */}
               </div>
             </div>
 
-            {/* Opportunity Details Section */}
-            <div className="space-y-4 pt-4 border-t">
-              <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
-                Opportunity Details
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Device Units *
-                  </label>
-                  <AntInput
-                    name="dev_opportunity"
-                    type="number"
-                    min="1"
-                    value={selectedOrder.dev_opportunity || ""}
-                    onChange={handleInputChange}
-                    status={editErrors.dev_opportunity ? "error" : ""}
-                  />
-                  {editErrors.dev_opportunity && (
-                    <p className="text-xs text-red-500">
-                      {editErrors.dev_opportunity}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Budget/Device *
-                  </label>
-                  <AntInput
-                    name="dev_budget"
-                    type="number"
-                    min="0"
-                    step="0.01"
-                    value={selectedOrder.dev_budget || ""}
-                    onChange={handleInputChange}
-                    status={editErrors.dev_budget ? "error" : ""}
-                  />
-                  {editErrors.dev_budget && (
-                    <p className="text-xs text-red-500">
-                      {editErrors.dev_budget}
-                    </p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Pipeline Value
-                  </label>
-                  <AntInput
-                    name="rev_opportunity"
-                    type="number"
-                    readOnly
-                    value={selectedOrder.rev_opportunity || ""}
-                    className="bg-gray-50"
-                  />
-                  <p className="text-xs text-gray-500">
-                    {formatCurrency(selectedOrder.rev_opportunity)}
-                  </p>
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Segment *
-                  </label>
-                  <Select
-                    value={selectedOrder.segment || ""}
-                    onChange={(value) => handleSelectChange("segment", value)}
-                    status={editErrors.segment ? "error" : ""}
-                    style={{ width: "100%" }}
-                    placeholder="Select segment"
-                  >
-                    <Select.Option value="SMB">SMB</Select.Option>
-                    <Select.Option value="Corporate">Corporate</Select.Option>
-                    <Select.Option value="Field">Field</Select.Option>
-                    <Select.Option value="Majors">Majors</Select.Option>
-                    <Select.Option value="State & Local">
-                      State & Local
-                    </Select.Option>
-                  </Select>
-                  {editErrors.segment && (
-                    <p className="text-xs text-red-500">{editErrors.segment}</p>
-                  )}
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">
-                    Vertical *
-                  </label>
-                  <Select
-                    value={selectedOrder.vertical || ""}
-                    onChange={(value) => handleSelectChange("vertical", value)}
-                    status={editErrors.vertical ? "error" : ""}
-                    style={{ width: "100%" }}
-                    placeholder="Select vertical"
-                  >
-                    <Select.Option value="Education">Education</Select.Option>
-                    <Select.Option value="Healthcare">Healthcare</Select.Option>
-                    <Select.Option value="Retails">Retails</Select.Option>
-                    <Select.Option value="Manufacturing">
-                      Manufacturing
-                    </Select.Option>
-                    <Select.Option value="Federal">Federal</Select.Option>
-                  </Select>
-                  {editErrors.vertical && (
-                    <p className="text-xs text-red-500">
-                      {editErrors.vertical}
-                    </p>
-                  )}
-                </div>
-              </div>
+        {/* Opportunity Details Section */}
+        <div className="space-y-4 pt-4 border-t">
+          <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
+            <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+            Opportunity Details
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Device Units *</label>
+              <AntInput name="dev_opportunity" type="number" min="1"
+                value={selectedOrder.dev_opportunity || ""}
+                onChange={handleInputChange}
+                status={editErrors.dev_opportunity ? "error" : ""} />
+              {editErrors.dev_opportunity && <p className="text-xs text-red-500">{editErrors.dev_opportunity}</p>}
             </div>
 
-            {/* Technical Details Section */}
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Budget/Device *</label>
+              <AntInput name="dev_budget" type="number" min="0" step="0.01"
+                value={selectedOrder.dev_budget || ""}
+                onChange={handleInputChange}
+                status={editErrors.dev_budget ? "error" : ""} />
+              {editErrors.dev_budget && <p className="text-xs text-red-500">{editErrors.dev_budget}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Pipeline Value</label>
+              <AntInput name="rev_opportunity" type="number" readOnly
+                value={selectedOrder.rev_opportunity || ""}
+                className="bg-gray-50" />
+              <p className="text-xs text-gray-500">{formatCurrency(selectedOrder.rev_opportunity)}</p>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">INGRAM Account # *</label>
+              <AntInput name="ingram_account"
+                value={selectedOrder.ingram_account || ""}
+                onChange={handleInputChange}
+                status={editErrors.ingram_account ? "error" : ""} />
+              {editErrors.ingram_account && <p className="text-xs text-red-500">{editErrors.ingram_account}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Quote # *</label>
+              <AntInput name="quote_number"
+                value={selectedOrder.quote_number || ""}
+                onChange={handleInputChange}
+                status={editErrors.quote_number ? "error" : ""} />
+              {editErrors.quote_number && <p className="text-xs text-red-500">{editErrors.quote_number}</p>}
+            </div>
+            <div className="space-y-2">
+  <label className="text-sm font-medium text-gray-700">
+    Manufacturer *
+  </label>
+  <Select
+    value={selectedOrder.current_manufacturer || ""}
+    onChange={(value) =>
+      handleSelectChange("current_manufacturer", value)
+    }
+    status={editErrors.current_manufacturer ? "error" : ""}
+    style={{ width: "100%" }}
+    placeholder="Select manufacturer"
+  >
+    <Select.Option value="Acer">Acer</Select.Option>
+    <Select.Option value="Asus">Asus</Select.Option>
+    <Select.Option value="Apple">Apple</Select.Option>
+    <Select.Option value="Dell">Dell</Select.Option>
+    <Select.Option value="HP">HP</Select.Option>
+    <Select.Option value="Lenovo">Lenovo</Select.Option>
+    <Select.Option value="Microsoft">Microsoft</Select.Option>
+    <Select.Option value="Panasonic">Panasonic</Select.Option>
+    <Select.Option value="Samsung">Samsung</Select.Option>
+    <Select.Option value="Other">Other</Select.Option>
+  </Select>
+  {editErrors.current_manufacturer && (
+    <p className="text-xs text-red-500">
+      {editErrors.current_manufacturer}
+    </p>
+  )}
+</div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Segment *</label>
+              <Select value={selectedOrder.segment || ""}
+                onChange={(value) => handleSelectChange("segment", value)}
+                status={editErrors.segment ? "error" : ""}
+                style={{ width: "100%" }} placeholder="Select segment">
+                <Select.Option value="Corporate West">Corporate West</Select.Option>
+                <Select.Option value="Corporate Central">Corporate Central</Select.Option>
+                <Select.Option value="Corporate East">Corporate East</Select.Option>
+                <Select.Option value="Small Business">Small Business</Select.Option>
+                <Select.Option value="K-12">K-12</Select.Option>
+                <Select.Option value="Hi-Ed">Hi-Ed</Select.Option>
+                <Select.Option value="Healthcare">Healthcare</Select.Option>
+                <Select.Option value="CoreTrust">CoreTrust</Select.Option>
+              </Select>
+              {editErrors.segment && <p className="text-xs text-red-500">{editErrors.segment}</p>}
+            </div>
+
+<div className="space-y-2">
+  <label className="text-sm font-medium text-gray-700">Competitive Opportunity? *</label>
+<Select value={selectedOrder.is_competitive ?? undefined}
+  onChange={(value) => handleSelectChange("is_competitive", value)}
+  status={editErrors.is_competitive ? "error" : ""}
+  style={{ width: "100%" }} 
+  placeholder="Select option">
+  <Select.Option value={true}>Yes</Select.Option>
+  <Select.Option value={false}>No</Select.Option>
+</Select>
+  {editErrors.is_competitive && <p className="text-xs text-red-500">{editErrors.is_competitive}</p>}
+</div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-700">Estimated Close Date *</label>
+              <AntInput name="estimated_close_date" type="date"
+                value={formatDateForInput(selectedOrder.estimated_close_date)}
+                onChange={handleInputChange}
+                status={editErrors.estimated_close_date ? "error" : ""} />
+              {editErrors.estimated_close_date && <p className="text-xs text-red-500">{editErrors.estimated_close_date}</p>}
+            </div>
+
+            {selectedOrder.addon_sim && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Wants 5G SIM?</label>
+                <Select value={selectedOrder.wants_5g_sim || ""}
+                  onChange={(value) => handleSelectChange("wants_5g_sim", value)}
+                  style={{ width: "100%" }} placeholder="Select option">
+                  <Select.Option value="Yes">Yes</Select.Option>
+                  <Select.Option value="No">No</Select.Option>
+                </Select>
+              </div>
+            )}
+
+          </div>
+        </div>
+
+            {/* Technical Details Section
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
                 <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
@@ -2104,7 +2133,7 @@ export default function OrderDetails() {
                   )}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Shipping Details Section */}
             <div className="space-y-4 pt-4 border-t">
