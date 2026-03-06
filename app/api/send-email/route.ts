@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     // Fallback to text if html empty
     if (!html) html = `<p>${text}</p>`;
 
-    if (!from) from = process.env.EMAIL_FROM;
+    if (!from) from = process.env.SMTP_FROM_NAME;
 
     const info = await transporter.sendMail({ from, to,  subject, text, html });
 
