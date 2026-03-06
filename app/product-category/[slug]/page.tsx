@@ -213,75 +213,63 @@ export default function Page() {
         }
     }
 
-    const handleAddToCart = async (productId: string) => {
-        try {
-            const product = products.find(p => p.id === productId);
+const handleAddToCart = async (productId: string) => {
+    try {
+        const product = products.find(p => p.id === productId);
 
-            await logActivity({
-                type: 'product',
-                level: 'info',
-                action: 'add_to_cart_attempt',
-                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku,
-                    userRole: profile?.role,
-                    isPublished: product?.post_status === 'Publish',
-                    stockQuantity: product?.stock_quantity
-                }
-            });
-
-            await addToCart(productId, 1);
-
-            await logActivity({
-                type: 'product',
-                level: 'success',
-                action: 'add_to_cart_success',
-                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku
-                },
-                status: 'completed'
-            });
-
-            setShowCartDrawer(true);
-
-        } catch (error: any) {
-            let errorMessage = 'Failed to add product to cart. Please try again.';
-
-            await logActivity({
-                type: 'product',
-                level: 'error',
-                action: 'add_to_cart_failed',
-                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    errorCode: error?.code,
-                    errorMessage: error?.message,
-                    errorDetails: error
-                },
-                status: 'failed'
-            });
-
-            if (error?.code === '23505') {
-                errorMessage = 'This product is already in your cart.';
-            } else if (error?.code === '23503') {
-                errorMessage = 'Product not found.';
-            } else if (error?.message?.includes('foreign key constraint')) {
-                errorMessage = 'Invalid product. Please refresh the page and try again.';
+        await logActivity({
+            type: 'product',
+            level: 'info',
+            action: 'add_to_cart_attempt',
+            message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                productName: product?.product_name,
+                sku: product?.sku,
+                userRole: profile?.role,
+                isPublished: product?.post_status === 'Publish',
+                stockQuantity: product?.stock_quantity
             }
+        });
 
-            toast.error(errorMessage, {
-                style: { background: "red", color: "white" },
-            });
-        }
-    };
+        await addToCart(productId, 1);
+
+        await logActivity({
+            type: 'product',
+            level: 'success',
+            action: 'add_to_cart_success',
+            message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                productName: product?.product_name,
+                sku: product?.sku
+            },
+            status: 'completed'
+        });
+
+        setShowCartDrawer(true);
+
+    } catch (error: any) {
+
+        await logActivity({
+            type: 'product',
+            level: 'error',
+            action: 'add_to_cart_failed',
+            message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                errorCode: error?.code,
+                errorMessage: error?.message,
+                errorDetails: error
+            },
+            status: 'failed'
+        });
+
+    }
+};
 
     // Get stock quantity for a cart item
     const getItemStockQuantity = (cartItem: any) => {

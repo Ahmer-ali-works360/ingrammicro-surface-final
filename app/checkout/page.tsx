@@ -66,7 +66,10 @@ export default function Page() {
     isTerms: false
   });
 
-  const cartItem = cartItems[0]?.product;
+ const mainProductItem = cartItems.find(
+  item => item.product?.sku !== "AT&T-5G-SIM"
+);
+const mainProduct = mainProductItem?.product;
 
   const has5GAddon = cartItems.some(item =>
   item.product?.sku === "AT&T-5G-SIM"
@@ -171,76 +174,26 @@ export default function Page() {
     }
   }, [authChecked, authInitialized]);
 
-  useEffect(() => {
-    if (cartCount < 1) {
-      if (!cartLoading) {
-        logActivity({
-          type: 'cart',
-          level: 'warning',
-          action: 'invalid_cart_count',
-          message: `User attempted checkout with ${cartCount} items (expected 1)`,
-          userId: profile?.id || null,
-          details: {
-            cartCount,
-            expectedCount: 1,
-            cartItems: cartItems.length
-          },
-          status: 'failed'
-        });
-        router.replace('/cart');
-      }
+useEffect(() => {
+  if (cartCount < 1) {
+    if (!cartLoading) {
+      logActivity({
+        type: 'cart',
+        level: 'warning',
+        action: 'invalid_cart_count',
+        message: `User attempted checkout with empty cart`,
+        userId: profile?.id || null,
+        details: {
+          cartCount,
+          cartItems: cartItems.length
+        },
+        status: 'failed'
+      });
+
+      router.replace('/cart');
     }
-
-    // Check if any product has quantity > 1
-    const hasQuantityMoreThanOne = cartItems.some(item => item.quantity > 1);
-    if (cartCount >= 1 && hasQuantityMoreThanOne) {
-      if (!cartLoading) {
-        logActivity({
-          type: 'cart',
-          level: 'warning',
-          action: 'invalid_quantity',
-          message: `User attempted checkout with quantity > 1`,
-          userId: profile?.id || null,
-          details: {
-            cartCount,
-            itemsWithQuantity: cartItems.map(item => ({
-              productId: item.product_id,
-              productName: item.product?.product_name,
-              quantity: item.quantity
-            }))
-          },
-          status: 'failed'
-        });
-
-        // Show toast message
-        toast.error("Only 1 quantity allowed per product", {
-          description: "Please reduce quantity to 1 before checkout",
-          style: { background: "red", color: "white" }
-        });
-
-        router.replace('/cart');
-      }
-    }
-
-    if (cartCount > 1) {
-      if (!cartLoading) {
-        logActivity({
-          type: 'cart',
-          level: 'warning',
-          action: 'invalid_cart_count',
-          message: `User attempted checkout with ${cartCount} items (expected 1)`,
-          userId: profile?.id || null,
-          details: {
-            cartCount,
-            expectedCount: 1,
-            cartItems: cartItems.length
-          },
-          status: 'failed'
-        });
-        router.replace('/cart');
-      }
-    }
-  }, [cartCount, cartLoading, cartItems]);
+  }
+}, [cartCount, cartLoading, cartItems]);
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -567,7 +520,7 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
       return false;
     }
 
-    if (!cartItem) {
+    if (!mainProduct) { 
       toast.error("Cart Error", {
         description: "No product found in cart. Please add a product to continue.",
         style: { background: "red", color: "white" }
@@ -590,14 +543,19 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
     const createdAtTimestamp = now.toISOString();
     const updatedAtTimestamp = now.toISOString();
 
+
     // Prepare arrays for product_ids and quantities
-    const productIdsArray = cartItems.map(item => item.product_id);
-    const quantitiesArray = cartItems.map(item => item.quantity);
+    // const productIdsArray = cartItems.map(item => item.product_id);
+    // const quantitiesArray = cartItems.map(item => item.quantity);
 
     return {
       // Arrays for multiple products
-      product_id: productIdsArray[0],
-      quantity: quantitiesArray[0],
+      // product_id: productIdsArray[0],
+      // quantity: quantitiesArray[0],
+
+      product_id: mainProduct?.id,
+quantity: mainProductItem?.quantity,
+addon_sim: has5GAddon,
 
       order_by: profile?.id || "",
       sales_executive: formData.sales_executive,
@@ -750,8 +708,10 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
 
       // Send emails with multiple products
       if (insertedOrder) {
+         setTimeout(() => {
         sendCheckoutEmail(insertedOrder);
         sendNewOrderEmail(insertedOrder);
+        }, 0);
       }
 
       // Redirect to order confirmation page
@@ -1039,134 +999,131 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
 
   return (
     <>
-      {cartCount < 1 ? (
-        <div className="h-[83vh] px-4 flex items-center justify-center">
-          <div className="max-w-6xl w-full">
-            <div className="bg-white rounded-lg p-12 text-center">
-              <div className="text-6xl mb-6 flex justify-center">
-                <AiOutlineShoppingCart />
-              </div>
-              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
-                Your cart is empty
-              </h2>
-              <p className="text-gray-600 mb-8">
-                Add items to your cart to get started
-              </p>
-              <Link
-                href="/product-category/alldevices"
-                className="bg-[#1d76bc] text-white py-2 px-5 rounded-md font-semibold hover:bg-[#1660a0] transition duration-200 inline-block"
-              >
-                Continue Shopping
-              </Link>
-            </div>
+{cartCount < 1 ? (
+  <>
+    <div className="h-[83vh] px-4 flex items-center justify-center">
+      <div className="max-w-6xl w-full">
+        <div className="bg-white rounded-lg p-12 text-center">
+          <div className="text-6xl mb-6 flex justify-center">
+            <AiOutlineShoppingCart />
           </div>
+          <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+            Your cart is empty
+          </h2>
+          <p className="text-gray-600 mb-8">
+            Add items to your cart to get started
+          </p>
+          <Link
+            href="/product-category/alldevices"
+            className="bg-[#1d76bc] text-white py-2 px-5 rounded-md font-semibold hover:bg-[#1660a0] transition duration-200 inline-block"
+          >
+            Continue Shopping
+          </Link>
         </div>
-      ) : cartItems.length > 1 || cartItems.some(item => item.quantity > 1) ? (
-        // New div that shows when multiple products or quantity > 1
-        <div className="min-h-screen p-4 my-7 md:p-8">
-          <div className="max-w-4xl mx-auto">
-            <div className="bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden">
-              {/* Header */}
-              <div className="bg-linear-to-r from-red-500 to-red-600 px-6 py-4">
-                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                  </svg>
-                  Demo Unit Limitation
-                </h2>
-              </div>
+      </div>
+    </div>
 
-              {/* Content */}
-              <div className="p-8">
-                <div className="flex flex-col items-center text-center">
-                  {/* Icon */}
-                  <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6">
-                    <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 12H4M12 4v16" />
-                    </svg>
-                  </div>
+    {/* New div that shows when multiple products or quantity > 1 */}
+    <div className="min-h-screen p-4 my-7 md:p-8">
+      <div className="max-w-4xl mx-auto">
+        <div className="bg-white rounded-lg border border-gray-200 shadow-lg overflow-hidden">
+          {/* Header */}
+          <div className="bg-linear-to-r from-red-500 to-red-600 px-6 py-4">
+            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+              <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+              </svg>
+              Demo Unit Limitation
+            </h2>
+          </div>
 
-                  {/* Main Message */}
-                  <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                    Only One Demo Unit Allowed
-                  </h3>
-
-                  <p className="text-gray-600 text-lg mb-6 max-w-lg">
-                    You can only request <span className="font-semibold text-red-600">one demo unit at a time</span> with quantity of 1.
-                  </p>
-
-                  {/* Cart Summary */}
-                  <div className="bg-gray-50 rounded-lg p-6 w-full max-w-md mb-8">
-                    <h4 className="font-semibold text-gray-700 mb-4 text-left">Your Current Cart:</h4>
-                    <div className="space-y-3">
-                      {cartItems.map((item, index) => (
-                        <div key={item.product_id} className="flex justify-between items-center text-sm border-b border-gray-200 pb-2 last:border-0">
-                          <span className="text-gray-600">{item.product?.product_name || 'Product'}</span>
-                          <span className={`font-medium ${item.quantity > 1 ? 'text-red-600' : 'text-gray-800'}`}>
-                            Qty: {item.quantity}
-                          </span>
-                        </div>
-                      ))}
-                      <div className="flex justify-between items-center pt-2 font-semibold">
-                        <span className="text-gray-800">Total Items:</span>
-                        <span className="text-gray-800">{cartItems.length}</span>
-                      </div>
-                      <div className="flex justify-between items-center font-semibold">
-                        <span className="text-gray-800">Total Quantity:</span>
-                        <span className="text-gray-800">{getTotalQuantity()}</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex flex-col sm:flex-row gap-4">
-                    <Link
-                      href="/cart"
-                      className="px-8 py-3 bg-[#1D76BC] text-white font-semibold rounded-lg hover:bg-[#1660a0] transition-colors duration-200 flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                      </svg>
-                      Go to Cart
-                    </Link>
-
-                    <Link
-                      href="/product-category/alldevices"
-                      className="px-8 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                      </svg>
-                      Continue Shopping
-                    </Link>
-                  </div>
-
-                  {/* Help Text */}
-                  <p className="text-sm text-gray-500 mt-8">
-                    Please adjust your cart to contain only one product with quantity 1 before proceeding to checkout.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Additional Info Card */}
-            <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start gap-3">
-                <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          {/* Content */}
+          <div className="p-8">
+            <div className="flex flex-col items-center text-center">
+              {/* Icon */}
+              <div className="w-24 h-24 bg-red-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="w-12 h-12 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M20 12H4M12 4v16" />
                 </svg>
-                <div>
-                  <h5 className="font-semibold text-blue-800">Why this limitation?</h5>
-                  <p className="text-sm text-blue-700 mt-1">
-                    Demo units are limited to one per customer to ensure fair access for all customers.
-                    If you need multiple units for evaluation, please contact our sales team.
-                  </p>
+              </div>
+
+              <h3 className="text-2xl font-bold text-gray-800 mb-3">
+                Only One Demo Unit Allowed
+              </h3>
+
+              <p className="text-gray-600 text-lg mb-6 max-w-lg">
+                You can only request <span className="font-semibold text-red-600">one demo unit at a time</span> with quantity of 1.
+              </p>
+
+              <div className="bg-gray-50 rounded-lg p-6 w-full max-w-md mb-8">
+                <h4 className="font-semibold text-gray-700 mb-4 text-left">Your Current Cart:</h4>
+                <div className="space-y-3">
+                  {cartItems.map((item) => (
+                    <div key={item.product_id} className="flex justify-between items-center text-sm border-b border-gray-200 pb-2 last:border-0">
+                      <span className="text-gray-600">{item.product?.product_name || "Product"}</span>
+                      <span className={`font-medium ${item.quantity > 1 ? "text-red-600" : "text-gray-800"}`}>
+                        Qty: {item.quantity}
+                      </span>
+                    </div>
+                  ))}
+                  <div className="flex justify-between items-center pt-2 font-semibold">
+                    <span className="text-gray-800">Total Items:</span>
+                    <span className="text-gray-800">{cartItems.length}</span>
+                  </div>
+                  <div className="flex justify-between items-center font-semibold">
+                    <span className="text-gray-800">Total Quantity:</span>
+                    <span className="text-gray-800">{getTotalQuantity()}</span>
+                  </div>
                 </div>
               </div>
+
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/cart"
+                  className="px-8 py-3 bg-[#1D76BC] text-white font-semibold rounded-lg hover:bg-[#1660a0] transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                  </svg>
+                  Go to Cart
+                </Link>
+
+                <Link
+                  href="/product-category/alldevices"
+                  className="px-8 py-3 bg-gray-100 text-gray-700 font-semibold rounded-lg hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center gap-2"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                  Continue Shopping
+                </Link>
+              </div>
+
+              <p className="text-sm text-gray-500 mt-8">
+                Please adjust your cart to contain only one product with quantity 1 before proceeding to checkout.
+              </p>
             </div>
           </div>
         </div>
-      ) : (
+
+        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <svg className="w-5 h-5 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <div>
+              <h5 className="font-semibold text-blue-800">Why this limitation?</h5>
+              <p className="text-sm text-blue-700 mt-1">
+                Demo units are limited to one per customer to ensure fair access for all customers.
+                If you need multiple units for evaluation, please contact our sales team.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </>
+) : (
         <>
           <div className="min-h-screen p-4 my-7 md:p-8">
             <div className="max-w-7xl mx-auto">
@@ -1450,11 +1407,14 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
                         required
                       >
                         <option value=""></option>
-                        <option value="SMB">SMB</option>
-                        <option value="Corporate">Corporate</option>
-                        <option value="Field">Field</option>
-                        <option value="Majors">Majors</option>
-                        <option value="State & Local">State & Local</option>
+                        <option value="Corporate West">Corporate West</option>
+                        <option value="Corporate Central">Corporate Central</option>
+                        <option value="Corporate East">Corporate East</option>
+                        <option value="Small Business">Small Business</option>
+                        <option value="K-12">K-12</option>
+                        <option value="Hi-Ed">Hi-Ed</option>
+                        <option value="Healthcare">Healthcare</option>
+                        <option value="CoreTrust">CoreTrust</option>
                       </select>
                       {errors.segment && (
                         <p className="mt-1 text-sm text-red-600">

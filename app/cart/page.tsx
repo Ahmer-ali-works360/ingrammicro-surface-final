@@ -225,28 +225,6 @@ export default function Page() {
     // Handle checkout
     const handleCheckout = () => {
         // Check if more than one product in cart
-        if (cartItems.length > 1) {
-            setShowSingleProductAlert(true);
-
-            // Auto hide alert after 5 seconds
-            setTimeout(() => {
-                setShowSingleProductAlert(false);
-            }, 5000);
-
-            logActivity({
-                type: 'cart',
-                level: 'warning',
-                action: 'checkout_blocked_multiple_products',
-                message: 'User attempted checkout with multiple products',
-                userId: profile?.id || null,
-                details: {
-                    cartItemCount: cartItems.length,
-                    productIds: cartItems.map(item => item.product_id)
-                },
-                status: 'failed'
-            });
-            return;
-        }
 
         logActivity({
             type: 'navigation',
@@ -395,7 +373,7 @@ export default function Page() {
                             })}
                         </div>
 
-                        {(cartItems.length > 1 || cartItems.some(item => item.quantity > 1)) && (
+                        {/* {(cartItems.length > 1 || cartItems.some(item => item.quantity > 1)) && (
                             <Alert variant="destructive" className="mb-6 border-red-200 bg-red-50">
                                 <AlertCircleIcon className="h-4 w-4 text-red-600" />
                                 <AlertTitle className="text-red-800 font-semibold">
@@ -425,7 +403,7 @@ export default function Page() {
                                     </div>
                                 </AlertDescription>
                             </Alert>
-                        )}
+                        )} */}
                     </div>
 
                     {/* Order Summary Section */}
@@ -472,7 +450,7 @@ export default function Page() {
                                 </div>
                             )}
 
-                            <button
+                            {/* <button
                                 onClick={handleCheckout}
                                 className={`w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${cartItems.length > 1 || cartItems.some(item => item.quantity > 1)
                                         ? 'bg-gray-400 hover:bg-gray-400'
@@ -491,7 +469,20 @@ export default function Page() {
                                         ? 'Cannot Proceed - Demo Unit Limit'
                                         : 'Proceed to Checkout'
                                 }
-                            </button>
+                            </button> */}
+                            <button
+    onClick={handleCheckout}
+    className="w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-[#1d76bc] hover:bg-[#1660a0] text-white"
+    disabled={
+        isUpdating ||
+        cartItems.length === 0
+    }
+>
+    {isUpdating
+        ? 'Processing...'
+        : 'Proceed to Checkout'
+    }
+</button>
                         </div>
                     </div>
                 </div>

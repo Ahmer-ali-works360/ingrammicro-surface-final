@@ -314,76 +314,70 @@ export default function Page() {
         );
     }
 
-    const handleAddToCart = async (productId: string) => {
-        try {
-            await logActivity({
-                type: 'product',
-                level: 'info',
-                action: 'add_to_cart_attempt',
-                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku,
-                    userRole: profile?.role,
-                    isPublished: product?.post_status === 'Publish',
-                    stockQuantity: product?.stock_quantity,
-                    slug: slug
-                }
-            });
-            await addToCart(productId, 1)
-
-            await logActivity({
-                type: 'product',
-                level: 'success',
-                action: 'add_to_cart_success',
-                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    productName: product?.product_name,
-                    sku: product?.sku,
-                    slug: slug
-                },
-                status: 'completed'
-            });
-
-            toast.success('Product added to cart!', {
-                style: { background: "black", color: "white" },
-            })
-        } catch (error: any) {
-            let errorMessage = 'Failed to add product to cart. Please try again.'
-
-            await logActivity({
-                type: 'product',
-                level: 'error',
-                action: 'add_to_cart_failed',
-                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
-                userId: user?.id || null,
-                productId: productId,
-                details: {
-                    errorCode: error?.code,
-                    errorMessage: error?.message,
-                    errorDetails: error
-                },
-                status: 'failed'
-            });
-
-            if (error?.code === '23505') {
-                errorMessage = 'This product is already in your cart.'
-            } else if (error?.code === '23503') {
-                errorMessage = 'Product not found.'
-                router.push(`/product/${slug}`)
-            } else if (error?.message?.includes('foreign key constraint')) {
-                errorMessage = 'Invalid product. Please refresh the page and try again.'
+ const handleAddToCart = async (productId: string) => {
+    try {
+        await logActivity({
+            type: 'product',
+            level: 'info',
+            action: 'add_to_cart_attempt',
+            message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                productName: product?.product_name,
+                sku: product?.sku,
+                userRole: profile?.role,
+                isPublished: product?.post_status === 'Publish',
+                stockQuantity: product?.stock_quantity,
+                slug: slug
             }
+        });
 
-            toast.error(errorMessage, {
-                style: { background: "red", color: "white" },
-            })
+        await addToCart(productId, 1);
+
+        await logActivity({
+            type: 'product',
+            level: 'success',
+            action: 'add_to_cart_success',
+            message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                productName: product?.product_name,
+                sku: product?.sku,
+                slug: slug
+            },
+            status: 'completed'
+        });
+
+        toast.success('Product added to cart!', {
+            style: { background: "black", color: "white" },
+        });
+
+    } catch (error: any) {
+
+        await logActivity({
+            type: 'product',
+            level: 'error',
+            action: 'add_to_cart_failed',
+            message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
+            userId: user?.id || null,
+            productId: productId,
+            details: {
+                errorCode: error?.code,
+                errorMessage: error?.message,
+                errorDetails: error
+            },
+            status: 'failed'
+        });
+
+        // Router redirect agar product invalid ho
+        if (error?.code === '23503') {
+            router.push(`/product/${slug}`);
         }
+
     }
+};
 
     // Handle cart item removal
     const handleRemoveFromCart = async (productId: string) => {
@@ -524,7 +518,7 @@ export default function Page() {
                 <button
                     onClick={() => handleAddToCart(product.id)}
                     disabled={isUpdating && addingProductId === product.id}
-                    className="flex items-center justify-center gap-2 px-5 py-2 cursor-pointer border border-[#0a3637] text-[#0a3637] rounded-sm hover:bg-[#0a3637] hover:text-white transition-colors disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-5 py-2 cursor-pointer border border-[#1D76BC] text-[#1D76BC] rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                 >
                     <ShoppingCart className="h-4 w-4" />
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
@@ -994,7 +988,7 @@ export default function Page() {
     return (
         <div className="min-h-screen">
             {/* Back Navigation */}
-            <div className="bg-white border-b">
+            {/* <div className="bg-white border-b">
                 <div className="max-w-7xl mx-auto px-4 py-3">
                     <button
                         onClick={() => router.back()}
@@ -1018,7 +1012,7 @@ export default function Page() {
                         </div>
                     </button>
                 </div>
-            </div>
+            </div> */}
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
                 {/* Product Main Section */}
@@ -1231,19 +1225,22 @@ export default function Page() {
                             </div> */}
 
                             {/* Description Points with ID for Read More button */}
-                            <div id="product-description">
+                            <div id="product-description" className="border-b mb-2">
                                 {descriptionPoints.length > 0 && (
-                                    <div className="mb-8">
-                                        <h3 className="text-sm font-semibold text-gray-900 mb-4">Key Features</h3>
+                                    <div className="mb-6">
+                                        {/* <h3 className="text-sm font-semibold text-gray-900 mb-4">Key Features</h3> */}
                                         <ul className="space-y-2">
                                             {descriptionPoints.map((point, index) => (
-                                                <li key={index} className="flex items-start">
-                                                    <BiRadioCircle className="h-5 w-5 mt-0.5 mr-1 shrink-0" />
-                                                    <span className="text-gray-700 text-sm">{point}</span>
-                                                </li>
+                                            <li key={index} className="flex items-center">
+                                                <span className="mr-2 text-[#1D76BC] text-lg leading-none">•</span>
+                                                <span className="text-gray-700 text-sm">{point}</span>
+                                            </li> 
                                             ))}
                                         </ul>
-                                        <h3 className="text-sm font-semibold text-[#a67e07] my-7">
+                                       <h3 className={`text-sm font-semibold my-7 ${
+                                                product?.stock_quantity === 0 ? "text-red-500" : "text-green-500"
+                                            }`}
+                                        >
                                             {product?.stock_quantity} / {product?.total_inventory} In Stock
                                         </h3>
                                     </div>
@@ -1255,17 +1252,14 @@ export default function Page() {
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    <div className="flex items-center gap-2 text-red-500 font-bold text-lg">
-                                        <FaBell className="h-5 w-5" />
-                                        <span>Out of stock</span>
-                                    </div>
+                                    
                                     <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
                                         <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                                            Get notified when available
+                                            Get an alert when the product is in stock
                                         </h2>
-                                        <p className="text-gray-600 mb-6">
-                                            Join the waitlist and be the first to know when this product is back in stock.
-                                        </p>
+                                            {/* <p className="text-gray-600 mb-6">
+                                                Join the waitlist and be the first to know when this product is back in stock.
+                                            </p> */}
 
                                         {!profile?.email ? (
                                             <div className="space-y-4">

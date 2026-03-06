@@ -821,7 +821,12 @@ export default function Navbar() {
                         onMouseLeave={handleDropdownMouseLeave}
                       >
                         {isLoggedIn ? (
-                          authMenuItems.map((item) => {
+                          [
+    ...(profile?.role === "administrator" || profile?.role === "shop-manager"
+      ? [{ name: 'Add Device', href: '/add-device' }]
+      : []),
+    ...authMenuItems
+  ].map((item) => {
                             const isActive = pathname === item.href
 
                             if (item.href === 'logout') {
@@ -935,7 +940,12 @@ export default function Navbar() {
                     {isUserMenuOpen && (
                       <div className="absolute right-0 top-full mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg z-50 border border-gray-200">
                         {isLoggedIn ? (
-                          authMenuItems.map((item) => {
+                          [
+    ...(profile?.role === "administrator" || profile?.role === "shop-manager"
+      ? [{ name: 'Add Device', href: '/add-device' }]
+      : []),
+    ...authMenuItems
+  ].map((item) => {
                             if (item.href === 'logout') {
                               return (
                                 <button

@@ -5,6 +5,8 @@ import { supabase } from '@/lib/supabase/client'
 import { useAuth } from './AuthContext'
 import { toast } from 'sonner'
 
+const SIM_SKU = "AT&T-5G-SIM"
+
 // Cart Item Interface (without price requirement)
 export interface CartItem {
   id?: string
@@ -264,6 +266,29 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   // Add item to cart
   const addToCart = async (productId: string, quantity: number = 1) => {
 
+    // Prevent multiple main devices (allow SIM only)
+      const hasMainDevice = cartItems.some(
+        item => item.product && item.product.sku !== SIM_SKU
+      )
+
+      if (hasMainDevice) {
+
+        // check if the product being added is SIM
+        const { data: product } = await supabase
+          .from("products")
+          .select("sku")
+          .eq("id", productId)
+          .single()
+
+        if (product?.sku !== SIM_SKU) {
+          toast.error("Only one demo device allowed in cart", {
+            style: { background: "red", color: "white" }
+          })
+          throw new Error("Only one device allowed")
+        }
+
+      }
+
     // For logged-in users, check verification
     if (user?.id && !checkUserVerification()) {
       toast.error('Your account is not verified. Please contact administrator.', {
@@ -340,6 +365,47 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
         // Refresh cart items
         await fetchCartItems()
+
+        // STEP 3: Auto add SIM if device supports 5G
+const { data: addedProduct } = await supabase
+  .from("products")
+  .select("five_g_Enabled")
+  .eq("id", productId)
+  .single()
+
+if (addedProduct?.five_g_Enabled) {
+
+  // Get SIM product
+  const { data: simProduct } = await supabase
+    .from("products")
+    .select("id, sku")
+    .eq("sku", SIM_SKU)
+    .single()
+
+  if (simProduct) {
+
+    const simExists = cartItems.some(
+      item => item.product && item.product.sku === SIM_SKU
+    )
+
+    if (!simExists) {
+
+      await supabase
+        .from("cart")
+        .insert({
+          product_id: simProduct.id,
+          quantity: prepareQuantityForDB(1),
+          user_id: user?.id
+        })
+
+      // Refresh cart again to show SIM
+      await fetchCartItems()
+
+    }
+
+  }
+
+}
       }
     } catch (error) {
       throw error
@@ -379,6 +445,27 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           .delete()
           .eq('user_id', user.id)
           .eq('product_id', productId)
+
+          // STEP 4: If main device removed, also remove SIM
+const removedItem = cartItems.find(
+  item => item.product_id === productId
+)
+
+if (removedItem?.product?.sku !== SIM_SKU) {
+
+  const simItem = cartItems.find(
+    item => item.product && item.product.sku === SIM_SKU
+  )
+
+  if (simItem) {
+    await supabase
+      .from("cart")
+      .delete()
+      .eq("user_id", user.id)
+      .eq("product_id", simItem.product_id)
+  }
+
+}
 
         if (error) throw error
 

@@ -211,7 +211,6 @@ export default function Page() {
             setShowCartDrawer(true);
 
         } catch (error: any) {
-            let errorMessage = 'Failed to add product to cart. Please try again.';
 
             await logActivity({
                 type: 'product',
@@ -228,17 +227,6 @@ export default function Page() {
                 status: 'failed'
             });
 
-            if (error?.code === '23505') {
-                errorMessage = 'This product is already in your cart.';
-            } else if (error?.code === '23503') {
-                errorMessage = 'Product not found.';
-            } else if (error?.message?.includes('foreign key constraint')) {
-                errorMessage = 'Invalid product. Please refresh the page and try again.';
-            }
-
-            toast.error(errorMessage, {
-                style: { background: "red", color: "white" },
-            });
         }
     };
 
@@ -719,7 +707,7 @@ export default function Page() {
                 {/* Fixed Filter Sidebar - Desktop */}
                 <div className="hidden lg:block w-64 flex-shrink-0 h-full top-0 overflow-y-auto bg-white border-r border-gray-200">
                     <div className="p-6">
-                        <div className="flex items-center justify-between mb-6">
+                        {/* <div className="flex items-center justify-between mb-6">
                             {getActiveFilterCount() > 0 && (
                                 <button
                                     onClick={clearFilters}
@@ -728,7 +716,7 @@ export default function Page() {
                                     Clear all
                                 </button>
                             )}
-                        </div>
+                        </div> */}
 
                         {/* Show skeleton only for filter options when loading */}
                         {isLoading ? (
@@ -757,9 +745,9 @@ export default function Page() {
                         {/* Mobile Heading */}
                         <div className="w-6 h-6">
                         </div>
-                        <h1 className="text-2xl font-bold text-gray-900">
+                        {/* <h1 className="text-2xl font-bold text-gray-900">
                             All Devices
-                        </h1>
+                        </h1> */}
 
                         {/* Filter Button */}
                         <button
@@ -773,7 +761,7 @@ export default function Page() {
                     {/* Products Section */}
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         {/* Results header - Only show when not loading */}
-                        {!isLoading && getActiveFilterCount() > 0 && (
+                        {/* {!isLoading && getActiveFilterCount() > 0 && (
                             <div className="mb-8">
                                 <div className="flex flex-wrap gap-2 mt-4">
                                     {Object.entries(filters).map(([key, values]) =>
@@ -800,7 +788,7 @@ export default function Page() {
                                     </button>
                                 </div>
                             </div>
-                        )}
+                        )} */}
 
                         {/* Products grid - Show skeleton when loading */}
                         <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6">
@@ -808,8 +796,9 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-                                    <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
-                                        {(admin === profile?.role || shopManager === profile?.role) ? (
+                                <div className="sm:my-10 my-5"></div>
+                                    {/* <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}> */}
+                                        {/* {(admin === profile?.role || shopManager === profile?.role) ? (
                                             <>
                                                 <div className="text-3xl font-semibold">Devices</div>
                                                 <div className="">
@@ -826,8 +815,8 @@ export default function Page() {
                                             </>
                                         ) : (
                                             <div className="text-3xl font-semibold">Devices</div>
-                                        )}
-                                    </div>
+                                        )} */}
+                                    
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
                                             // If product is not published, only show to admin/shop_manager
@@ -974,14 +963,14 @@ export default function Page() {
                 title={
                     <div className="flex items-center justify-between">
                         <span className="text-xl font-bold">Filters</span>
-                        {getActiveFilterCount() > 0 && (
+                        {/* {getActiveFilterCount() > 0 && (
                             <button
                                 onClick={clearFilters}
                                 className="text-sm text-[#1D76BC] hover:text-[#1660a0]"
                             >
                                 Clear all
                             </button>
-                        )}
+                        )} */}
                     </div>
                 }
                 placement="right"

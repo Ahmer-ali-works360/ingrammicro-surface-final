@@ -18,6 +18,8 @@ import {
 interface FormData {
     productName: string;
     sku: string;
+    oemBrand: string;
+    generation: string;
     formFactor: string;
     processor: string;
     memory: string;
@@ -32,6 +34,7 @@ interface FormData {
     copilotPC: string;
     fiveGEnabled: string;
     postStatus: string;
+    publishDate: string;
 }
 
 interface CustomInputs {
@@ -40,6 +43,8 @@ interface CustomInputs {
     memory: string;
     storage: string;
     screenSize: string;
+    oemBrand: string;
+    generation: string;
 }
 
 interface FilterOptions {
@@ -48,6 +53,8 @@ interface FilterOptions {
     memory: string[];
     storage: string[];
     screenSizesize: string[];
+    oemBrand: string[];
+    generation: string[];
 }
 
 export default function AddDeviceClient() {
@@ -92,6 +99,8 @@ export default function AddDeviceClient() {
     const [formData, setFormData] = useState<FormData>({
         productName: "",
         sku: "",
+        oemBrand: "",
+        generation: "",
         formFactor: "",
         processor: "",
         memory: "",
@@ -106,6 +115,7 @@ export default function AddDeviceClient() {
         copilotPC: "No",
         fiveGEnabled: "No",
         postStatus: "Publish",
+        publishDate: "",
     });
 
     // Custom input states
@@ -115,6 +125,8 @@ export default function AddDeviceClient() {
         memory: "",
         storage: "",
         screenSize: "",
+        oemBrand: "",
+        generation: "",
     });
 
     // Filter options from existing products
@@ -124,6 +136,8 @@ export default function AddDeviceClient() {
         memory: [],
         storage: [],
         screenSizesize: [],
+        oemBrand: [],
+        generation: [],
     });
 
     // Loading states
@@ -307,6 +321,8 @@ export default function AddDeviceClient() {
             setFormData({
                 productName: product.product_name || "",
                 sku: product.sku || "",
+                oemBrand: product.oem_brand || "",
+                generation: product.generation || "",
                 formFactor: product.form_factor || "",
                 processor: product.processor || "",
                 memory: product.memory || "",
@@ -321,6 +337,7 @@ export default function AddDeviceClient() {
                 copilotPC: product.copilot ? "Yes" : "No",
                 fiveGEnabled: product.five_g_Enabled ? "Yes" : "No",
                 postStatus: product.post_status || "Publish",
+                publishDate: product.publish_date?.split('T')[0] || "",
             });
 
             // Fetch filter options after setting form data
@@ -372,12 +389,26 @@ export default function AddDeviceClient() {
                 .not("screen_size", "is", null)
                 .not("screen_size", "eq", "");
 
+            const { data: oemBrandData } = await supabase
+                .from("products")
+                .select("oem_brand")
+                .not("oem_brand", "is", null)
+                .not("oem_brand", "eq", "");
+
+            const { data: generationData } = await supabase
+                .from("products")
+                .select("generation")
+                .not("generation", "is", null)
+                .not("generation", "eq", "");
+
             // Extract unique values
             const formFactorOptions = [...new Set(formFactorData?.map(item => item.form_factor) || [])].sort();
             const processorOptions = [...new Set(processorData?.map(item => item.processor) || [])].sort();
             const memoryOptions = [...new Set(memoryData?.map(item => item.memory) || [])].sort();
             const storageOptions = [...new Set(storageData?.map(item => item.storage) || [])].sort();
             const screenSizeOptions = [...new Set(screenSizeData?.map(item => item.screen_size) || [])].sort();
+            const oemBrandOptions = [...new Set(oemBrandData?.map(item => item.oem_brand) || [])].sort();
+            const generationOptions = [...new Set(generationData?.map(item => item.generation) || [])].sort();
 
             setFilterOptions({
                 formfactor: [...formFactorOptions, "Custom"],
@@ -385,6 +416,8 @@ export default function AddDeviceClient() {
                 memory: [...memoryOptions, "Custom"],
                 storage: [...storageOptions, "Custom"],
                 screenSizesize: [...screenSizeOptions, "Custom"],
+                oemBrand: [...oemBrandOptions, "Custom"],
+                generation: [...generationOptions, "Custom"],
             });
 
         } catch (error) {
@@ -484,6 +517,8 @@ export default function AddDeviceClient() {
             memory: "memory",
             storage: "storage",
             screenSize: "screenSize",
+            oemBrand: "oemBrand",
+            generation: "generation",
         };
 
         if (fieldMap[field] && value !== "Custom") {
@@ -592,6 +627,8 @@ export default function AddDeviceClient() {
             const requiredFields = [
                 { field: 'productName', label: 'Product Name', value: formData.productName },
                 { field: 'sku', label: 'SKU', value: formData.sku },
+                { field: 'oemBrand', label: 'OEM Brand', value: formData.oemBrand },
+                { field: 'generation', label: 'Generation', value: formData.generation },
                 // { field: 'formFactor', label: 'Form Factor', value: formData.formFactor },
                 // { field: 'processor', label: 'Processor', value: formData.processor },
                 // { field: 'memory', label: 'Memory', value: formData.memory },
@@ -644,6 +681,8 @@ export default function AddDeviceClient() {
                 { field: 'memory' as const, customField: 'memory' as const },
                 { field: 'storage' as const, customField: 'storage' as const },
                 { field: 'screenSize' as const, customField: 'screenSize' as const },
+                { field: 'oemBrand' as const, customField: 'oemBrand' as const },
+                { field: 'generation' as const, customField: 'generation' as const },
             ];
 
             const missingCustomInputs = customFieldsToCheck.filter(({ field, customField }) => {
@@ -660,6 +699,8 @@ export default function AddDeviceClient() {
                         memory: "Memory",
                         storage: "Storage",
                         screenSize: "Screen Size",
+                        oemBrand: "OEM Brand",
+                        generation: "Generation",
                     };
                     return labelMap[field] || field;
                 }).join(', ');
@@ -752,6 +793,8 @@ export default function AddDeviceClient() {
             const finalFormData = {
                 productName: formData.productName,
                 sku: formData.sku,
+                oemBrand: getFieldValue('oemBrand', 'oemBrand'),
+                generation: getFieldValue('generation', 'generation'),
                 formFactor: getFieldValue('formFactor', 'formFactor'),
                 processor: getFieldValue('processor', 'processor'),
                 memory: getFieldValue('memory', 'memory'),
@@ -765,6 +808,7 @@ export default function AddDeviceClient() {
                 copilotPC: formData.copilotPC,
                 fiveGEnabled: formData.fiveGEnabled,
                 postStatus: formData.postStatus,
+                publishDate: formData.publishDate,
                 description: formData.description,
             };
 
@@ -840,6 +884,8 @@ export default function AddDeviceClient() {
                         product_name: finalFormData.productName,
                         slug: slug,
                         sku: finalFormData.sku,
+                        oem_brand: finalFormData.oemBrand,
+                        generation: finalFormData.generation,
                         form_factor: finalFormData.formFactor,
                         processor: finalFormData.processor,
                         memory: finalFormData.memory,
@@ -853,6 +899,7 @@ export default function AddDeviceClient() {
                         copilot: toBool(finalFormData.copilotPC),
                         five_g_Enabled: toBool(finalFormData.fiveGEnabled),
                         post_status: finalFormData.postStatus,
+                        publish_date: finalFormData.publishDate,
                         description: finalFormData.description,
                         thumbnail: imageUrls.primary,
                         gallery: finalGallery,
@@ -912,6 +959,8 @@ export default function AddDeviceClient() {
                         product_name: finalFormData.productName,
                         slug: slug,
                         sku: finalFormData.sku,
+                        oem_brand: finalFormData.oemBrand,
+                        generation: finalFormData.generation,
                         form_factor: finalFormData.formFactor,
                         processor: finalFormData.processor,
                         memory: finalFormData.memory,
@@ -926,6 +975,7 @@ export default function AddDeviceClient() {
                         copilot: toBool(finalFormData.copilotPC),
                         five_g_Enabled: toBool(finalFormData.fiveGEnabled),
                         post_status: finalFormData.postStatus,
+                        publish_date: finalFormData.publishDate,
                         description: finalFormData.description,
                         isBundle: false,
                         isInStock: true,
@@ -964,6 +1014,8 @@ export default function AddDeviceClient() {
         setFormData({
             productName: "",
             sku: "",
+            oemBrand: "",
+            generation: "",
             formFactor: "",
             processor: "",
             memory: "",
@@ -978,6 +1030,7 @@ export default function AddDeviceClient() {
             copilotPC: "No",
             fiveGEnabled: "No",
             postStatus: "Publish",
+            publishDate: "",
         });
 
         setCustomInputs({
@@ -986,6 +1039,8 @@ export default function AddDeviceClient() {
             memory: "",
             storage: "",
             screenSize: "",
+            oemBrand: "",
+            generation: "",
         });
 
         setPrimaryImage(null);
@@ -1005,7 +1060,7 @@ export default function AddDeviceClient() {
         field: keyof FormData,
         options: string[],
         customField: keyof CustomInputs,
-        type: string
+        // type: string
     ) => {
         const safeOptions = options || [];
         const showCustomInput = formData[field] === "Custom";
@@ -1247,21 +1302,27 @@ export default function AddDeviceClient() {
                                     required
                                 />
                             </div>
+                            {/* OEM Brand */}
+                            {renderFieldWithCustom("OEM Brand", "oemBrand", filterOptions.oemBrand, "oemBrand", )}
+
+                            {/* Generation */}
+                            {renderFieldWithCustom("Generation", "generation", filterOptions.generation, "generation", )}
+
 
                             {/* Form Factor */}
-                            {renderFieldWithCustom("Form Factor", "formFactor", filterOptions.formfactor, "formFactor", "form_factor")}
+                            {renderFieldWithCustom("Form Factor", "formFactor", filterOptions.formfactor, "formFactor", )}
 
                             {/* Processor */}
-                            {renderFieldWithCustom("Processor", "processor", filterOptions.processor, "processor", "processor")}
+                            {renderFieldWithCustom("Processor", "processor", filterOptions.processor, "processor", )}
 
                             {/* Memory */}
-                            {renderFieldWithCustom("Memory", "memory", filterOptions.memory, "memory", "memory")}
+                            {renderFieldWithCustom("Memory", "memory", filterOptions.memory, "memory", )}
 
                             {/* Storage */}
-                            {renderFieldWithCustom("Storage", "storage", filterOptions.storage, "storage", "storage")}
+                            {renderFieldWithCustom("Storage", "storage", filterOptions.storage, "storage", )}
 
                             {/* Screen Size */}
-                            {renderFieldWithCustom("Screen Size", "screenSize", filterOptions.screenSizesize, "screenSize", "screen_size")}
+                            {renderFieldWithCustom("Screen Size", "screenSize", filterOptions.screenSizesize, "screenSize", )}
 
                             {/* Technologies */}
                             <div>
@@ -1384,6 +1445,21 @@ export default function AddDeviceClient() {
                                         </label>
                                     ))}
                                 </div>
+                            </div>
+
+                            {/* Publish Date */}
+                            <div>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">
+                                    Publish Date
+                                </label>
+
+                                <input
+                                    type="date"
+                                    value={formData.publishDate}
+                                    onChange={(e) => handleInputChange("publishDate", e.target.value)}
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md
+                            focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                />
                             </div>
 
                             {/* Description */}
