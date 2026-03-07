@@ -629,8 +629,8 @@ export default function AddDeviceClient() {
             const requiredFields = [
                 { field: 'productName', label: 'Product Name', value: formData.productName },
                 { field: 'sku', label: 'SKU', value: formData.sku },
-                { field: 'oemBrand', label: 'OEM Brand', value: formData.oemBrand },
-                { field: 'generation', label: 'Generation', value: formData.generation },
+                // { field: 'oemBrand', label: 'OEM Brand', value: formData.oemBrand },
+                // { field: 'generation', label: 'Generation', value: formData.generation },
                 // { field: 'formFactor', label: 'Form Factor', value: formData.formFactor },
                 // { field: 'processor', label: 'Processor', value: formData.processor },
                 // { field: 'memory', label: 'Memory', value: formData.memory },
@@ -683,8 +683,8 @@ export default function AddDeviceClient() {
                 { field: 'memory' as const, customField: 'memory' as const },
                 { field: 'storage' as const, customField: 'storage' as const },
                 { field: 'screenSize' as const, customField: 'screenSize' as const },
-                { field: 'oemBrand' as const, customField: 'oemBrand' as const },
-                { field: 'generation' as const, customField: 'generation' as const },
+                // { field: 'oemBrand' as const, customField: 'oemBrand' as const },
+                // { field: 'generation' as const, customField: 'generation' as const },
             ];
 
             const missingCustomInputs = customFieldsToCheck.filter(({ field, customField }) => {
@@ -789,12 +789,12 @@ export default function AddDeviceClient() {
 
             // Prepare final data with direct text values
             // For custom fields, use the custom input value if "Custom" is selected
-            const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): string => {
-                if (formData[field] === "Custom") {
-                    return customInputs[customField] || formData[field];
-                }
-                return formData[field];
-            };
+const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): string | null => {
+    if (formData[field] === "Custom") {
+        return customInputs[customField] || null;
+    }
+    return formData[field] || null;
+};
 
             const finalFormData = {
                 productName: formData.productName,
