@@ -146,6 +146,7 @@ export default function AddDeviceClient() {
     const [isLoadingProduct, setIsLoadingProduct] = useState(false);
     const [isFormLoading, setIsFormLoading] = useState(false);
     const [productId, setProductId] = useState<string | null>(null);
+    const [originalProductName, setOriginalProductName] = useState<string>("");
 
     // Static options
     const inventoryTypes = ["Program", "Global"];
@@ -260,6 +261,7 @@ export default function AddDeviceClient() {
 
             // Set product ID for updates
             setProductId(product.id);
+            setOriginalProductName(product.product_name || "");
 
             // Set primary image preview
             if (product.thumbnail) {
@@ -779,7 +781,11 @@ export default function AddDeviceClient() {
             const imageUrls = await uploadImagesToSupabase();
 
             // Create slug
-            const slug = createSlug(formData.productName);
+            const slug = isEditing && editSlug
+    ? formData.productName.trim() !== originalProductName.trim()
+        ? createSlug(formData.productName)
+        : editSlug
+    : createSlug(formData.productName);
 
             // Prepare final data with direct text values
             // For custom fields, use the custom input value if "Custom" is selected
