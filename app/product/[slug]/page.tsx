@@ -473,7 +473,7 @@ export default function Page() {
                                 descriptionSection.scrollIntoView({ behavior: 'smooth' });
                             }
                         }}
-                        className="flex items-center justify-center gap-2 px-5 py-2 border border-[#0a3637] text-[#0a3637] rounded-sm hover:bg-[#0a3637] hover:text-white transition-colors"
+                        className="flex items-center justify-center gap-2 px-5 py-2 border border-[#1D76BC] text-[#1D76BC] rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -487,7 +487,7 @@ export default function Page() {
         if (product.post_status !== "Publish") {
             return (
                 <div
-                    className="flex w-56 items-center justify-center gap-2 px-5 py-2 border border-[#0a3637] text-[#0a3637] rounded-sm"
+                    className="flex w-56 items-center justify-center gap-2 px-5 py-2 border border-[#1d76bc] text-[#1d76bc] rounded-sm"
                 >
                     Private
                 </div>
@@ -976,7 +976,7 @@ export default function Page() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">{error || "Product not found"}</h2>
                     <button
                         onClick={() => router.back()}
-                        className="px-4 py-2 bg-[#0e4647] text-white rounded-lg hover:bg-[#0a3637] transition-colors"
+                        className="px-4 py-2 bg-[#1D76BC] text-white rounded-lg hover:bg-[#1660a0] transition-colors"
                     >
                         Go Back
                     </button>
