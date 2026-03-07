@@ -693,7 +693,7 @@ export default function OrderDetails() {
           <Link
             href={`/order-details/${row.getValue("order_no")}`}
             target="_blank"
-            className="text-teal-600 underline"
+            className="text-[#1D76BC] underline"
           >
             {row.getValue("order_no")}
           </Link>
@@ -1743,7 +1743,7 @@ export default function OrderDetails() {
                 <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
                 Team Details
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
                     Sales Executive *
@@ -1762,7 +1762,7 @@ export default function OrderDetails() {
                 </div>
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">
-                    SE Email *
+                    Sales Executive Email *
                   </label>
                   <AntInput
                     name="se_email"

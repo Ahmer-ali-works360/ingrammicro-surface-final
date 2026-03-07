@@ -827,7 +827,7 @@ export default function AddDeviceClient() {
                     .select("sku")
                     .eq("sku", finalFormData.sku.trim())
                     .neq("id", productId)
-                    .single();
+                    .maybeSingle();
 
                 if (pRowSKU) {
                     toast.error("Unable to update the device because a device with the same SKU already exists.", {
@@ -883,6 +883,7 @@ export default function AddDeviceClient() {
                     });
                 }
 
+          
                 // Update device - directly store text values
                 const { error } = await supabase
                     .from("products")
@@ -912,6 +913,7 @@ export default function AddDeviceClient() {
                         updated_at: new Date().toISOString(),
                     })
                     .eq("id", productId);
+
 
                 if (error) {
                     toast.error("Failed to update device. Please try again.", {
