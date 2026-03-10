@@ -7,54 +7,6 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
 import { logger, logAuth, logError, logSuccess } from "@/lib/logger";
-import crypto from 'crypto';
-
-class PasswordHash {
-  private itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-  private iterationCountLog2: number
-  private portableHashes: boolean
-  constructor(iterationCountLog2: number, portableHashes: boolean) {
-    if (iterationCountLog2 < 4 || iterationCountLog2 > 31) iterationCountLog2 = 8
-    this.iterationCountLog2 = iterationCountLog2
-    this.portableHashes = portableHashes
-  }
-  checkPassword(password: string, storedHash: string) {
-    const hash = this.cryptPrivate(password, storedHash)
-    return hash === storedHash
-  }
-  private cryptPrivate(password: string, setting: string) {
-    let output = '*0'
-    if (setting.substring(0, 2) === '*0') output = '*1'
-    const id = setting.substring(0, 3)
-    if (id !== '$P$' && id !== '$H$') return output
-    const countLog2 = this.itoa64.indexOf(setting[3])
-    if (countLog2 < 7 || countLog2 > 30) return output
-    const count = 1 << countLog2
-    const salt = setting.substring(4, 12)
-    if (salt.length !== 8) return output
-    let hash = crypto.createHash('md5').update(salt + password).digest()
-    for (let i = 0; i < count; i++) {
-      hash = crypto.createHash('md5').update(Buffer.concat([hash, Buffer.from(password)])).digest()
-    }
-    return setting.substring(0, 12) + this.encode64(hash, 16)
-  }
-  private encode64(input: Buffer, count: number) {
-    let output = ''
-    let i = 0
-    do {
-      let value = input[i++]
-      output += this.itoa64[value & 0x3f]
-      if (i < count) value |= input[i] << 8
-      output += this.itoa64[(value >> 6) & 0x3f]
-      if (i++ >= count) break
-      if (i < count) value |= input[i] << 16
-      output += this.itoa64[(value >> 12) & 0x3f]
-      if (i++ >= count) break
-      output += this.itoa64[(value >> 18) & 0x3f]
-    } while (i < count)
-    return output
-  }
-}
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -67,15 +19,10 @@ export default function LoginForm() {
   const router = useRouter();
   const { profile, isLoggedIn, loading, user } = useAuth();
 
-  const [source, setSource] = useState<string>(
-    process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/login` : ''
-  );
-
-  useEffect(() => {
-    if (!process.env.NEXT_PUBLIC_APP_URL && typeof window !== 'undefined') {
-      setSource(`${window.location.origin}/login`);
-    }
-  }, []);
+  // ✅ Simple variable — no useState/useEffect needed
+  const source = typeof window !== "undefined"
+    ? `${window.location.origin}/login`
+    : `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/login`;
 
   useEffect(() => {
     if (loading) return;
@@ -84,11 +31,9 @@ export default function LoginForm() {
       const redirectTo = searchParams.get("redirect_to");
       const redirectPath = redirectTo ? `/${redirectTo}` : "/";
 
-      logAuth('auto_redirect', `User already logged in, redirecting to ${redirectPath}`, user?.id, undefined, 'completed', source);
+      logAuth("auto_redirect", `User already logged in, redirecting to ${redirectPath}`, user?.id, undefined, "completed", source);
 
       router.push(redirectPath);
-
-      return;
     }
   }, [loading, isLoggedIn, profile, router, searchParams, user?.id, source]);
 
@@ -123,6 +68,7 @@ export default function LoginForm() {
     const trimmedEmail = email.trim().toLowerCase();
 
     try {
+      // ✅ Step 1: Normal Supabase login try karo
       const { data: normalAuthData, error: normalAuthError } = await supabase.auth.signInWithPassword({
         email: trimmedEmail,
         password,
@@ -133,10 +79,11 @@ export default function LoginForm() {
         return;
       }
 
+      // ✅ Step 2: Normal login fail — WordPress legacy migration try karo
       try {
-        const verifyResponse = await fetch('/api/user-verification', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const verifyResponse = await fetch("/api/user-verification", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: trimmedEmail, password }),
         });
 
@@ -159,37 +106,25 @@ export default function LoginForm() {
           return;
         }
 
-        if (verifyData.existsInAuth) {
-          const { data: newAuthData, error: newAuthError } = await supabase.auth.signInWithPassword({
-            email: trimmedEmail,
-            password,
-          });
+        // ✅ Step 3: WP migration successful — ab Supabase login karo
+        const { data: newAuthData, error: newAuthError } = await supabase.auth.signInWithPassword({
+          email: trimmedEmail,
+          password,
+        });
 
-          if (newAuthError) {
-            if (verifyData.needsPasswordUpdate) {
-              toast.error(
-                <div>
-                  Account needs password update. <br />
-                  <Link href="/password-reset" className="underline">Reset your password</Link>
-                </div>,
-                { duration: 8000 }
-              );
-            } else {
-              toast.error("Invalid email or password");
-            }
-            setLoading(false);
-          } else {
-            await handleSuccessfulLogin(newAuthData.user.id, trimmedEmail, startTime, true);
-          }
-        } else {
-          toast.error("Account not found or not migrated");
+        if (newAuthError) {
+          toast.error("Login failed after migration. Please reset your password.");
           setLoading(false);
+          return;
         }
-      } catch (apiError) {
+
+        await handleSuccessfulLogin(newAuthData.user.id, trimmedEmail, startTime, true);
+
+      } catch {
         toast.error("Authentication service unavailable");
         setLoading(false);
       }
-    } catch (error) {
+    } catch {
       toast.error("Authentication error. Please try again.");
       setLoading(false);
     }
@@ -204,8 +139,8 @@ export default function LoginForm() {
     const executionTime = Date.now() - startTime;
 
     if (!userId) {
-      await logError('auth', 'user_id_missing', 'No user ID returned after successful login',
-        { email: userEmail, isLegacyMigration }, '', source);
+      await logError("auth", "user_id_missing", "No user ID returned after successful login",
+        { email: userEmail, isLegacyMigration }, "", source);
       setLoading(false);
       return;
     }
@@ -217,7 +152,7 @@ export default function LoginForm() {
       .single();
 
     if (userError) {
-      await logError('db', 'user_fetch_failed', `Failed to fetch user data: ${userError.message}`,
+      await logError("db", "user_fetch_failed", `Failed to fetch user data: ${userError.message}`,
         userError, userId, source);
       toast.error("Unable to verify account status", {
         style: { background: "black", color: "white" },
@@ -228,7 +163,7 @@ export default function LoginForm() {
     }
 
     if (!userData?.isVerified) {
-      await logger.warning('auth', 'account_not_approved',
+      await logger.warning("auth", "account_not_approved",
         `Login attempt for unapproved account: ${userEmail}`,
         { email: userEmail, userId, isLegacyMigration }, userId, source);
       toast.error("Your account is not approved yet.", {
@@ -239,39 +174,41 @@ export default function LoginForm() {
       return;
     }
 
-    // ✅ Sab DB calls + logs Promise.all mein — background mein chalenge
     const previousCount = parseInt(userData?.login_count || "0", 10);
 
-    const dbUpdates: any[] = [
-      supabase.from("users").update({
-        login_at: new Date().toISOString().split("T")[0],
-        login_count: String(previousCount + 1),
-      }).eq("userId", userId)
-    ];
+    // ✅ Background DB updates — user wait nahi karega
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const dbUpdates: any[] = [
+        supabase.from("users").update({
+          login_at: new Date().toISOString().split("T")[0],
+          login_count: String(previousCount + 1),
+        }).eq("userId", userId)
+      ];
 
-    if (userData?.userId == null || userData?.password != null) {
-      dbUpdates.push(
-        supabase.from('users').update({ userId: userId, password: null }).eq('email', userEmail),
-        supabase.from('wp_pass').delete().eq('email', userEmail)
+      if (userData?.userId == null || userData?.password != null) {
+        dbUpdates.push(
+          supabase.from("users").update({ userId, password: null }).eq("email", userEmail),
+          supabase.from("wp_pass").delete().eq("email", userEmail)
+        );
+      }
+
+      Promise.all(dbUpdates).catch(err =>
+        console.error("Background DB update failed:", err)
       );
-    }
-
-    // ✅ Background mein chalao — user wait nahi karega
-    Promise.all(dbUpdates);
 
     // ✅ Logs bhi background mein
-    logger.info('auth', 'login_stats_updated', `Login stats updated for user: ${userEmail}`, {
+    logger.info("auth", "login_stats_updated", `Login stats updated for user: ${userEmail}`, {
       email: userEmail, userId, previousCount, executionTime, isLegacyMigration
     }, userId, source);
 
-    logSuccess('auth', 'login_successful',
-      `User logged in ${isLegacyMigration ? 'via legacy migration' : 'normally'}: ${userEmail}`, {
+    logSuccess("auth", "login_successful",
+      `User logged in ${isLegacyMigration ? "via legacy migration" : "normally"}: ${userEmail}`, {
       email: userEmail, userId, executionTime, isLegacyMigration,
       userData: {
         firstName: userData?.firstName,
         lastName: userData?.lastName,
         isVerified: userData?.isVerified,
-        loginCount: userData?.login_count
+        loginCount: userData?.login_count,
       }
     }, userId, source);
 
@@ -279,20 +216,15 @@ export default function LoginForm() {
       style: { background: "black", color: "white" },
     });
 
-    const userName = userData?.firstName || "User";
-
-    setEmail("");
-    setPassword("");
-
     const redirectTo = searchParams.get("redirect_to");
     const redirectPath = redirectTo ? `/${redirectTo}` : "/";
 
-    // ✅ Log bhi background mein, seedha redirect
-    logger.info('auth', 'redirecting_after_login',
+    logger.info("auth", "redirecting_after_login",
       `Redirecting user to: ${redirectPath}`, {
       email: userEmail, userId, redirectPath, isLegacyMigration
     }, userId, source);
 
+    // ✅ Direct redirect — state clear karna pointless tha
     router.push(redirectPath);
   };
 
@@ -313,8 +245,9 @@ export default function LoginForm() {
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form onSubmit={signin} className="space-y-4">
               <div className="my-3">
-                <label htmlFor="" className="font-semibold text-gray-700 text-sm">Email</label>
+                <label htmlFor="email" className="font-semibold text-gray-700 text-sm">Email</label>
                 <input
+                  id="email"
                   type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -326,8 +259,9 @@ export default function LoginForm() {
               </div>
 
               <div className="my-3">
-                <label htmlFor="" className="font-semibold text-gray-700 text-sm">Password</label>
+                <label htmlFor="password" className="font-semibold text-gray-700 text-sm">Password</label>
                 <input
+                  id="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
