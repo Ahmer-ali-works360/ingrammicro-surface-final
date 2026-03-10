@@ -39,6 +39,7 @@ interface Product {
     total_inventory: number;
     stock_quantity: number;
     date: string;
+    publish_date: string | null;
     copilot: boolean;
     five_g_Enabled: boolean;
     post_status: string;
@@ -529,11 +530,16 @@ export default function Page() {
         if (aHasStock && !bHasStock) return -1;
         if (!aHasStock && bHasStock) return 1;
 
-        // Priority 3: Date (latest first)
-        const dateA = a.date ? new Date(a.date).getTime() : 0;
-        const dateB = b.date ? new Date(b.date).getTime() : 0;
+       // Priority 3: Publish Date (agar ho) ya phir Date
+        const dateA = a.publish_date 
+            ? new Date(a.publish_date).getTime() 
+            : a.date ? new Date(a.date).getTime() : 0;
 
-        return dateB - dateA; // Descending order (latest first)
+        const dateB = b.publish_date 
+            ? new Date(b.publish_date).getTime() 
+            : b.date ? new Date(b.date).getTime() : 0;
+
+        return dateB - dateA;
     });
 
     // Pehle yeh state update function ko fix karo - line 300 ke around

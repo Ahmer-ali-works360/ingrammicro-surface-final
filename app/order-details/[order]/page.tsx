@@ -798,9 +798,9 @@ export default function Page() {
         try {
             setIsUploading(true); setUploadError(null);
             const filePath = `return-labels/${order.order_no}/${Date.now()}-${Math.random().toString(36).substring(2)}.${file.name.split('.').pop()}`;
-            const { error: uploadError } = await supabase.storage.from('TdSynnex').upload(filePath, file, { cacheControl: '3600', upsert: true });
+            const { error: uploadError } = await supabase.storage.from('ingram').upload(filePath, file, { cacheControl: '3600', upsert: true });
             if (uploadError) throw uploadError;
-            const { data: { publicUrl } } = supabase.storage.from('TdSynnex').getPublicUrl(filePath);
+            const { data: { publicUrl } } = supabase.storage.from('ingram').getPublicUrl(filePath);
             const { error: updateError } = await supabase.from('orders').update({ return_label: publicUrl }).eq('id', order.id);
             if (updateError) throw updateError;
             setOrders(prev => prev.map(o => o.id === order.id ? { ...o, return_label: publicUrl } : o));
