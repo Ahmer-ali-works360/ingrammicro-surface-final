@@ -482,6 +482,7 @@ export default function Page() {
 
     // Filter products based on selected filters
     const filteredProducts = products.filter(product => {
+        if (product.inventory_type?.toLowerCase() === 'addon') return false;
         return Object.entries(filters).every(([key, values]) => {
             if (values.length === 0) return true;
 
