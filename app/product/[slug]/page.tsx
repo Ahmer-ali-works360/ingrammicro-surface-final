@@ -38,18 +38,12 @@ const ProductSkeleton = () => {
     const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
-        // Check on mount and on resize
         const checkIfMobile = () => {
             setIsMobile(window.innerWidth < 640);
         };
 
-        // Initial check
         checkIfMobile();
-
-        // Add event listener for resize
         window.addEventListener('resize', checkIfMobile);
-
-        // Cleanup
         return () => window.removeEventListener('resize', checkIfMobile);
     }, []);
 
@@ -105,11 +99,11 @@ interface Product {
     product_name: string;
     slug: string;
     sku: string;
-    form_factor: string | null;  // Now stores text directly
-    processor: string | null;     // Now stores text directly
-    memory: string | null;        // Now stores text directly
-    storage: string | null;       // Now stores text directly
-    screen_size: string | null;   // Now stores text directly
+    form_factor: string | null;
+    processor: string | null;
+    memory: string | null;
+    storage: string | null;
+    screen_size: string | null;
     technologies: string | null;
     inventory_type: string | null;
     total_inventory: number | null;
@@ -178,16 +172,14 @@ export default function Page() {
     const [authChecked, setAuthChecked] = useState(false);
     const [authInitialized, setAuthInitialized] = useState(false);
 
-    // Handle auth check - IMPROVED VERSION
+    // Handle auth check
     useEffect(() => {
-        // Only run auth check after auth is fully initialized
         if (loading) {
             return;
         }
 
         setAuthInitialized(true);
 
-        // Now check authentication status
         if (!isLoggedIn || profile?.isVerified === false && !profile) {
             router.replace(`/login/?redirect_to=product/${slug}`);
         } else {
@@ -205,7 +197,6 @@ export default function Page() {
         try {
             setIsAddingToWaitlist(true);
 
-            // Check if already in waitlist
             const { data: existingWaitlist, error: checkError } = await supabase
                 .from('waitlist')
                 .select('id')
@@ -219,7 +210,6 @@ export default function Page() {
                 return;
             }
 
-            // Add to waitlist
             const { error } = await supabase
                 .from('waitlist')
                 .insert({
@@ -230,7 +220,7 @@ export default function Page() {
                 });
 
             if (error) {
-                if (error.code === '23505') { // Unique constraint violation
+                if (error.code === '23505') {
                     toast.error("You are already on the waitlist for this product");
                 } else {
                     throw error;
@@ -260,9 +250,6 @@ export default function Page() {
                     .eq('product_id', product.id)
                     .eq('user_id', profile.id)
                     .single();
-
-                // You can use this data to show different UI if already on waitlist
-                // For example, you can set a state to disable the waitlist button
             } catch (error) {
                 // User is not on waitlist (404 is expected)
             }
@@ -276,10 +263,9 @@ export default function Page() {
     // Fetch data only after auth is confirmed AND initialized
     useEffect(() => {
         if (!authChecked || !authInitialized) {
-            return; // Don't fetch data until auth is fully checked AND initialized
+            return;
         }
     }, [authChecked, authInitialized]);
-
 
     const sendWinEmail = async () => {
         try {
@@ -314,75 +300,77 @@ export default function Page() {
         );
     }
 
- const handleAddToCart = async (productId: string) => {
-    try {
-        await logActivity({
-            type: 'product',
-            level: 'info',
-            action: 'add_to_cart_attempt',
-            message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                productName: product?.product_name,
-                sku: product?.sku,
-                userRole: profile?.role,
-                isPublished: product?.post_status === 'Publish',
-                stockQuantity: product?.stock_quantity,
-                slug: slug
+    const handleAddToCart = async (productId: string) => {
+        try {
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'info',
+                action: 'add_to_cart_attempt',
+                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku,
+                    userRole: profile?.role,
+                    isPublished: product?.post_status === 'Publish',
+                    stockQuantity: product?.stock_quantity,
+                    slug: slug
+                }
+            });
+
+            await addToCart(productId, 1);
+
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'success',
+                action: 'add_to_cart_success',
+                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku,
+                    slug: slug
+                },
+                status: 'completed'
+            });
+
+            toast.success('Product added to cart!', {
+                style: { background: "black", color: "white" },
+            });
+
+        } catch (error: any) {
+
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'error',
+                action: 'add_to_cart_failed',
+                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    errorCode: error?.code,
+                    errorMessage: error?.message,
+                    errorDetails: error
+                },
+                status: 'failed'
+            });
+
+            if (error?.code === '23503') {
+                router.push(`/product/${slug}`);
             }
-        });
-
-        await addToCart(productId, 1);
-
-        await logActivity({
-            type: 'product',
-            level: 'success',
-            action: 'add_to_cart_success',
-            message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                productName: product?.product_name,
-                sku: product?.sku,
-                slug: slug
-            },
-            status: 'completed'
-        });
-
-        toast.success('Product added to cart!', {
-            style: { background: "black", color: "white" },
-        });
-
-    } catch (error: any) {
-
-        await logActivity({
-            type: 'product',
-            level: 'error',
-            action: 'add_to_cart_failed',
-            message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                errorCode: error?.code,
-                errorMessage: error?.message,
-                errorDetails: error
-            },
-            status: 'failed'
-        });
-
-        // Router redirect agar product invalid ho
-        if (error?.code === '23503') {
-            router.push(`/product/${slug}`);
         }
-
-    }
-};
+    };
 
     // Handle cart item removal
     const handleRemoveFromCart = async (productId: string) => {
         try {
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'info',
                 action: 'remove_from_cart_attempt',
@@ -395,9 +383,11 @@ export default function Page() {
                     slug: slug
                 }
             });
+
             await removeFromCart(productId)
 
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'success',
                 action: 'remove_from_cart_success',
@@ -418,7 +408,8 @@ export default function Page() {
         } catch (error: any) {
             let errorMessage = 'Failed to remove product from cart. Please try again.'
 
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'error',
                 action: 'remove_from_cart_failed',
@@ -467,7 +458,6 @@ export default function Page() {
                     </button>
                     <button
                         onClick={() => {
-                            // Scroll to description section
                             const descriptionSection = document.getElementById('product-description');
                             if (descriptionSection) {
                                 descriptionSection.scrollIntoView({ behavior: 'smooth' });
@@ -571,7 +561,6 @@ export default function Page() {
         if (isProductInCart) {
             return (
                 <div className="space-y-2">
-                    {/* Remove button */}
                     <button
                         onClick={(e) => {
                             e.preventDefault();
@@ -610,9 +599,7 @@ export default function Page() {
         }
 
         try {
-            // Try to parse as JSON if it's a string
             if (typeof galleryData === 'string') {
-                // Check if it's already a JSON string array
                 if (galleryData.startsWith('[') && galleryData.endsWith(']')) {
                     const parsed = JSON.parse(galleryData);
                     if (Array.isArray(parsed)) {
@@ -620,9 +607,7 @@ export default function Page() {
                     }
                 }
 
-                // Check if it's a comma-separated string
                 if (galleryData.includes(',') && galleryData.includes('http')) {
-                    // Remove brackets and quotes if present, then split
                     const cleaned = galleryData
                         .replace(/[\[\]"]/g, '')
                         .split(',')
@@ -631,7 +616,6 @@ export default function Page() {
                     return cleaned;
                 }
 
-                // If it's a single URL string
                 return [galleryData];
             }
         } catch (error) {
@@ -647,9 +631,8 @@ export default function Page() {
         const thumbnail = product.thumbnail || '';
         const galleryArray = parseGalleryImages(product.gallery);
 
-        // Combine thumbnail with gallery, removing duplicates
         const allImages = [thumbnail, ...galleryArray].filter(Boolean);
-        return [...new Set(allImages)]; // Remove duplicates
+        return [...new Set(allImages)];
     };
 
     // Fetch product data
@@ -658,8 +641,8 @@ export default function Page() {
 
             const startTime = Date.now();
 
-            // Log fetch attempt
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'info',
                 action: 'product_fetch_attempt',
@@ -676,7 +659,6 @@ export default function Page() {
                 setLoading(true);
                 setError(null);
 
-                // Fetch product by slug - directly from products table
                 const { data: productData, error: productError } = await supabase
                     .from("products")
                     .select("*")
@@ -684,7 +666,8 @@ export default function Page() {
                     .single();
 
                 if (productError) {
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'error',
                         action: 'product_fetch_failed',
@@ -703,7 +686,8 @@ export default function Page() {
                 }
 
                 if (!productData) {
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'warning',
                         action: 'product_not_found',
@@ -720,7 +704,6 @@ export default function Page() {
                     return;
                 }
 
-                // Parse gallery images if needed
                 const parsedGallery = parseGalleryImages(productData.gallery);
                 const productWithParsedGallery = {
                     ...productData,
@@ -729,7 +712,8 @@ export default function Page() {
 
                 setProduct(productWithParsedGallery);
 
-                await logActivity({
+                // ✅ await hata diya - background mein chalega
+                logActivity({
                     type: 'product',
                     level: 'success',
                     action: 'product_fetch_success',
@@ -752,29 +736,22 @@ export default function Page() {
                     status: 'completed'
                 });
 
-                // Fetch related products based on filters (using text values)
                 const relatedProductsStartTime = Date.now();
-
-                // Build conditions array for related products
                 const conditions = [];
 
                 if (productData.form_factor) {
                     conditions.push(`form_factor.eq.${productData.form_factor}`);
                 }
-
                 if (productData.processor) {
                     conditions.push(`processor.eq.${productData.processor}`);
                 }
-
                 if (productData.memory) {
                     conditions.push(`memory.eq.${productData.memory}`);
                 }
-
                 if (productData.storage) {
                     conditions.push(`storage.eq.${productData.storage}`);
                 }
 
-                // Only fetch if there are conditions
                 if (conditions.length > 0) {
                     const { data: relatedData, error: relatedError } = await supabase
                         .from("products")
@@ -784,7 +761,8 @@ export default function Page() {
                         .limit(4);
 
                     if (!relatedError && relatedData) {
-                        await logActivity({
+                        // ✅ await hata diya - background mein chalega
+                        logActivity({
                             type: 'product',
                             level: 'info',
                             action: 'related_products_fetch_success',
@@ -805,7 +783,8 @@ export default function Page() {
                 }
 
             } catch (err) {
-                await logActivity({
+                // ✅ await hata diya - background mein chalega
+                logActivity({
                     type: 'product',
                     level: 'error',
                     action: 'product_fetch_error',
@@ -838,8 +817,8 @@ export default function Page() {
 
         const startTime = Date.now();
 
-        // Log delete attempt
-        await logActivity({
+        // ✅ await hata diya - background mein chalega
+        logActivity({
             type: 'product',
             level: 'warning',
             action: 'product_delete_attempt',
@@ -863,8 +842,8 @@ export default function Page() {
                 .eq("user_id", profile?.userId);
 
             if (error) {
-
-                await logActivity({
+                // ✅ await hata diya - background mein chalega
+                logActivity({
                     type: 'product',
                     level: 'error',
                     action: 'product_delete_failed',
@@ -883,7 +862,9 @@ export default function Page() {
                 toast.error("Failed to delete product");
                 return;
             }
-            await logActivity({
+
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'success',
                 action: 'product_delete_success',
@@ -899,12 +880,13 @@ export default function Page() {
                 },
                 status: 'completed'
             });
-            toast.success("Product deleted successfully");
 
-            // ✅ Redirect after delete
+            toast.success("Product deleted successfully");
             router.push("/product-category/alldevices");
+
         } catch (err) {
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'error',
                 action: 'product_delete_error',
@@ -922,7 +904,6 @@ export default function Page() {
             toast.error("Something went wrong");
         }
     };
-
 
     // Split description into bullet points
     const descriptionPoints = product?.description
@@ -1020,7 +1001,6 @@ export default function Page() {
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6 md:p-8">
                         {/* Left Column - Product Images */}
                         <div>
-                            {/* Main Image Carousel - Only show if there are images */}
                             {galleryImages.length > 0 ? (
                                 <div className="relative rounded-lg overflow-hidden mb-4">
                                     {shopManager === profile?.role ? (
@@ -1037,9 +1017,7 @@ export default function Page() {
                                                     okText="Yes"
                                                     cancelText="No"
                                                     onConfirm={handleDeleteDevice}
-                                                    okButtonProps={{
-                                                        danger: true,
-                                                    }}
+                                                    okButtonProps={{ danger: true }}
                                                 >
                                                     <div className="cursor-pointer bg-white/90 text-red-500 border border-red-500 backdrop-blur-sm rounded-full p-2">
                                                         <MdDelete />
@@ -1061,9 +1039,7 @@ export default function Page() {
                                                     okText="Yes"
                                                     cancelText="No"
                                                     onConfirm={handleDeleteDevice}
-                                                    okButtonProps={{
-                                                        danger: true,
-                                                    }}
+                                                    okButtonProps={{ danger: true }}
                                                 >
                                                     <div className="cursor-pointer bg-white/90 text-red-500 border border-red-500 backdrop-blur-sm rounded-full p-2">
                                                         <MdDelete />
@@ -1073,12 +1049,11 @@ export default function Page() {
                                         </div>
                                     ) : (null)}
 
-                                    {/* Carousel Container with Custom Navigation */}
                                     <div className="relative">
                                         <Carousel
                                             ref={carouselRef}
                                             dots={false}
-                                            arrows={false} // Disable default arrows
+                                            arrows={false}
                                             afterChange={(current) => setSelectedImage(current)}
                                         >
                                             {galleryImages.map((image, index) => (
@@ -1096,10 +1071,8 @@ export default function Page() {
                                             ))}
                                         </Carousel>
 
-                                        {/* Custom Navigation Buttons - Only show if multiple images */}
                                         {galleryImages.length > 1 && (
                                             <>
-                                                {/* Previous Button */}
                                                 <button
                                                     onClick={goToPreviousSlide}
                                                     className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 cursor-pointer z-10"
@@ -1108,7 +1081,6 @@ export default function Page() {
                                                     <ChevronLeft className="h-6 w-6" />
                                                 </button>
 
-                                                {/* Next Button */}
                                                 <button
                                                     onClick={goToNextSlide}
                                                     className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 rounded-full p-1 cursor-pointer z-10"
@@ -1117,7 +1089,6 @@ export default function Page() {
                                                     <ChevronRight className="h-6 w-6" />
                                                 </button>
 
-                                                {/* Image Counter */}
                                                 <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full z-10">
                                                     {selectedImage + 1} / {galleryImages.length}
                                                 </div>
@@ -1125,7 +1096,6 @@ export default function Page() {
                                         )}
                                     </div>
 
-                                    {/* 5G Badge if enabled */}
                                     {product?.five_g_Enabled && (
                                         <div className="absolute top-4 right-4 z-10">
                                             <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
@@ -1144,7 +1114,6 @@ export default function Page() {
                                 </div>
                             )}
 
-                            {/* Thumbnail Gallery - Only show if there are multiple images */}
                             {galleryImages.length > 1 && (
                                 <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
                                     {galleryImages.map((image, index) => (
@@ -1175,7 +1144,6 @@ export default function Page() {
 
                         {/* Right Column - Product Info */}
                         <div>
-                            {/* Product Header */}
                             <div className="mb-6 border-b pb-3">
                                 <div className="flex items-center justify-between mb-2">
                                     <h1 className="text-xl md:text-2xl sm:text-lg font-semibold text-gray-900">
@@ -1187,79 +1155,35 @@ export default function Page() {
                                 </div>
                             </div>
 
-                            {/* Display Specifications */}
-                            {/* <div className="mb-6">
-                                <h3 className="text-sm font-semibold text-gray-900 mb-3">Specifications</h3>
-                                <div className="grid grid-cols-2 gap-3 text-sm">
-                                    {product?.form_factor && (
-                                        <div className="flex justify-between border-b pb-1">
-                                            <span className="text-gray-600 font-medium">Form Factor:</span>
-                                            <span className="">{product.form_factor}</span>
-                                        </div>
-                                    )}
-                                    {product?.processor && (
-                                        <div className="flex justify-between border-b pb-1">
-                                            <span className="text-gray-600 font-medium">Processor:</span>
-                                            <span className="">{product.processor}</span>
-                                        </div>
-                                    )}
-                                    {product?.memory && (
-                                        <div className="flex justify-between border-b pb-1">
-                                            <span className="text-gray-600 font-medium">Memory:</span>
-                                            <span className="">{product.memory}</span>
-                                        </div>
-                                    )}
-                                    {product?.storage && (
-                                        <div className="flex justify-between border-b pb-1">
-                                            <span className="text-gray-600 font-medium">Storage:</span>
-                                            <span className="">{product.storage}</span>
-                                        </div>
-                                    )}
-                                    {product?.screen_size && (
-                                        <div className="flex justify-between border-b pb-1">
-                                            <span className="text-gray-600 font-medium">Screen Size:</span>
-                                            <span className="">{product.screen_size}</span>
-                                        </div>
-                                    )}
-                                </div>
-                            </div> */}
-
                             {/* Description Points with ID for Read More button */}
                             <div id="product-description" className="border-b mb-2">
                                 {descriptionPoints.length > 0 && (
                                     <div className="mb-6">
-                                        {/* <h3 className="text-sm font-semibold text-gray-900 mb-4">Key Features</h3> */}
                                         <ul className="space-y-2">
                                             {descriptionPoints.map((point, index) => (
-                                            <li key={index} className="flex items-center">
-                                                <span className="mr-2 text-[#1D76BC] text-lg leading-none">•</span>
-                                                <span className="text-gray-700 text-sm">{point}</span>
-                                            </li> 
+                                                <li key={index} className="flex items-center">
+                                                    <span className="mr-2 text-[#1D76BC] text-lg leading-none">•</span>
+                                                    <span className="text-gray-700 text-sm">{point}</span>
+                                                </li>
                                             ))}
                                         </ul>
-                                       <h3 className={`text-sm font-semibold my-7 ${
-                                                product?.stock_quantity === 0 ? "text-red-500" : "text-green-500"
-                                            }`}
-                                        >
+                                        <h3 className={`text-sm font-semibold my-7 ${product?.stock_quantity === 0 ? "text-red-500" : "text-green-500"}`}>
                                             {product?.stock_quantity} / {product?.total_inventory} In Stock
                                         </h3>
                                     </div>
                                 )}
                             </div>
+
                             {product?.stock_quantity != 0 ? (
                                 <div className="space-y-4">
                                     {renderMainActionButton()}
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    
                                     <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
                                         <h2 className="text-xl font-semibold text-gray-900 mb-4">
                                             Get an alert when the product is in stock
                                         </h2>
-                                            {/* <p className="text-gray-600 mb-6">
-                                                Join the waitlist and be the first to know when this product is back in stock.
-                                            </p> */}
 
                                         {!profile?.email ? (
                                             <div className="space-y-4">
@@ -1327,15 +1251,13 @@ export default function Page() {
                                 }
                                 return (
                                     <Link href={`/product/${product.slug}`} key={product.id}>
-                                        <div className="bg-white border border-gray-300 sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col"
-                                        >
+                                        <div className="bg-white border border-gray-300 sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col">
                                             {product.stock_quantity == 0 && (
                                                 <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
                                                     Out of stock
                                                 </div>
                                             )}
 
-                                            {/* 5G Logo - Top Right Corner */}
                                             {product.five_g_Enabled && (
                                                 <div className="absolute top-4 right-3 z-10">
                                                     <img
@@ -1346,14 +1268,12 @@ export default function Page() {
                                                 </div>
                                             )}
 
-                                            {/* Show Private badge only for admin/shop manager users when product is not published */}
                                             {product.post_status !== "Publish" && (
                                                 <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#41abd6]">
                                                     Private
                                                 </div>
                                             )}
 
-                                            {/* Image Container - Fixed Height */}
                                             <div className="flex items-center justify-center transition-colors h-48 min-h-48 sm:mt-0 -mt-12 relative">
                                                 {product.thumbnail ? (
                                                     <img
@@ -1370,22 +1290,17 @@ export default function Page() {
                                                 )}
                                             </div>
 
-                                            {/* Product Info Container - Flexible but with constraints */}
                                             <div className="flex flex-col grow space-y-2 text-center sm:mt-4 -mt-7">
-                                                {/* Title with fixed lines */}
                                                 <h3 className="text-gray-800 sm:text-md text-sm line-clamp-1 min-h-14 flex items-center justify-center">
                                                     {product.product_name}
                                                 </h3>
 
-                                                {/* SKU Info - Fixed height */}
                                                 <div className="text-gray-500 text-xs sm:py-3 py-1 space-y-1">
                                                     <p><b>SKU:</b> {product.sku}</p>
                                                 </div>
 
-                                                {/* Spacer to push button to bottom */}
                                                 <div className="grow"></div>
 
-                                                {/* Button Container - Fixed at bottom */}
                                                 {product.stock_quantity != 0 ? (
                                                     <div className="sm:pt-4 sm:mb-2 mt-auto">
                                                         {renderRelatedProductButton(product)}

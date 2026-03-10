@@ -188,15 +188,11 @@ export default function Page() {
     const getFiltersFromURL = () => {
         const urlFilters: Record<string, string[]> = {};
 
-        // Iterate through all search params
         searchParams.forEach((value, key) => {
-            // Skip non-filter parameters
             if (key === 'q' || key === 'page' || key === '_') return;
 
-            // Map URL parameter to filter key
             const filterKey = URL_FILTER_MAPPING[key];
             if (filterKey) {
-                // Handle multiple values for same filter (comma-separated)
                 const values = value.split(',').map(v => v.trim());
                 urlFilters[filterKey] = values;
             }
@@ -213,63 +209,66 @@ export default function Page() {
         }
     }
 
-const handleAddToCart = async (productId: string) => {
-    try {
-        const product = products.find(p => p.id === productId);
+    const handleAddToCart = async (productId: string) => {
+        try {
+            const product = products.find(p => p.id === productId);
 
-        await logActivity({
-            type: 'product',
-            level: 'info',
-            action: 'add_to_cart_attempt',
-            message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                productName: product?.product_name,
-                sku: product?.sku,
-                userRole: profile?.role,
-                isPublished: product?.post_status === 'Publish',
-                stockQuantity: product?.stock_quantity
-            }
-        });
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'info',
+                action: 'add_to_cart_attempt',
+                message: `User attempted to add product to cart: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku,
+                    userRole: profile?.role,
+                    isPublished: product?.post_status === 'Publish',
+                    stockQuantity: product?.stock_quantity
+                }
+            });
 
-        await addToCart(productId, 1);
+            await addToCart(productId, 1);
 
-        await logActivity({
-            type: 'product',
-            level: 'success',
-            action: 'add_to_cart_success',
-            message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                productName: product?.product_name,
-                sku: product?.sku
-            },
-            status: 'completed'
-        });
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'success',
+                action: 'add_to_cart_success',
+                message: `Product added to cart successfully: ${product?.product_name || 'Unknown product'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    productName: product?.product_name,
+                    sku: product?.sku
+                },
+                status: 'completed'
+            });
 
-        setShowCartDrawer(true);
+            setShowCartDrawer(true);
 
-    } catch (error: any) {
+        } catch (error: any) {
 
-        await logActivity({
-            type: 'product',
-            level: 'error',
-            action: 'add_to_cart_failed',
-            message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
-            userId: user?.id || null,
-            productId: productId,
-            details: {
-                errorCode: error?.code,
-                errorMessage: error?.message,
-                errorDetails: error
-            },
-            status: 'failed'
-        });
+            // ✅ await hata diya - background mein chalega
+            logActivity({
+                type: 'product',
+                level: 'error',
+                action: 'add_to_cart_failed',
+                message: `Failed to add product to cart: ${error?.message || 'Unknown error'}`,
+                userId: user?.id || null,
+                productId: productId,
+                details: {
+                    errorCode: error?.code,
+                    errorMessage: error?.message,
+                    errorDetails: error
+                },
+                status: 'failed'
+            });
 
-    }
-};
+        }
+    };
 
     // Get stock quantity for a cart item
     const getItemStockQuantity = (cartItem: any) => {
@@ -295,7 +294,8 @@ const handleAddToCart = async (productId: string) => {
     const handleRemoveFromCart = async (productId: string) => {
         const product = products.find(p => p.id === productId);
 
-        await logActivity({
+        // ✅ await hata diya - background mein chalega
+        logActivity({
             type: 'product',
             level: 'info',
             action: 'remove_from_cart_attempt',
@@ -313,7 +313,8 @@ const handleAddToCart = async (productId: string) => {
         try {
             await removeFromCart(productId);
 
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'success',
                 action: 'remove_from_cart_success',
@@ -330,7 +331,8 @@ const handleAddToCart = async (productId: string) => {
             });
 
         } catch (error) {
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'error',
                 action: 'remove_from_cart_failed',
@@ -371,13 +373,14 @@ const handleAddToCart = async (productId: string) => {
         }
 
         fetchDataFromDatabase();
-    }, [authChecked, authInitialized, searchParams]); // Add searchParams as dependency
+    }, [authChecked, authInitialized, searchParams]);
 
     // Function to fetch products based on slug and URL filters
     const fetchProductsBySlug = async (categorySlug: string) => {
         const startTime = Date.now();
 
-        await logActivity({
+        // ✅ await hata diya - background mein chalega
+        logActivity({
             type: 'product',
             level: 'info',
             action: 'category_products_fetch_attempt',
@@ -398,11 +401,9 @@ const handleAddToCart = async (productId: string) => {
                 .select("*")
                 .order("date", { ascending: false });
 
-            // Apply URL filters to the database query
             let hasFilters = false;
 
             searchParams.forEach((value, key) => {
-                // Skip non-filter parameters
                 if (key === 'q' || key === 'page' || key === '_') return;
 
                 const dbColumn = URL_TO_DB_MAPPING[key];
@@ -410,18 +411,15 @@ const handleAddToCart = async (productId: string) => {
                     const values = value.split(',').map(v => v.trim());
 
                     if (values.length === 1) {
-                        // Single value - use eq
                         productsQuery = productsQuery.eq(dbColumn, values[0]);
                         hasFilters = true;
                     } else if (values.length > 1) {
-                        // Multiple values - use in
                         productsQuery = productsQuery.in(dbColumn, values);
                         hasFilters = true;
                     }
                 }
             });
 
-            // If no filters, search by product name or SKU
             if (!hasFilters) {
                 productsQuery = productsQuery.or(`product_name.ilike.%${decodedSlug}%,sku.ilike.%${decodedSlug}%`);
             }
@@ -429,7 +427,8 @@ const handleAddToCart = async (productId: string) => {
             const { data: productsData, error: productsError } = await productsQuery;
 
             if (productsError) {
-                await logActivity({
+                // ✅ await hata diya - background mein chalega
+                logActivity({
                     type: 'product',
                     level: 'error',
                     action: 'category_products_fetch_failed',
@@ -445,7 +444,8 @@ const handleAddToCart = async (productId: string) => {
                 return [];
             } else {
                 if (productsData && productsData.length > 0) {
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'success',
                         action: 'category_products_fetch_success',
@@ -463,7 +463,8 @@ const handleAddToCart = async (productId: string) => {
 
                     return productsData;
                 } else {
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'info',
                         action: 'category_no_products_found',
@@ -481,7 +482,8 @@ const handleAddToCart = async (productId: string) => {
             }
 
         } catch (error) {
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'error',
                 action: 'category_products_fetch_error',
@@ -528,7 +530,8 @@ const handleAddToCart = async (productId: string) => {
 
     // Fetch all data from database
     const fetchDataFromDatabase = async () => {
-        await logActivity({
+        // ✅ await hata diya - background mein chalega
+        logActivity({
             type: 'product',
             level: 'info',
             action: 'products_fetch_attempt',
@@ -556,9 +559,7 @@ const handleAddToCart = async (productId: string) => {
                     .select("*")
                     .order("date", { ascending: false });
 
-                // Apply URL filters for alldevices
                 searchParams.forEach((value, key) => {
-                    // Skip non-filter parameters
                     if (key === 'q' || key === 'page' || key === '_') return;
 
                     const dbColumn = URL_TO_DB_MAPPING[key];
@@ -576,7 +577,8 @@ const handleAddToCart = async (productId: string) => {
                 const { data, error } = await query;
 
                 if (error) {
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'error',
                         action: 'products_fetch_failed',
@@ -592,7 +594,8 @@ const handleAddToCart = async (productId: string) => {
                 } else if (data) {
                     productsData = data;
 
-                    await logActivity({
+                    // ✅ await hata diya - background mein chalega
+                    logActivity({
                         type: 'product',
                         level: 'success',
                         action: 'products_fetch_success',
@@ -612,7 +615,6 @@ const handleAddToCart = async (productId: string) => {
             setProducts(productsData);
             updateFilterOptions(productsData);
 
-            // Initialize filters from URL for UI - LEKIN SIRF TAB JAB FILTERS EMPTY HO
             const urlFilters = getFiltersFromURL();
             if (Object.keys(urlFilters).length > 0 && Object.values(filters).every(arr => arr.length === 0)) {
                 setFilters(prev => ({
@@ -632,7 +634,8 @@ const handleAddToCart = async (productId: string) => {
             setOpenFilters(allFilterKeys);
 
         } catch (error) {
-            await logActivity({
+            // ✅ await hata diya - background mein chalega
+            logActivity({
                 type: 'product',
                 level: 'error',
                 action: 'products_fetch_error',
@@ -721,9 +724,6 @@ const handleAddToCart = async (productId: string) => {
                 [filterType]: newValues
             };
 
-            // REMOVE this line - no direct URL update
-            // updateURLWithFilters(updatedFilters);
-
             return updatedFilters;
         });
     };
@@ -740,37 +740,19 @@ const handleAddToCart = async (productId: string) => {
         };
 
         setFilters(clearedFilters);
-
-        // REMOVE this URL update logic
-        /*
-        const params = new URLSearchParams(searchParams.toString());
-        Object.keys(URL_FILTER_MAPPING).forEach(key => {
-            params.delete(key);
-        });
-        const queryString = params.toString();
-        const newUrl = queryString
-            ? `${pathname}?${queryString}`
-            : pathname;
-        router.replace(newUrl, { scroll: false });
-        */
-
-        // Refetch data without filters
         fetchDataFromDatabase();
     };
 
     // Update URL when filters change
     useEffect(() => {
-        // Skip if not authenticated
         if (!authChecked || !authInitialized) return;
 
         const params = new URLSearchParams(searchParams.toString());
 
-        // Remove all existing filter parameters
         Object.keys(URL_FILTER_MAPPING).forEach(key => {
             params.delete(key);
         });
 
-        // Add new filter parameters
         Object.entries(filters).forEach(([filterKey, values]) => {
             if (values.length > 0) {
                 const urlKey = Object.keys(URL_FILTER_MAPPING).find(
@@ -783,13 +765,11 @@ const handleAddToCart = async (productId: string) => {
             }
         });
 
-        // Preserve existing query parameters like 'q'
         const queryString = params.toString();
         const newUrl = queryString
             ? `${pathname}?${queryString}`
             : pathname;
 
-        // Only update if URL actually changed
         const currentUrl = window.location.pathname + window.location.search;
         if (newUrl !== currentUrl) {
             router.replace(newUrl, { scroll: false });
@@ -1126,7 +1106,6 @@ const handleAddToCart = async (productId: string) => {
                 className="filter-drawer"
             >
                 <div className="space-y-6">
-                    {/* Conditionally render Form Factor filter - hide if present in URL */}
                     {!searchParams.has('form_factor') && (
                         <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
                     )}

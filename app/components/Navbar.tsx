@@ -12,11 +12,10 @@ import { IoCartOutline } from 'react-icons/io5'
 import { Badge, Drawer } from 'antd'
 import { Bell, Search, ShoppingCart, Trash2 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-import { useCart } from '../context/CartContext' // Add this import
+import { useCart } from '../context/CartContext'
 import { PiBellLight, PiShoppingCartThin } from "react-icons/pi";
 import { FaCaretDown } from 'react-icons/fa6'
 
-// Add at the top with other role constants
 const shopManager = process.env.NEXT_PUBLIC_SHOPMANAGER;
 const admin = process.env.NEXT_PUBLIC_ADMINISTRATOR;
 const superSubscriber = process.env.NEXT_PUBLIC_SUPERSUBSCRIBER;
@@ -46,7 +45,6 @@ const authMenuItems = [
   { name: 'Logout', href: 'logout' },
 ]
 
-// Interface for product search results
 interface ProductSearchResult {
   id: string;
   product_name: string;
@@ -92,7 +90,7 @@ export default function Navbar() {
     updateQuantity,
     clearCart,
     getCartTotal
-  } = useCart() // Use cart context
+  } = useCart()
 
   const handleLogout = async () => {
     await supabase.auth.signOut()
@@ -106,7 +104,6 @@ export default function Navbar() {
     }
 
     try {
-      // Fetch pending user approvals (isVerified = false)
       const { count: userCount, error: userError } = await supabase
         .from('users')
         .select('*', { count: 'exact', head: true })
@@ -116,7 +113,6 @@ export default function Navbar() {
         setPendingUserCount(userCount || 0);
       }
 
-      // Fetch pending orders (awaiting approval)
       const { count: orderCount, error: orderError } = await supabase
         .from('orders')
         .select('*', { count: 'exact', head: true })
@@ -129,20 +125,16 @@ export default function Navbar() {
     }
   }, [profile?.role]);
 
-  // Navbar میں یہ state variable اضافہ کریں (دیگر state variables کے ساتھ):
   const [quantityInputValues, setQuantityInputValues] = useState<Record<string, string>>({});
   const [editingProductId, setEditingProductId] = useState<string | null>(null);
 
-  // Quantity input change handler
   const handleQuantityInputChange = (productId: string, value: string) => {
-    // Only allow numbers
     if (value === '' || /^\d+$/.test(value)) {
       setQuantityInputValues(prev => ({
         ...prev,
         [productId]: value
       }));
 
-      // Set this product as being edited
       if (value !== cartItems.find(item => item.product_id === productId)?.quantity.toString()) {
         setEditingProductId(productId);
       } else {
@@ -151,7 +143,6 @@ export default function Navbar() {
     }
   };
 
-  // Save quantity handler
   const handleSaveQuantity = async (productId: string) => {
     const inputValue = quantityInputValues[productId];
     if (!inputValue || inputValue.trim() === '') return;
@@ -163,7 +154,6 @@ export default function Navbar() {
       await handleUpdateQuantity(productId, numericValue);
       setEditingProductId(null);
     } catch (error) {
-      // Revert to original value on error
       const currentItem = cartItems.find(item => item.product_id === productId);
       if (currentItem) {
         setQuantityInputValues(prev => ({
@@ -174,7 +164,6 @@ export default function Navbar() {
     }
   };
 
-  // Cancel editing handler
   const handleCancelEdit = (productId: string) => {
     const currentItem = cartItems.find(item => item.product_id === productId);
     if (currentItem) {
@@ -186,7 +175,6 @@ export default function Navbar() {
     setEditingProductId(null);
   };
 
-  // Cart drawer کھلتے ہی initial values set کریں
   useEffect(() => {
     if (isCartDrawerOpen && cartItems.length > 0) {
       const initialValues: Record<string, string> = {};
@@ -197,25 +185,20 @@ export default function Navbar() {
     }
   }, [isCartDrawerOpen, cartItems]);
 
-  // Cart drawer بند ہونے پر reset کریں
   useEffect(() => {
     if (!isCartDrawerOpen) {
       setEditingProductId(null);
     }
   }, [isCartDrawerOpen]);
 
-  // Add useEffect to fetch counts
   useEffect(() => {
     if (!loading && profile?.role && (profile.role === admin || profile.role === superSubscriber)) {
       fetchNotificationCounts();
-
-      // Refresh counts every 30 seconds
       const interval = setInterval(fetchNotificationCounts, 30000);
       return () => clearInterval(interval);
     }
   }, [loading, profile?.role, fetchNotificationCounts]);
 
-  // Add click outside handler for notification dropdown
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
@@ -229,14 +212,11 @@ export default function Navbar() {
     };
   }, []);
 
-  // Calculate total count
   const totalNotificationCount = pendingUserCount + pendingOrderCount;
 
-  // Add this function to handle notification click
   const handleNotificationClick = () => {
     setIsNotificationOpen(!isNotificationOpen);
   };
-
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -252,12 +232,10 @@ export default function Navbar() {
     return () => subscription.unsubscribe()
   }, [])
 
-  // Calculate total price using cart context
   const calculateTotal = () => {
     return getCartTotal()
   }
 
-  // Handle cart item removal
   const handleRemoveFromCart = async (productId: string) => {
     try {
       await removeFromCart(productId)
@@ -265,16 +243,13 @@ export default function Navbar() {
     }
   }
 
-  // Handle quantity update
   const handleUpdateQuantity = async (productId: string, newQuantity: number) => {
     try {
-      // Get current item to check stock
       const cartItem = cartItems.find(item => item.product_id === productId);
       if (!cartItem) return;
 
       const stockQuantity = cartItem.product?.stock_quantity || 0;
 
-      // Validate quantity
       if (newQuantity < 1) {
         newQuantity = 1;
       }
@@ -284,14 +259,10 @@ export default function Navbar() {
       }
 
       await updateQuantity(productId, newQuantity);
-
-      // Show success message only for significant changes
-
     } catch (error) {
     }
   };
 
-  // Handle clear cart
   const handleClearCart = async () => {
     try {
       await clearCart()
@@ -299,7 +270,6 @@ export default function Navbar() {
     }
   }
 
-  // Fetch search results
   const fetchSearchResults = useCallback(async (query: string) => {
     if (!query.trim()) {
       setSearchResults([])
@@ -330,7 +300,6 @@ export default function Navbar() {
     }
   }, [])
 
-  // Debounce search input
   useEffect(() => {
     if (searchDebounceRef.current) {
       clearTimeout(searchDebounceRef.current)
@@ -347,7 +316,6 @@ export default function Navbar() {
     }
   }, [searchQuery, fetchSearchResults])
 
-  // Close search dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
@@ -361,14 +329,11 @@ export default function Navbar() {
     }
   }, [])
 
-
   const handleCart = () => {
     router.replace('/cart');
     setIsCartDrawerOpen(false);
   };
 
-
-  // Focus search input when dropdown opens
   useEffect(() => {
     if (isSearchOpen && searchInputRef.current) {
       setTimeout(() => {
@@ -377,22 +342,17 @@ export default function Navbar() {
     }
   }, [isSearchOpen])
 
-  // Check if user role matches allowed roles
   const showAuthNavigation =
     profile && (profile.role === admin || profile.role === superSubscriber);
-
-  // Replace the existing navigation logic with this:
 
   const navigation = !loading && isLoggedIn
     ? [
       ...publicNavigation,
-      // Add 'Report a Win' for all logged in users EXCEPT shopManager
       ...(profile?.role !== shopManager ? [{ name: 'Report a Win', href: '/wins' }] : []),
       ...(profile?.role === shopManager ? [
         { name: 'Orders', href: '/order-details' },
         { name: 'Live Inventory', href: '/live+inventory' }
       ] : []),
-      // Add '360Dashboard' only for admin and superSubscriber
       ...((profile?.role === admin || profile?.role === superSubscriber)
         ? [{ name: '360Dashboard', href: '/360dashboard' }]
         : [])
@@ -474,18 +434,18 @@ export default function Navbar() {
     router.push('/product-category/alldevices');
   };
 
-  // Get stock quantity for a cart item
   const getItemStockQuantity = (cartItem: any) => {
     return cartItem.product?.stock_quantity || 0;
   };
 
-  // Keyboard shortcuts handler
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Escape' && editingProductId) {
       handleCancelEdit(editingProductId);
     }
   }, [editingProductId]);
+
   const notificationTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
     return () => {
@@ -500,25 +460,25 @@ export default function Navbar() {
           <>
             <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
               <div className="relative flex h-16 items-center justify-between">
+
+                {/* ===== LOGO ===== */}
                 <div className="shrink-0 flex items-center">
-                  <div className="shrink-0 flex items-center">
-                    <Link href="/">
-                      <img
-                        src="/Ingram_micro_logo.png"
-                        alt="Logo"
-                        className="sm:h-9 h-6 w-auto cursor-pointer"
-                      />
-                    </Link>
-                  </div>
+                  <Link href="/">
+                    <img
+                      src="/Ingram_micro_logo.png"
+                      alt="Logo"
+                      className="sm:h-9 h-6 w-auto cursor-pointer"
+                    />
+                  </Link>
                 </div>
 
+                {/* ===== DESKTOP NAV LINKS ===== */}
                 <div className="hidden sm:flex flex-1 justify-center items-center">
                   <div className="flex space-x-4">
                     {navigation.map((item) => {
                       const isProducts = item.name === 'Create Demo Kit'
                       const finalHref =
                         isProducts && !isLoggedIn ? '/login/?redirect_to=product-category/alldevices' : item.href
-
                       const isActive = pathname === finalHref
 
                       return (
@@ -539,11 +499,17 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  {/* Desktop Notification Bell with Hover Dropdown */}
+                {/* ===== RIGHT SIDE ICONS — ALL CENTERED ===== */}
+                {/* 
+                  FIX: Parent div uses "flex items-center" — sab icons vertically center mein hain.
+                  Kisi bhi icon button par mt-* ya mb-* nahi lagaya — jo bhi tha woh hata diya.
+                */}
+                <div className="flex items-center space-x-1">
+
+                  {/* === DESKTOP: Bell Notification === */}
                   {(isLoggedIn && (profile?.role === admin || profile?.role === superSubscriber)) && (
                     <div
-                      className="hidden lg:block relative"
+                      className="hidden lg:flex items-center relative"  // FIX: block → flex items-center
                       ref={notificationRef}
                       onMouseEnter={() => {
                         if (notificationTimeoutRef.current) {
@@ -559,7 +525,8 @@ export default function Navbar() {
                     >
                       <button
                         type="button"
-                        className="relative rounded-full p-1 text-black cursor-pointer hover:bg-gray-100 mt-1 mx-2 transition-colors duration-200"
+                        className="flex items-center justify-center rounded-full p-2 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                        // FIX: mt-1 mx-2 hataaye, p-2 uniform, flex items-center justify-center add kiya
                       >
                         <span className="sr-only">Notifications</span>
                         <Badge
@@ -573,11 +540,9 @@ export default function Navbar() {
                             height: '18px',
                             minWidth: '18px',
                             lineHeight: '18px',
-                            top: '1px',
-                            right: '1px'
                           }}
                         >
-                          <PiBellLight size={23} />
+                          <PiBellLight size={22} />
                         </Badge>
                       </button>
 
@@ -675,16 +640,18 @@ export default function Navbar() {
                     </div>
                   )}
 
-                  {/* Desktop Search Button and Dropdown */}
+                  {/* === DESKTOP: Search === */}
                   {isLoggedIn && (
-                    <div className="hidden sm:block relative" ref={searchRef}>
+                    <div className="hidden sm:flex items-center relative" ref={searchRef}>
+                      {/* FIX: block → flex items-center */}
                       <button
                         type="button"
-                        className="relative rounded-full p-1 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                        className="flex items-center justify-center rounded-full p-2 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                        // FIX: p-1 → p-2 uniform, flex items-center justify-center
                         onClick={() => setIsSearchOpen(!isSearchOpen)}
                       >
                         <span className="sr-only">Search</span>
-                        <CiSearch size={23} />
+                        <CiSearch size={22} />
                       </button>
 
                       {isSearchOpen && (
@@ -719,7 +686,6 @@ export default function Navbar() {
                               </button>
                             </div>
 
-                            {/* Search Results Dropdown */}
                             {(searchQuery.trim() && (isSearching || searchResults.length > 0)) && (
                               <div className="border-t border-gray-100 pt-2 mt-2">
                                 {isSearching ? (
@@ -772,7 +738,6 @@ export default function Navbar() {
                                       ))}
                                     </div>
 
-                                    {/* See All Products Link */}
                                     {totalProducts > 4 && (
                                       <div className="border-t border-gray-100 pt-2 mt-2">
                                         <button
@@ -797,16 +762,18 @@ export default function Navbar() {
                     </div>
                   )}
 
+                  {/* === DESKTOP: User Menu === */}
                   <div className="relative hidden sm:flex items-center">
                     <button
-                      className="flex items-center space-x-1 rounded-full p-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                      className="flex items-center justify-center space-x-1 rounded-full p-2 cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                      // FIX: p-2 uniform, flex items-center justify-center already theek tha
                       onMouseEnter={handleUserMenuMouseEnter}
                       onMouseLeave={handleUserMenuMouseLeave}
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                     >
-                      <CiUser size={23} />
+                      <CiUser size={22} />
                       <FaCaretDown
-                        size={13}
+                        size={12}
                         className={classNames(
                           isUserMenuOpen ? 'rotate-180' : 'rotate-0',
                           'transition-transform duration-200'
@@ -822,11 +789,11 @@ export default function Navbar() {
                       >
                         {isLoggedIn ? (
                           [
-    ...(profile?.role === "administrator" || profile?.role === "shop-manager"
-      ? [{ name: 'Add Device', href: '/add-device' }]
-      : []),
-    ...authMenuItems
-  ].map((item) => {
+                            ...(profile?.role === "administrator" || profile?.role === "shop-manager"
+                              ? [{ name: 'Add Device', href: '/add-device' }]
+                              : []),
+                            ...authMenuItems
+                          ].map((item) => {
                             const isActive = pathname === item.href
 
                             if (item.href === 'logout') {
@@ -884,44 +851,40 @@ export default function Navbar() {
                     )}
                   </div>
 
-                  {/* Cart Button */}
+                  {/* === DESKTOP + MOBILE: Cart === */}
                   {isLoggedIn && (
-                    <>
-                      <button
-                        type="button"
-                        onClick={handleCartClick}
-                        disabled={cartUpdating || cartLoading}
-                        className="relative rounded-full p-1 mt-2 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <span className="sr-only">Cart</span>
-                        <Badge
-                          count={cartCount}
-                          size="small"
-                          overflowCount={99}
-                          showZero={true}
-                          style={{
-                            backgroundColor: '#ef4444',
-                            fontSize: '10px',
-                            height: '18px',
-                            minWidth: '18px',
-                            lineHeight: '18px',
-                            top: '1px',
-                            right: '1px'
-                          }}
-                        >
-                          <div className="relative">
-                            <PiShoppingCartThin size={23} />
-                          </div>
-                        </Badge>
-                      </button>
-                    </>
-                  )}
-
-                  {/* Mobile Search Button */}
-                  <div className="sm:hidden">
                     <button
                       type="button"
-                      className="relative rounded-full p-1 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200"
+                      onClick={handleCartClick}
+                      disabled={cartUpdating || cartLoading}
+                      className="flex items-center justify-center rounded-full p-2 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                      // FIX: mt-2 hataaya, p-1 → p-2 uniform, flex items-center justify-center
+                    >
+                      <span className="sr-only">Cart</span>
+                      <Badge
+                        count={cartCount}
+                        size="small"
+                        overflowCount={99}
+                        showZero={true}
+                        style={{
+                          backgroundColor: '#ef4444',
+                          fontSize: '10px',
+                          height: '18px',
+                          minWidth: '18px',
+                          lineHeight: '18px',
+                        }}
+                      >
+                        <PiShoppingCartThin size={22} />
+                      </Badge>
+                    </button>
+                  )}
+
+                  {/* === MOBILE: Search === */}
+                  <div className="sm:hidden flex items-center">
+                    {/* FIX: flex items-center wrapper */}
+                    <button
+                      type="button"
+                      className="flex items-center justify-center rounded-full p-2 text-black cursor-pointer hover:bg-gray-100 transition-colors duration-200"
                       onClick={handleMobileSearchClick}
                     >
                       <span className="sr-only">Search</span>
@@ -929,29 +892,31 @@ export default function Navbar() {
                     </button>
                   </div>
 
-                  <div className="sm:hidden relative">
+                  {/* === MOBILE: User Menu === */}
+                  <div className="sm:hidden flex items-center relative">
+                    {/* FIX: flex items-center wrapper */}
                     <button
                       onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                      className="flex items-center space-x-1 rounded-full p-2 hover:bg-gray-100 transition-colors duration-200"
+                      className="flex items-center justify-center rounded-full p-2 hover:bg-gray-100 transition-colors duration-200"
                     >
-                      <CiUser size={24} />
+                      <CiUser size={22} />
                     </button>
 
                     {isUserMenuOpen && (
                       <div className="absolute right-0 top-full mt-2 w-36 origin-top-right rounded-md bg-white shadow-lg z-50 border border-gray-200">
                         {isLoggedIn ? (
                           [
-    ...(profile?.role === "administrator" || profile?.role === "shop-manager"
-      ? [{ name: 'Add Device', href: '/add-device' }]
-      : []),
-    ...authMenuItems
-  ].map((item) => {
+                            ...(profile?.role === "administrator" || profile?.role === "shop-manager"
+                              ? [{ name: 'Add Device', href: '/add-device' }]
+                              : []),
+                            ...authMenuItems
+                          ].map((item) => {
                             if (item.href === 'logout') {
                               return (
                                 <button
                                   key={item.name}
                                   onClick={handleLogout}
-                                  className="w-full text-left block px-4 py-2 text-sm  hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
+                                  className="w-full text-left block px-4 py-2 text-sm hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
                                 >
                                   {item.name}
                                 </button>
@@ -1000,9 +965,11 @@ export default function Navbar() {
                     )}
                   </div>
 
-                  <div className="sm:hidden">
+                  {/* === MOBILE: Hamburger Menu === */}
+                  <div className="sm:hidden flex items-center">
+                    {/* FIX: flex items-center wrapper */}
                     <Disclosure.Button
-                      className="inline-flex items-center justify-center rounded-md p-2 text-gray-900 hover:text-black hover:bg-gray-100 cursor-pointer"
+                      className="flex items-center justify-center rounded-md p-2 text-gray-900 hover:text-black hover:bg-gray-100 cursor-pointer"
                       suppressHydrationWarning
                     >
                       <span className="sr-only">Open main menu</span>
@@ -1013,6 +980,7 @@ export default function Navbar() {
                       )}
                     </Disclosure.Button>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -1051,7 +1019,7 @@ export default function Navbar() {
         )}
       </Disclosure>
 
-      {/* Cart Drawer */}
+      {/* ===== CART DRAWER ===== */}
       <Drawer
         title={
           <div className="flex items-center justify-between">
@@ -1102,7 +1070,6 @@ export default function Navbar() {
           </div>
         ) : (
           <div className="flex flex-col h-full">
-            {/* Cart Items List */}
             <div className="flex-1 overflow-y-auto pr-2">
               {cartItems.map((item) => {
                 const stockQuantity = getItemStockQuantity(item);
@@ -1115,7 +1082,6 @@ export default function Navbar() {
                 return (
                   <div key={item.id} className="border-b border-gray-200 py-4">
                     <div className="flex items-start space-x-3">
-                      {/* Product Image */}
                       <div
                         className="w-15 h-15 bg-gray-100 rounded-md flex items-center justify-center shrink-0 cursor-pointer hover:bg-gray-200 transition-colors"
                         onClick={() => productSlug && router.push(`/product/${productSlug}`)}
@@ -1131,7 +1097,6 @@ export default function Navbar() {
                         )}
                       </div>
 
-                      {/* Product Details */}
                       <div className="flex-1 min-w-0">
                         <h4
                           className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
@@ -1140,16 +1105,13 @@ export default function Navbar() {
                           {productName}
                         </h4>
                         <p className="text-xs text-gray-500">SKU: {sku}</p>
-
                       </div>
 
-                      {/* Price and Remove Button */}
                       <div className="flex flex-col items-end space-y-2">
                         <button
                           onClick={() => handleRemoveFromCart(item.product_id)}
                           disabled={cartUpdating}
-                          className="text-gray-400 hover:text-red-500 p-1 transition-colors 
-                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                          className="text-gray-400 hover:text-red-500 p-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                         >
                           <Trash2 size={16} />
                         </button>
@@ -1165,9 +1127,7 @@ export default function Navbar() {
               })}
             </div>
 
-            {/* Cart Summary */}
             <div className="border-t border-gray-200 pt-4 mt-4">
-
               <div className="space-y-3">
                 <button
                   onClick={handleCart}
@@ -1188,7 +1148,7 @@ export default function Navbar() {
         )}
       </Drawer>
 
-      {/* Mobile Search Drawer */}
+      {/* ===== MOBILE SEARCH DRAWER ===== */}
       {isMobileSearchOpen && (
         <div className="fixed inset-0 z-60 bg-white bg-opacity-50">
           <div className="fixed inset-0 flex items-start justify-center pt-20">
@@ -1235,7 +1195,6 @@ export default function Navbar() {
                     </button>
                   </div>
 
-                  {/* Mobile Search Results */}
                   {(searchQuery.trim() && (isSearching || searchResults.length > 0)) && (
                     <div className="border-t border-gray-100 pt-2 mt-2">
                       {isSearching ? (
@@ -1246,7 +1205,6 @@ export default function Navbar() {
                         <>
                           <div className="space-y-2 max-h-72 overflow-y-auto">
                             {(() => {
-                              // ✅ Filter only published products
                               const publishedProducts = searchResults.filter(product => product.post_status === 'Publish');
                               const productsToShow = publishedProducts.slice(0, 4);
 
@@ -1297,7 +1255,6 @@ export default function Navbar() {
                             })()}
                           </div>
 
-                          {/* See All Products Link - Mobile */}
                           {totalProducts > 4 && (
                             <div className="border-t border-gray-100 pt-2 mt-2">
                               <button

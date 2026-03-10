@@ -159,7 +159,8 @@ export default function Page() {
         .eq("email", email);
 
       if (selectError && selectError.code !== "PGRST116") {
-        await logError(
+        // await removed
+        logError(
           "auth",
           "user_check",
           `Error checking existing user: ${selectError.message}`,
@@ -174,9 +175,9 @@ export default function Page() {
         return;
       }
 
-      // ✅ FIXED: was `!= 0` which caused issues with empty array comparison
       if (existingUsers && existingUsers.length > 0) {
-        await logger.warning(
+        // await removed
+        logger.warning(
           "auth",
           "duplicate_registration",
           `Duplicate registration attempt: ${email}`,
@@ -191,7 +192,8 @@ export default function Page() {
         return;
       }
 
-      await logAuth(
+      // await removed
+      logAuth(
         "registration_start",
         `Registration attempt: ${email}`,
         "",
@@ -207,7 +209,8 @@ export default function Page() {
       });
 
       if (authError) {
-        await logError(
+        // await removed
+        logError(
           "auth",
           "supabase_auth",
           `Auth error: ${authError.message}`,
@@ -225,7 +228,8 @@ export default function Page() {
       const userId = authData.user?.id;
 
       if (!userId) {
-        await logError(
+        // await removed
+        logError(
           "auth",
           "user_id_missing",
           "No user ID returned",
@@ -258,7 +262,8 @@ export default function Page() {
       });
 
       if (dbError) {
-        await logError(
+        // await removed
+        logError(
           "db",
           "user_insert",
           `Database insert error: ${dbError.message}`,
@@ -273,7 +278,8 @@ export default function Page() {
         return;
       }
 
-      await logger.success(
+      // await removed
+      logger.success(
         "auth",
         "user_created",
         `User created: ${email}`,
@@ -285,7 +291,8 @@ export default function Page() {
       // 4️⃣ Sign out immediately after signup
       await supabase.auth.signOut();
 
-      await logAuth(
+      // await removed
+      logAuth(
         "auto_signout",
         "Auto-signed out after registration",
         userId,
@@ -304,7 +311,8 @@ export default function Page() {
       );
 
       const executionTime = Date.now() - startTime;
-      await logger.success(
+      // await removed
+      logger.success(
         "auth",
         "registration_complete",
         `Registration completed: ${email}`,
@@ -334,7 +342,8 @@ export default function Page() {
       router.push("/login");
     } catch (err: any) {
       const executionTime = Date.now() - startTime;
-      await logError(
+      // await removed
+      logError(
         "system",
         "unexpected_error",
         `Unexpected error: ${err?.message || "Unknown"}`,
