@@ -18,7 +18,6 @@ export async function GET(request: NextRequest) {
         const today = new Date();
         const todayString = today.toISOString().split('T')[0];
 
-        // 1️⃣ Get ALL shipped orders — single product per order
         const { data: orders, error: ordersError } = await supabase
             .from('orders')
             .select(`
@@ -59,28 +58,6 @@ export async function GET(request: NextRequest) {
             return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         };
 
-        // Helper: extract reminder info from notes
-        const extractReminderInfo = (notes: string | null) => {
-            if (!notes) return { lastReminderDate: null, reminderCount: 0 };
-
-            const lines = notes.split('\n');
-            let lastReminderDate = null;
-            let reminderCount = 0;
-
-            for (const line of lines) {
-                if (line.includes('[Auto-reminder')) {
-                    const match = line.match(/\[Auto-reminder #(\d+) sent on (.+?) -/);
-                    if (match) {
-                        reminderCount = parseInt(match[1]);
-                        lastReminderDate = new Date(match[2].trim());
-                    }
-                }
-            }
-
-            return { lastReminderDate, reminderCount };
-        };
-
-        // 2️⃣ Process each order
         for (const order of orders) {
             try {
                 if (!order.shipped_date) {
@@ -91,7 +68,6 @@ export async function GET(request: NextRequest) {
                 const shippedDate = new Date(order.shipped_date);
                 const daysSinceShipped = calculateDaysDifference(shippedDate, today);
 
-                // Skip if less than 35 days
                 if (daysSinceShipped < 35) {
                     console.log(`⏳ Skipping order #${order.order_no}: ${daysSinceShipped} days (less than 35)`);
                     skipped++;
@@ -103,15 +79,21 @@ export async function GET(request: NextRequest) {
                     continue;
                 }
 
-                const { lastReminderDate, reminderCount } = extractReminderInfo(order.notes);
+                // ✅ Naye columns use karo
+                const lastReminderDate = order.last_reminder_sent_at
+                    ? new Date(order.last_reminder_sent_at)
+                    : null;
+                const reminderCount = order.reminder_count || 0;
 
                 let shouldSendReminder = false;
                 let newReminderCount = reminderCount;
 
                 if (!lastReminderDate) {
+                    // Pehli baar
                     shouldSendReminder = true;
                     newReminderCount = 1;
                 } else {
+                    // 10 din guzre hain?
                     const daysSinceLastReminder = calculateDaysDifference(lastReminderDate, today);
                     if (daysSinceLastReminder >= 10) {
                         shouldSendReminder = true;
@@ -125,7 +107,6 @@ export async function GET(request: NextRequest) {
                     continue;
                 }
 
-                // ✅ Single product — order_items nahi hai
                 const productName = order.product?.product_name || "Product";
                 const productSlug = order.product?.slug || "#";
                 const productQuantity = order.quantity || 0;
@@ -148,7 +129,6 @@ export async function GET(request: NextRequest) {
                     productNames: [productName]
                 };
 
-                // 3️⃣ Email data
                 const emailData = {
                     orderNumber: order.order_no,
                     orderDate: new Date(order.order_date).toLocaleDateString(),
@@ -167,7 +147,6 @@ export async function GET(request: NextRequest) {
                     customerEmail: order.users.email
                 };
 
-                // 4️⃣ Email template
                 const template = emailTemplates.returnReminderEmail({
                     orderNumber: emailData.orderNumber,
                     orderDate: emailData.orderDate,
@@ -188,7 +167,6 @@ export async function GET(request: NextRequest) {
 
                 const mergedEmails = [order.users.email, ...OverDueReminderEmail];
 
-                // 5️⃣ Send email
                 const emailResult = await sendCronEmail({
                     to: mergedEmails,
                     subject: template.subject,
@@ -197,11 +175,13 @@ export async function GET(request: NextRequest) {
                 });
 
                 if (emailResult.success) {
-                    const newNote = `${order.notes ? order.notes + '\n' : ''}[Auto-reminder #${newReminderCount} sent on ${today.toLocaleDateString()} - ${daysSinceShipped} days after shipping]`;
-
+                    // ✅ Notes ki jagah naye columns update karo
                     await supabase
                         .from('orders')
-                        .update({ notes: newNote })
+                        .update({
+                            last_reminder_sent_at: today.toISOString(),
+                            reminder_count: newReminderCount
+                        })
                         .eq('id', order.id);
 
                     await logEmail(
