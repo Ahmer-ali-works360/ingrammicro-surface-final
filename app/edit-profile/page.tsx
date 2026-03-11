@@ -1,3 +1,5 @@
+//src/app/edit-profile/page.tsx
+
 "use client"
 
 import { useRouter } from "next/navigation";
@@ -16,8 +18,7 @@ export default function Page() {
     const { profile, isLoggedIn, loading, user } = useAuth();
     const [isUpdating, setIsUpdating] = useState(false);
     const [formData, setFormData] = useState({
-        firstName: "",
-        lastName: "",
+        name: "",
         email: "",
         reseller: ""
     });
@@ -64,8 +65,7 @@ export default function Page() {
     useEffect(() => {
         if (profile) {
             setFormData({
-                firstName: profile.firstName || "",
-                lastName: profile.lastName || "",
+                name: profile.name || "",
                 email: profile.email || "",
                 reseller: profile.reseller || ""
             });
@@ -78,8 +78,7 @@ export default function Page() {
                 message: 'Profile data loaded for editing',
                 userId: profile.id,
                 details: {
-                    hasFirstName: !!profile.firstName,
-                    hasLastName: !!profile.lastName,
+                    hasName: !!profile.name,
                     hasReseller: !!profile.reseller,
                     userRole: profile.role
                 },
@@ -148,8 +147,7 @@ export default function Page() {
             userId: profile?.id || null,
             details: {
                 oldData: {
-                    firstName: profile?.firstName,
-                    lastName: profile?.lastName,
+                    name: profile?.name,
                     reseller: profile?.reseller
                 },
                 newData: formData,
@@ -161,8 +159,7 @@ export default function Page() {
             const { error } = await supabase
                 .from('users')
                 .update({
-                    firstName: formData.firstName,
-                    lastName: formData.lastName,
+                    name: formData.name,
                     reseller: formData.reseller,
                     updated_at: new Date().toISOString()
                 })
@@ -193,8 +190,7 @@ export default function Page() {
                 userId: profile?.id || null,
                 details: {
                     changes: {
-                        firstName: profile?.firstName !== formData.firstName,
-                        lastName: profile?.lastName !== formData.lastName,
+                        name: profile?.name !== formData.name,
                         reseller: profile?.reseller !== formData.reseller
                     },
                     newValues: formData,
@@ -276,33 +272,15 @@ export default function Page() {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6 bg-white p-6 rounded-lg shadow-md">
-                {/* First Name */}
+                {/* Name */}
                 <div className="space-y-2">
-                    <Label htmlFor="firstName" className="text-gray-700">
-                        First Name
-                    </Label>
+                    <Label htmlFor="name" className="text-gray-700">Full Name</Label>
                     <Input
-                        id="firstName"
-                        name="firstName"
-                        value={formData.firstName}
+                        id="name"
+                        name="name"
+                        value={formData.name}
                         onChange={handleInputChange}
-                        placeholder="Enter your first name"
-                        className="focus:ring-2 focus:ring-[#1d76bc] focus:border-transparent selection:bg-blue-500"
-                        required
-                    />
-                </div>
-
-                {/* Last Name */}
-                <div className="space-y-2">
-                    <Label htmlFor="lastName" className="text-gray-700">
-                        Last Name
-                    </Label>
-                    <Input
-                        id="lastName"
-                        name="lastName"
-                        value={formData.lastName}
-                        onChange={handleInputChange}
-                        placeholder="Enter your last name"
+                        placeholder="Enter your full name"
                         className="focus:ring-2 focus:ring-[#1d76bc] focus:border-transparent selection:bg-blue-500"
                         required
                     />

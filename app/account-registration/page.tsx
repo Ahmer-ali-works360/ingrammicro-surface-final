@@ -10,8 +10,8 @@ import { toast } from "sonner";
 
 export default function Page() {
   const [email, setEmail] = useState("");
-  const [FirstName, setFirstName] = useState("");
-  const [LastName, setLastName] = useState("");
+  
+  const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [reseller, setReseller] = useState("");
@@ -78,7 +78,6 @@ export default function Page() {
   const getAdminEmails = async (): Promise<string[]> => {
     try {
       const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
-
       const { data: admins, error } = await supabase
         .from("users")
         .select("email")
@@ -86,7 +85,6 @@ export default function Page() {
         .not("email", "is", null);
 
       if (error) return [];
-
       return admins
         .map((admin: { email: string }) => admin.email)
         .filter((e: string) => e && e.trim() !== "");
@@ -96,45 +94,27 @@ export default function Page() {
   };
 
   const sendRegistrationEmails = async (
-    firstName: string,
-    lastName: string,
+
+    name: string,
     userEmail: string,
     resellerName: string,
     registrationDate: string
   ) => {
     try {
       const adminEmails = await getAdminEmails();
-
-      const mergedAdminEmails = [
-        ...new Set([...adminEmails, ...UserRegisterEmail]),
-      ];
-
-      const userEmailData = {
-        firstName,
-        lastName,
-        email: userEmail,
-        reseller: resellerName,
-        registrationDate,
-      };
+      const mergedAdminEmails = [...new Set([...adminEmails, ...UserRegisterEmail])];
+      const userEmailData = {name,  email: userEmail, reseller: resellerName, registrationDate };
 
       const adminTemplate = emailTemplates.registrationAdminNotification(userEmailData);
       await sendEmail({
-        to:
-          process.env.NODE_ENV === "development"
-            ? ["ahmer.ali@works360.com"]
-            : mergedAdminEmails,
+        to: process.env.NODE_ENV === "development" ? ["ahmer.ali@works360.com"] : mergedAdminEmails,
         subject: adminTemplate.subject,
         text: adminTemplate.text,
         html: adminTemplate.html,
       });
 
       const userTemplate = emailTemplates.registrationUserWaiting(userEmailData);
-      await sendEmail({
-        to: userEmail,
-        subject: userTemplate.subject,
-        text: userTemplate.text,
-        html: userTemplate.html,
-      });
+      await sendEmail({ to: userEmail, subject: userTemplate.subject, text: userTemplate.text, html: userTemplate.html });
     } catch {
       // Email errors should not block registration
     }
@@ -143,103 +123,45 @@ export default function Page() {
   const signup = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-
     if (!validateForm()) return;
 
     const startTime = Date.now();
     const source = `${process.env.NEXT_PUBLIC_APP_URL || ""}/account-registration`;
-
     setLoading(true);
 
     try {
-      // 1️⃣ Check if email already exists
       const { data: existingUsers, error: selectError } = await supabase
-        .from("users")
-        .select("userId")
-        .eq("email", email);
+        .from("users").select("userId").eq("email", email);
 
       if (selectError && selectError.code !== "PGRST116") {
-        // await removed
-        logError(
-          "auth",
-          "user_check",
-          `Error checking existing user: ${selectError.message}`,
-          selectError,
-          "",
-          source
-        );
-        toast.error(selectError.message || "Error checking existing users", {
-          style: { background: "black", color: "white" },
-        });
+        logError("auth", "user_check", `Error checking existing user: ${selectError.message}`, selectError, "", source);
+        toast.error(selectError.message || "Error checking existing users", { style: { background: "black", color: "white" } });
         setLoading(false);
         return;
       }
 
       if (existingUsers && existingUsers.length > 0) {
-        // await removed
-        logger.warning(
-          "auth",
-          "duplicate_registration",
-          `Duplicate registration attempt: ${email}`,
-          { email },
-          "",
-          source
-        );
-        toast.error("User already exists with this email", {
-          style: { background: "black", color: "white" },
-        });
+        logger.warning("auth", "duplicate_registration", `Duplicate registration attempt: ${email}`, { email }, "", source);
+        toast.error("User already exists with this email", { style: { background: "black", color: "white" } });
         setLoading(false);
         return;
       }
 
-      // await removed
-      logAuth(
-        "registration_start",
-        `Registration attempt: ${email}`,
-        "",
-        { email, firstName: FirstName, lastName: LastName },
-        "completed",
-        source
-      );
+      logAuth("registration_start", `Registration attempt: ${email}`, "", { email,name  }, "completed", source);
 
-      // 2️⃣ Sign up with Supabase Auth
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-      });
+      const { data: authData, error: authError } = await supabase.auth.signUp({ email, password });
 
       if (authError) {
-        // await removed
-        logError(
-          "auth",
-          "supabase_auth",
-          `Auth error: ${authError.message}`,
-          authError,
-          "",
-          source
-        );
-        toast.error(authError.message || "Signup failed", {
-          style: { background: "black", color: "white" },
-        });
+        logError("auth", "supabase_auth", `Auth error: ${authError.message}`, authError, "", source);
+        toast.error(authError.message || "Signup failed", { style: { background: "black", color: "white" } });
         setLoading(false);
         return;
       }
 
       const userId = authData.user?.id;
-
       if (!userId) {
-        // await removed
-        logError(
-          "auth",
-          "user_id_missing",
-          "No user ID returned",
-          { email, authData },
-          "",
-          source
-        );
-        toast.error("Signup failed: No user ID returned.", {
-          style: { background: "black", color: "white" },
-        });
+        logError("auth", "user_id_missing", "No user ID returned", { email, authData }, "", source);
+        toast.error("Signup failed: No user ID returned.", { style: { background: "black", color: "white" } });
         setLoading(false);
         return;
       }
@@ -247,226 +169,177 @@ export default function Page() {
       const today = new Date().toISOString().split("T")[0];
       const registrationDate = formatRegistrationDate();
 
-      // 3️⃣ Insert user into users table
       const { error: dbError } = await supabase.from("users").insert({
-        userId,
-        firstName: FirstName,
-        lastName: LastName,
-        email,
-        role: process.env.NEXT_PUBLIC_SUBSCRIBER,
-        reseller,
-        registered_at: today,
-        login_at: today,
-        login_count: 1,
-        isVerified: false,
+        userId, name, email,
+        role: process.env.NEXT_PUBLIC_SUBSCRIBER, reseller,
+        registered_at: today, login_at: today, login_count: 1, isVerified: false,
       });
 
       if (dbError) {
-        // await removed
-        logError(
-          "db",
-          "user_insert",
-          `Database insert error: ${dbError.message}`,
-          dbError,
-          userId,
-          source
-        );
-        toast.error(dbError.message || "Error saving user data", {
-          style: { background: "black", color: "white" },
-        });
+        logError("db", "user_insert", `Database insert error: ${dbError.message}`, dbError, userId, source);
+        toast.error(dbError.message || "Error saving user data", { style: { background: "black", color: "white" } });
         setLoading(false);
         return;
       }
 
-      // await removed
-      logger.success(
-        "auth",
-        "user_created",
-        `User created: ${email}`,
-        { userId, email, firstName: FirstName, lastName: LastName, reseller },
-        userId,
-        source
-      );
-
-      // 4️⃣ Sign out immediately after signup
+      logger.success("auth", "user_created", `User created: ${email}`, { userId, email, name, reseller }, userId, source);
       await supabase.auth.signOut();
+      logAuth("auto_signout", "Auto-signed out after registration", userId, {}, "completed", source);
 
-      // await removed
-      logAuth(
-        "auto_signout",
-        "Auto-signed out after registration",
-        userId,
-        {},
-        "completed",
-        source
-      );
-
-      // 5️⃣ Send emails (non-blocking)
-      sendRegistrationEmails(
-        FirstName,
-        LastName,
-        email,
-        reseller,
-        registrationDate
-      );
+      sendRegistrationEmails(name, email, reseller, registrationDate);
 
       const executionTime = Date.now() - startTime;
-      // await removed
-      logger.success(
-        "auth",
-        "registration_complete",
-        `Registration completed: ${email}`,
-        {
-          email,
-          firstName: FirstName,
-          lastName: LastName,
-          reseller,
-          execution_time_ms: executionTime,
-        },
-        userId,
-        source
-      );
+      logger.success("auth", "registration_complete", `Registration completed: ${email}`, { email, name, reseller, execution_time_ms: executionTime }, userId, source);
 
-      // 6️⃣ Clear form
-      setEmail("");
-      setFirstName("");
-      setLastName("");
-      setPassword("");
-      setConfirmPassword("");
-      setReseller("");
+      setEmail(""); setName(""); setPassword(""); setConfirmPassword(""); setReseller("");
 
-      toast.success("Registration successful! Please wait for PM approval.", {
-        style: { background: "black", color: "white" },
-      });
-
+      toast.success("Registration successful! Please wait for PM approval.", { style: { background: "black", color: "white" } });
       router.push("/login");
     } catch (err: any) {
       const executionTime = Date.now() - startTime;
-      // await removed
-      logError(
-        "system",
-        "unexpected_error",
-        `Unexpected error: ${err?.message || "Unknown"}`,
-        {
-          error: err?.message,
-          stack: err?.stack,
-          execution_time_ms: executionTime,
-        },
-        "",
-        source
-      );
-      toast.error(err?.message || "An unexpected error occurred", {
-        style: { background: "black", color: "white" },
-      });
+      logError("system", "unexpected_error", `Unexpected error: ${err?.message || "Unknown"}`, { error: err?.message, stack: err?.stack, execution_time_ms: executionTime }, "", source);
+      toast.error(err?.message || "An unexpected error occurred", { style: { background: "black", color: "white" } });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="relative min-h-screen">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/computer-mouse-object-background.jpg')" }}
-      />
-      <div className="absolute inset-0 top-0 bg-white/92"></div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 min-h-[600px]">
 
-      <div className="relative flex items-center justify-center min-h-screen px-3 py-22 lg:px-8">
-        <div className="relative z-10 w-full max-w-md rounded-2xl border-8 border-gray-100 bg-white sm:px-10 px-6 py-14">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="text-center text-2xl font-normal text-black">Registration</h2>
-          </div>
+        {/* Left: Blue Panel */}
+        <div
+          className="md:w-7/12 w-full flex flex-col justify-center px-10 py-12 rounded-2xl"
+          style={{
+            background: "linear-gradient(135deg, #1D76BC 0%, #1a5fa0 60%, #154d85 100%)",
+          }}
+        >
+          <h2 className="text-3xl font-bold text-white leading-tight mb-4">
+            Welcome to Ingram Micro and Microsoft Surface
+          </h2>
+          <p className="text-blue-100 text-sm mb-10 leading-relaxed">
+            Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
+          </p>
 
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form onSubmit={signup} className="space-y-4">
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">Email (Username)</label>
-                <input
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`my-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${
-                    submitted && errors.email ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {submitted && errors.email && (
-                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">
-                    {errors.email}
-                  </div>
-                )}
+          <div className="space-y-7">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                </svg>
+                <p className="text-white font-bold text-base">Register</p>
               </div>
+              <p className="text-blue-100 text-sm">Fill out a quick registration form if not registered yet.</p>
+            </div>
 
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">First Name</label>
-                <input
-                  type="text"
-                  value={FirstName}
-                  onChange={(e) => setFirstName(e.target.value)}
-                  className="my-2 w-full rounded-md border border-gray-300 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition"
-                />
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-white font-bold text-base">Approval</p>
               </div>
+              <p className="text-blue-100 text-sm">Your registration will be approved by the Program Manager.</p>
+            </div>
 
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">Last Name</label>
-                <input
-                  type="text"
-                  value={LastName}
-                  onChange={(e) => setLastName(e.target.value)}
-                  className="my-2 w-full rounded-md border border-gray-300 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition"
-                />
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                <p className="text-white font-bold text-base">Login</p>
               </div>
-
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">Password</label>
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`my-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${
-                    submitted && errors.password ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-              </div>
-
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">Confirm Password</label>
-                <input
-                  type="password"
-                  value={ConfirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className={`my-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${
-                    submitted && errors.password ? "border-red-500" : "border-gray-300"
-                  }`}
-                />
-                {submitted && errors.password && (
-                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">
-                    {errors.password}
-                  </div>
-                )}
-              </div>
-
-              <div className="my-3">
-                <label className="font-semibold text-gray-700 text-sm">Reseller</label>
-                <input
-                  type="text"
-                  value={reseller}
-                  onChange={(e) => setReseller(e.target.value)}
-                  className="my-2 w-full rounded-md border border-gray-300 px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition"
-                />
-              </div>
-
-              <div className="flex justify-center pt-4">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="w-56 rounded-md bg-[#1D76BC] px-6 py-3 font-semibold cursor-pointer text-white transition-colors hover:bg-[#1660a0] disabled:opacity-50"
-                >
-                  {loading ? "Signing up..." : "Sign up"}
-                </button>
-              </div>
-            </form>
+              <p className="text-blue-100 text-sm">Sign in to your account once it&apos;s approved.</p>
+            </div>
           </div>
         </div>
+
+        {/* Right: Form Panel */}
+        <div className="md:w-5/12 w-full flex flex-col justify-center px-10 py-12 bg-white rounded-2xl shadow-sm">
+          <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Registration</h2>
+
+          <form onSubmit={signup} className="space-y-4">
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
+                  submitted && errors.email ? "border-red-500 bg-red-50" : "border-transparent"
+                }`}
+              />
+              {submitted && errors.email && (
+                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.email}</div>
+              )}
+            </div>
+
+            {/* Name:  */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="w-full rounded-lg border border-transparent bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+              />
+            </div>
+
+            {/* Reseller */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Reseller</label>
+              <input
+                type="text"
+                value={reseller}
+                onChange={(e) => setReseller(e.target.value)}
+                className="w-full rounded-lg border border-transparent bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition"
+              />
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
+                  submitted && errors.password ? "border-red-500 bg-red-50" : "border-transparent"
+                }`}
+              />
+            </div>
+
+            {/* Confirm Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+              <input
+                type="password"
+                value={ConfirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
+                  submitted && errors.password ? "border-red-500 bg-red-50" : "border-transparent"
+                }`}
+              />
+              {submitted && errors.password && (
+                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.password}</div>
+              )}
+            </div>
+
+            {/* Submit */}
+            <div className="pt-2">
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full rounded-lg bg-[#1D76BC] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? "Signing up..." : "Register"}
+              </button>
+            </div>
+          </form>
+        </div>
+
       </div>
     </div>
   );

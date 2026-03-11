@@ -63,8 +63,7 @@ import { AprovedUserCC } from "@/lib/emailconst"
 // Define User type based on your Supabase table
 export type User = {
     id: string
-    firstName: string
-    lastName: string
+    name: string
     email: string
     role: string
     registered_at: string | null
@@ -104,8 +103,7 @@ export default function UsersList() {
     const viewRoles = [superSubscriberRole].filter(Boolean);
 
     const columnDisplayNames: Record<string, string> = {
-        "firstName": "First Name",
-        "lastName": "Last Name",
+        "name": "Name",
         "email": "Email",
         "role": "Role",
         "isVerified": "Verified",
@@ -293,7 +291,7 @@ export default function UsersList() {
             {
                 userId: user.id,
                 email: user.email,
-                currentName: `${user.firstName} ${user.lastName}`
+                currentName: user.name
             },
             profile?.id,
             source
@@ -308,8 +306,7 @@ export default function UsersList() {
             const { error } = await supabase
                 .from('users')
                 .update({
-                    firstName: editUser.firstName,
-                    lastName: editUser.lastName,
+                    name: editUser.name,
                     email: editUser.email,
                 })
                 .eq('id', editUser.id);
@@ -324,8 +321,8 @@ export default function UsersList() {
                 {
                     userId: editUser.id,
                     email: editUser.email,
-                    oldName: `${editUser.firstName} ${editUser.lastName}`,
-                    newName: `${editUser.firstName} ${editUser.lastName}`,
+                    oldName: editUser.name,
+                    newName: editUser.name,
                     executionTime,
                     updatedBy: profile?.email
                 },
@@ -679,40 +676,17 @@ export default function UsersList() {
 
     // Define columns with proper typing (removed select column)
     const columns: ColumnDef<User>[] = [
-        // First Name column
+      // Name column
         {
-            accessorKey: "firstName",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        First Name
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("firstName")}</div>,
-        },
-
-        // Last Name column
-        {
-            accessorKey: "lastName",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Last Name
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("lastName")}</div>,
+            accessorKey: "name",
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
+            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("name")}</div>,
         },
 
         // Email column
@@ -995,8 +969,7 @@ export default function UsersList() {
         try {
             // Prepare the data with custom date format
             const data = users.map(user => ({
-                'First Name': user.firstName || '',
-                'Last Name': user.lastName || '',
+                'Name': user.name || '',
                 'Email': user.email || '',
                 'Role': user.role || '',
                 'Verified': user.isVerified ? 'Yes' : 'No',
@@ -1423,24 +1396,11 @@ export default function UsersList() {
                     {editUser && (
                         <div className="grid gap-4 py-4">
                             <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="firstName" className="text-right">
-                                    First Name
-                                </Label>
+                                <Label htmlFor="name" className="text-right">Name</Label>
                                 <Input
-                                    id="firstName"
-                                    value={editUser.firstName}
-                                    onChange={(e) => setEditUser({ ...editUser, firstName: e.target.value })}
-                                    className="col-span-3 selection:bg-blue-500 selection:text-white"
-                                />
-                            </div>
-                            <div className="grid grid-cols-4 items-center gap-4">
-                                <Label htmlFor="lastName" className="text-right">
-                                    Last Name
-                                </Label>
-                                <Input
-                                    id="lastName"
-                                    value={editUser.lastName}
-                                    onChange={(e) => setEditUser({ ...editUser, lastName: e.target.value })}
+                                    id="name"
+                                    value={editUser.name}
+                                    onChange={(e) => setEditUser({ ...editUser, name: e.target.value })}
                                     className="col-span-3 selection:bg-blue-500 selection:text-white"
                                 />
                             </div>
@@ -1488,7 +1448,7 @@ export default function UsersList() {
                     <DialogHeader>
                         <DialogTitle>Change User Role</DialogTitle>
                         <DialogDescription>
-                            Select a new role for {changeRoleUser?.firstName} {changeRoleUser?.lastName}
+                            Select a new role for {changeRoleUser?.name}
                         </DialogDescription>
                     </DialogHeader>
                     {changeRoleUser && (

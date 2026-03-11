@@ -1,3 +1,5 @@
+//src/app/login/LoginForm.tsx
+
 "use client";
 
 import { supabase } from "@/lib/supabase/client";
@@ -19,20 +21,16 @@ export default function LoginForm() {
   const router = useRouter();
   const { profile, isLoggedIn, loading, user } = useAuth();
 
-  // ✅ Simple variable — no useState/useEffect needed
   const source = typeof window !== "undefined"
     ? `${window.location.origin}/login`
     : `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/login`;
 
   useEffect(() => {
     if (loading) return;
-
     if (isLoggedIn && profile?.isVerified === true) {
       const redirectTo = searchParams.get("redirect_to");
       const redirectPath = redirectTo ? `/${redirectTo}` : "/";
-
       logAuth("auto_redirect", `User already logged in, redirecting to ${redirectPath}`, user?.id, undefined, "completed", source);
-
       router.push(redirectPath);
     }
   }, [loading, isLoggedIn, profile, router, searchParams, user?.id, source]);
@@ -40,16 +38,8 @@ export default function LoginForm() {
   const validateForm = () => {
     const newErrors = { email: "", password: "" };
     let isValid = true;
-
-    if (!email.trim()) {
-      newErrors.email = "E-mail Address is required";
-      isValid = false;
-    }
-    if (!password) {
-      newErrors.password = "Password is required";
-      isValid = false;
-    }
-
+    if (!email.trim()) { newErrors.email = "E-mail Address is required"; isValid = false; }
+    if (!password) { newErrors.password = "Password is required"; isValid = false; }
     setErrors(newErrors);
     return isValid;
   };
@@ -68,10 +58,8 @@ export default function LoginForm() {
     const trimmedEmail = email.trim().toLowerCase();
 
     try {
-      // ✅ Step 1: Normal Supabase login try karo
       const { data: normalAuthData, error: normalAuthError } = await supabase.auth.signInWithPassword({
-        email: trimmedEmail,
-        password,
+        email: trimmedEmail, password,
       });
 
       if (!normalAuthError && normalAuthData?.user) {
@@ -79,7 +67,6 @@ export default function LoginForm() {
         return;
       }
 
-      // ✅ Step 2: Normal login fail — WordPress legacy migration try karo
       try {
         const verifyResponse = await fetch("/api/user-verification", {
           method: "POST",
@@ -106,10 +93,8 @@ export default function LoginForm() {
           return;
         }
 
-        // ✅ Step 3: WP migration successful — ab Supabase login karo
         const { data: newAuthData, error: newAuthError } = await supabase.auth.signInWithPassword({
-          email: trimmedEmail,
-          password,
+          email: trimmedEmail, password,
         });
 
         if (newAuthError) {
@@ -147,16 +132,14 @@ export default function LoginForm() {
 
     const { data: userData, error: userError } = await supabase
       .from("users")
-      .select("isVerified, firstName, lastName, email, login_count, password, userId")
+      .select("isVerified, name, email, login_count, password, userId")
       .eq("email", userEmail)
       .single();
 
     if (userError) {
       await logError("db", "user_fetch_failed", `Failed to fetch user data: ${userError.message}`,
         userError, userId, source);
-      toast.error("Unable to verify account status", {
-        style: { background: "black", color: "white" },
-      });
+      toast.error("Unable to verify account status", { style: { background: "black", color: "white" } });
       await supabase.auth.signOut();
       setLoading(false);
       return;
@@ -166,9 +149,7 @@ export default function LoginForm() {
       await logger.warning("auth", "account_not_approved",
         `Login attempt for unapproved account: ${userEmail}`,
         { email: userEmail, userId, isLegacyMigration }, userId, source);
-      toast.error("Your account is not approved yet.", {
-        style: { background: "black", color: "white" },
-      });
+      toast.error("Your account is not approved yet.", { style: { background: "black", color: "white" } });
       await supabase.auth.signOut();
       setLoading(false);
       return;
@@ -176,27 +157,23 @@ export default function LoginForm() {
 
     const previousCount = parseInt(userData?.login_count || "0", 10);
 
-    // ✅ Background DB updates — user wait nahi karega
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const dbUpdates: any[] = [
-        supabase.from("users").update({
-          login_at: new Date().toISOString().split("T")[0],
-          login_count: String(previousCount + 1),
-        }).eq("userId", userId)
-      ];
+    const dbUpdates: any[] = [
+      supabase.from("users").update({
+        login_at: new Date().toISOString().split("T")[0],
+        login_count: String(previousCount + 1),
+      }).eq("userId", userId)
+    ];
 
-      if (userData?.userId == null || userData?.password != null) {
-        dbUpdates.push(
-          supabase.from("users").update({ userId, password: null }).eq("email", userEmail),
-          supabase.from("wp_pass").delete().eq("email", userEmail)
-        );
-      }
-
-      Promise.all(dbUpdates).catch(err =>
-        console.error("Background DB update failed:", err)
+    if (userData?.userId == null || userData?.password != null) {
+      dbUpdates.push(
+        supabase.from("users").update({ userId, password: null }).eq("email", userEmail),
+        supabase.from("wp_pass").delete().eq("email", userEmail)
       );
+    }
 
-    // ✅ Logs bhi background mein
+    Promise.all(dbUpdates).catch(err => console.error("Background DB update failed:", err));
+
     logger.info("auth", "login_stats_updated", `Login stats updated for user: ${userEmail}`, {
       email: userEmail, userId, previousCount, executionTime, isLegacyMigration
     }, userId, source);
@@ -204,103 +181,102 @@ export default function LoginForm() {
     logSuccess("auth", "login_successful",
       `User logged in ${isLegacyMigration ? "via legacy migration" : "normally"}: ${userEmail}`, {
       email: userEmail, userId, executionTime, isLegacyMigration,
-      userData: {
-        firstName: userData?.firstName,
-        lastName: userData?.lastName,
-        isVerified: userData?.isVerified,
-        loginCount: userData?.login_count,
-      }
+      userData: { name: userData?.name, isVerified: userData?.isVerified, loginCount: userData?.login_count }
     }, userId, source);
 
-    toast.success("Login successful!", {
-      style: { background: "black", color: "white" },
-    });
+    toast.success("Login successful!", { style: { background: "black", color: "white" } });
 
     const redirectTo = searchParams.get("redirect_to");
     const redirectPath = redirectTo ? `/${redirectTo}` : "/";
 
-    logger.info("auth", "redirecting_after_login",
-      `Redirecting user to: ${redirectPath}`, {
+    logger.info("auth", "redirecting_after_login", `Redirecting user to: ${redirectPath}`, {
       email: userEmail, userId, redirectPath, isLegacyMigration
     }, userId, source);
 
-    // ✅ Direct redirect — state clear karna pointless tha
     router.push(redirectPath);
   };
 
   return (
-    <div className="relative min-h-screen">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/computer-mouse-object-background.jpg')" }}
-      />
-      <div className="absolute inset-0 top-0 bg-white/92"></div>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 min-h-[500px]">
 
-      <div className="relative flex items-center justify-center min-h-screen px-3 py-22 lg:px-8">
-        <div className="relative z-10 w-full max-w-md rounded-2xl border-8 border-gray-100 bg-white sm:px-13 px-6 py-14">
-          <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="text-center text-2xl font-normal text-black">Login</h2>
-          </div>
-
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form onSubmit={signin} className="space-y-4">
-              <div className="my-3">
-                <label htmlFor="email" className="font-semibold text-gray-700 text-sm">Email</label>
-                <input
-                  id="email"
-                  type="text"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className={`my-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${submitted && errors.email ? "border-red-500" : "border-gray-300"}`}
-                />
-                {submitted && errors.email && (
-                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.email}</div>
-                )}
-              </div>
-
-              <div className="my-3">
-                <label htmlFor="password" className="font-semibold text-gray-700 text-sm">Password</label>
-                <input
-                  id="password"
-                  type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className={`my-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${submitted && errors.password ? "border-red-500" : "border-gray-300"}`}
-                />
-                {submitted && errors.password && (
-                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.password}</div>
-                )}
-              </div>
-
-              <div className="flex w-full gap-4 mt-6">
-                <div className="flex-1">
-                  <button
-                    type="submit"
-                    disabled={isloading}
-                    className="w-full rounded-md bg-[#1D76BC] px-6 py-3 cursor-pointer font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    {isloading ? "Please wait..." : "Login"}
-                  </button>
-                </div>
-                <div className="flex-1">
-                  <Link
-                    href={"/account-registration"}
-                    className="flex items-center justify-center w-full rounded-md bg-white px-6 py-3 font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:shadow-md border border-gray-300"
-                  >
-                    Register
-                  </Link>
-                </div>
-              </div>
-
-              <Link
-                href={"/password-reset"}
-                className="flex justify-center font-normal text-[#7c7c7c] hover:text-[#1D76BC] transition-colors mt-6"
-              >
-                <h4>Forgot your password?</h4>
-              </Link>
-            </form>
-          </div>
+        {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
+        <div className="md:w-7/12 w-full rounded-2xl overflow-hidden">
+          <img
+            src="/image 64.png"
+            alt="Login visual"
+            className="w-full h-full object-cover"
+          />
         </div>
+
+        {/* ── RIGHT DIV — Login Form (same style as Register) ── */}
+        <div className="md:w-5/12 w-full flex flex-col justify-center px-10 py-12 bg-white rounded-2xl shadow-sm">
+          <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Login</h2>
+
+          <form onSubmit={signin} className="space-y-4">
+
+            {/* Email */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+              <input
+                id="email"
+                type="text"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
+                  submitted && errors.email ? "border-red-500 bg-red-50" : "border-transparent"
+                }`}
+              />
+              {submitted && errors.email && (
+                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.email}</div>
+              )}
+            </div>
+
+            {/* Password */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
+                  submitted && errors.password ? "border-red-500 bg-red-50" : "border-transparent"
+                }`}
+              />
+              {submitted && errors.password && (
+                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.password}</div>
+              )}
+            </div>
+
+            {/* Buttons */}
+            <div className="flex w-full gap-3 pt-2">
+              <button
+                type="submit"
+                disabled={isloading}
+                className="flex-1 rounded-lg bg-[#1D76BC] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isloading ? "Please wait..." : "Login"}
+              </button>
+              <Link
+                href="/account-registration"
+                className="flex-1 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:shadow-md"
+              >
+                Register
+              </Link>
+            </div>
+
+            {/* Forgot password */}
+            <Link
+              href="/password-reset"
+              className="flex justify-center text-sm font-normal text-[#7c7c7c] hover:text-[#1D76BC] transition-colors mt-2"
+            >
+              Forgot your password?
+            </Link>
+
+          </form>
+        </div>
+
       </div>
     </div>
   );

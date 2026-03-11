@@ -1,3 +1,5 @@
+//src/app/checkout/page.tsx
+
 "use client"
 
 import { useRouter } from "next/navigation";
@@ -107,7 +109,7 @@ const mainProduct = mainProductItem?.product;
     if (profile) {
       setFormData(prev => ({
         ...prev,
-        sales_executive: `${profile.firstName || ""} ${profile.lastName || ""}`.trim(),
+        sales_executive: profile.name || "",
         se_email: profile.email || "",
         // reseller: profile.reseller || ""
       }));

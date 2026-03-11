@@ -65,8 +65,7 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 // Define User type based on your Supabase table
 export type User = {
     id: string
-    firstName: string
-    lastName: string
+    name: string
     email: string
     role: string
     registered_at: string | null
@@ -98,8 +97,7 @@ export default function Page() {
     const viewRoles = [superSubscriberRole].filter(Boolean);
 
     const columnDisplayNames: Record<string, string> = {
-        "firstName": "First Name",
-        "lastName": "Last Name",
+        "name": "Name",
         "email": "Email",
         "role": "Role",
         "isVerified": "Verified",
@@ -446,9 +444,9 @@ export default function Page() {
 
     // Define columns with proper typing (removed select column)
     const columns: ColumnDef<User>[] = [
-        // First Name column
+        // name column
         {
-            accessorKey: "firstName",
+            accessorKey: "name",
             header: ({ column }) => {
                 return (
                     <Button
@@ -456,32 +454,15 @@ export default function Page() {
                         className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
                         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
                     >
-                        First Name
+                        Name
                         <ArrowUpDown className="ml-2 h-4 w-4" />
                     </Button>
                 )
             },
-            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("firstName")}</div>,
+            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("name")}</div>,
         },
 
-        // Last Name column
-        {
-            accessorKey: "lastName",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Last Name
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
-            cell: ({ row }) => <div className="text-left ps-2">{row.getValue("lastName")}</div>,
-        },
-
+        
         // Email column
         {
             accessorKey: "email",
@@ -661,8 +642,7 @@ export default function Page() {
         try {
             // Prepare the data with custom date format
             const data = users.map(user => ({
-                'First Name': user.firstName || '',
-                'Last Name': user.lastName || '',
+                'Name': user.name || '',
                 'Email': user.email || '',
                 'Role': user.role || '',
                 'Verified': user.isVerified ? 'Yes' : 'No',
