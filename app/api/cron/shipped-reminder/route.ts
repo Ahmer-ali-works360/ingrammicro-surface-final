@@ -1,3 +1,5 @@
+//src/app/api/cron/shipped-reminder/route.ts
+
 import { emailTemplates, sendEmail } from "@/lib/email";
 import { ReturnReminderEmail, ShippedEmail } from "@/lib/emailconst";
 import { supabase } from "@/lib/supabase/client";
