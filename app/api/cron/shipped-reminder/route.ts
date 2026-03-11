@@ -12,10 +12,9 @@ export async function GET() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // ✅ Fix 1: product name bhi fetch karo
     const { data: orders, error } = await supabase
       .from("orders")
-      .select("*, product:product_id(name)")
+      .select("*, product:product_id(product_name)") // ✅ fix 1
       .eq("order_status", SHIPPED_STATUS)
       .not("shipped_date", "is", null);
 
@@ -35,9 +34,9 @@ export async function GET() {
 
       if (diffDays !== 25) continue;
 
-      // ✅ Fix 2: products_array nahi hai — single product use karo
+      // ✅ fix 2: single product
       const productsForEmail = [{
-        name: order.product?.name || "Product",
+        name: order.product?.product_name || "Product",
         quantity: order.quantity || 0,
       }];
 
@@ -74,7 +73,7 @@ export async function GET() {
         deviceUnits: order.dev_opportunity || 0,
         budgetPerDevice: order.dev_budget || 0,
         revenue: order.rev_opportunity || 0,
-        ingramAccount: order.ingram_account || "", // ✅ Fix 3: crm_account → ingram_account
+        ingramAccount: order.ingram_account || "", // ✅ fix 3
 
         quoteNumber: order.quote_number || "",
         competitiveOpportunity: order.is_competitive || "",
