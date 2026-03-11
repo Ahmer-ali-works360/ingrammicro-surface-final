@@ -1,6 +1,6 @@
 //src/app/api/cron/shipped-reminder/route.ts
 
-import { emailTemplates,  sendCronEmail  } from "@/lib/email";
+import { emailTemplates, sendCronEmail } from "@/lib/email";
 import { ReturnReminderEmail, ShippedEmail } from "@/lib/emailconst";
 import { supabase } from "@/lib/supabase/client";
 import { NextResponse } from "next/server";
@@ -9,14 +9,13 @@ const SHIPPED_STATUS = process.env.NEXT_PUBLIC_STATUS_SHIPPED;
 
 export async function GET() {
   try {
-    // Today date (YYYY-MM-DD)
     const today = new Date();
     today.setHours(0, 0, 0, 0);
 
-    // Fetch shipped orders
+    // ✅ Fix 1: product name bhi fetch karo
     const { data: orders, error } = await supabase
       .from("orders")
-      .select("*")
+      .select("*, product:product_id(name)")
       .eq("order_status", SHIPPED_STATUS)
       .not("shipped_date", "is", null);
 
@@ -30,69 +29,61 @@ export async function GET() {
       const shippedDate = new Date(order.shipped_date);
       shippedDate.setHours(0, 0, 0, 0);
 
-      // diff in days
       const diffDays = Math.floor(
         (today.getTime() - shippedDate.getTime()) / (1000 * 60 * 60 * 24)
       );
 
-      // ✅ only 25th day
       if (diffDays !== 25) continue;
 
-      // products mapping
-      const productsForEmail = (order.products_array || []).map(
-        (product: any, index: number) => ({
-          name: product.product_name || `Product ${index + 1}`,
-          quantity: order.quantities_array?.[index] || 0,
-        })
-      );
+      // ✅ Fix 2: products_array nahi hai — single product use karo
+      const productsForEmail = [{
+        name: order.product?.name || "Product",
+        quantity: order.quantity || 0,
+      }];
 
-      const totalQuantity = productsForEmail.reduce(
-        (sum: number, p: any) => sum + p.quantity,
-        0
-      );
+      const totalQuantity = order.quantity || 0;
 
-    const template = emailTemplates.shippedReminderEmail({
-      orderNumber: order.order_no,
-      orderDate: order.order_date,
-      customerName: order.contact_name || "Customer",
-      customerEmail: order.order_by_user?.email,
-      shippedDate: order.shipped_date,
+      const template = emailTemplates.shippedReminderEmail({
+        orderNumber: order.order_no,
+        orderDate: order.order_date,
+        customerName: order.contact_name || "Customer",
+        customerEmail: order.order_by_user?.email,
+        shippedDate: order.shipped_date,
 
-      products: productsForEmail,
-      totalQuantity,
+        products: productsForEmail,
+        totalQuantity,
 
-      orderTracking: order.tracking || "",
-      orderTrackingLink: order.tracking_link || "",
-      returnTracking: order.return_tracking || "",
-      returnTrackingLink: order.return_tracking_link || "",
-      caseType: order.case_type || "",
-      fileLink: order.return_label || "",
+        orderTracking: order.tracking || "",
+        orderTrackingLink: order.tracking_link || "",
+        returnTracking: order.return_tracking || "",
+        returnTrackingLink: order.return_tracking_link || "",
+        caseType: order.case_type || "",
+        fileLink: order.return_label || "",
 
-      salesExecutive: order.sales_executive || "",
-      salesExecutiveEmail: order.se_email || "",
-      companyName: order.company_name || "",
-      contactName: order.contact_name || "",
-      contactEmail: order.email || "",
-      shippingAddress: order.address || "",
-      city: order.city || "",
-      state: order.state || "",
-      zip: order.zip || "",
-      deliveryDate: order.desired_date || "",
+        salesExecutive: order.sales_executive || "",
+        salesExecutiveEmail: order.se_email || "",
+        companyName: order.company_name || "",
+        contactName: order.contact_name || "",
+        contactEmail: order.email || "",
+        shippingAddress: order.address || "",
+        city: order.city || "",
+        state: order.state || "",
+        zip: order.zip || "",
+        deliveryDate: order.desired_date || "",
 
-      deviceUnits: order.dev_opportunity || 0,
-      budgetPerDevice: order.dev_budget || 0,
-      revenue: order.rev_opportunity || 0,
-      ingramAccount: order.crm_account || "",
+        deviceUnits: order.dev_opportunity || 0,
+        budgetPerDevice: order.dev_budget || 0,
+        revenue: order.rev_opportunity || 0,
+        ingramAccount: order.ingram_account || "", // ✅ Fix 3: crm_account → ingram_account
 
-      quoteNumber: order.quote_number || "",
-      competitiveOpportunity: order.is_competitive || "",
-      estimatedCloseDate: order.estimated_close_date || "",
-      wants5gSim: order.wants_5g_sim ? "Yes" : "No",
+        quoteNumber: order.quote_number || "",
+        competitiveOpportunity: order.is_competitive || "",
+        estimatedCloseDate: order.estimated_close_date || "",
+        wants5gSim: order.wants_5g_sim ? "Yes" : "No",
 
-      segment: order.segment || "",
-
-      note: order.notes || "",
-    });
+        segment: order.segment || "",
+        note: order.notes || "",
+      });
 
       const mergedEmails = [
         order.order_by_user?.email,

@@ -2617,26 +2617,23 @@ export const emailTemplates = {
 
     },
 
+
     shippedReminderEmail: ({
     orderNumber,
     orderDate,
     customerName,
     customerEmail,
     shippedDate,
-
     products,
     totalQuantity,
-
     returnTracking,
     orderTracking,
     fileLink,
     caseType,
     returnTrackingLink,
     orderTrackingLink,
-
     salesExecutive,
     salesExecutiveEmail,
-
     companyName,
     contactName,
     contactEmail,
@@ -2645,44 +2642,35 @@ export const emailTemplates = {
     state,
     zip,
     deliveryDate,
-
     deviceUnits,
     budgetPerDevice,
     revenue,
     ingramAccount,
     segment,
-
     note,
-
     quoteNumber,
     competitiveOpportunity,
     estimatedCloseDate,
     wants5gSim,
-
     }: {
     orderNumber: string | number;
     orderDate: string;
     customerName: string;
     customerEmail: string;
     shippedDate: string;
-
     products: Array<{
     name: string;
     quantity: number;
     }>;
-
     totalQuantity: number;
-
     returnTracking: string;
     orderTracking: string;
     fileLink: string;
     caseType: string;
     orderTrackingLink: string;
     returnTrackingLink: string;
-
     salesExecutive: string;
     salesExecutiveEmail: string;
-
     companyName: string;
     contactName: string;
     contactEmail: string;
@@ -2691,20 +2679,16 @@ export const emailTemplates = {
     state: string;
     zip: string;
     deliveryDate: string;
-
     deviceUnits: number | string;
     budgetPerDevice: number | string;
     revenue: number | string;
     ingramAccount: string;
     segment: string;
-
     note: string;
-
     quoteNumber: string;
     competitiveOpportunity: string;
     estimatedCloseDate: string;
     wants5gSim: string;
-
     }) => {
 
     const productRows = products.map(product => `
@@ -2718,14 +2702,16 @@ export const emailTemplates = {
 
     return {
 
-    subject: `Order Shipped #${orderNumber} | Ingram Micro Surface`,
+    // ✅ Subject fix kiya
+    subject: `25-Day Return Reminder – Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
 
-    text: `Shipped Ingram Micro Surface Order (#${orderNumber})
+    text: `25-Day Return Reminder – Order #${orderNumber} (${companyName})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello,
 
-    Your order placed on ingrammicro-surface.com has been shipped.
+    This is a friendly reminder that Order #${orderNumber} for ${companyName} has been shipped for 25 days.
+    As the 45-day trial period is progressing, please begin preparing the return process.
 
     ORDER ITEMS (${totalQuantity} items)
     ${productListText}
@@ -2794,21 +2780,17 @@ export const emailTemplates = {
     <p style="margin:0 0 8px;font-size:15px;">
     <strong>25-Day Shipping Reminder – Order #${orderNumber}</strong>
     </p>
-
     <p style="margin:0 0 8px;font-size:15px;">
     Placed on ${formatEmailDate(orderDate)}
     </p>
-
     <p style="font-size:15px;line-height:1.6;">
     This is a friendly reminder from the Ingram Micro Surface team that
     <b>Order #${orderNumber}</b> for <b>${companyName}</b>
     has been shipped for <b>25 days</b>.
     </p>
-
     <p style="font-size:15px;line-height:1.6;">
     As the 45-day trial period is progressing, we kindly ask you to review the order status and begin preparing the return process.
     </p>
-
     <p style="font-size:15px;line-height:1.6;">
     You may obtain a soft copy of the return label by clicking the button below or by contacting us at
     <a href="mailto:support@ingrammicro-surface.com">support@ingrammicro-surface.com</a>.
@@ -2817,7 +2799,7 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="text-align:center;margin:30px 0;padding:0;">
+    <td style="text-align:center;margin:30px 0;padding:20px 0;">
     <a href="${fileLink}" style="
     background:#1D76BC;
     color:#ffffff;
@@ -2853,42 +2835,34 @@ export const emailTemplates = {
     Order Details
     </th>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Sales Executive</td>
     <td style="padding:10px;border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Sales Executive Email</td>
     <td style="padding:10px;border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Customer Company Name</td>
     <td style="padding:10px;border:1px solid #ddd;">${companyName}</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Customer Contact Email</td>
     <td style="padding:10px;border:1px solid #ddd;">${contactEmail}</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Shipped Date</td>
     <td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(shippedDate)}</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Days Since Shipped</td>
     <td style="padding:10px;border:1px solid #ddd;">25</td>
     </tr>
-
     <tr>
     <td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Returned Tracking</td>
     <td style="padding:10px;border:1px solid #ddd;">${returnTracking}</td>
     </tr>
-
     </table>
     </td>
     </tr>
@@ -2901,7 +2875,6 @@ export const emailTemplates = {
     Shipping Details
     </th>
     </tr>
-
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Company Name</td><td style="padding:10px;border:1px solid #ddd;">${companyName}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Contact Name</td><td style="padding:10px;border:1px solid #ddd;">${contactName}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Email Address</td><td style="padding:10px;border:1px solid #ddd;">${contactEmail}</td></tr>
@@ -2910,7 +2883,6 @@ export const emailTemplates = {
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">State</td><td style="padding:10px;border:1px solid #ddd;">${state}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Zip</td><td style="padding:10px;border:1px solid #ddd;">${zip}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Desired Demo Delivery Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td></tr>
-
     </table>
     </td>
     </tr>
@@ -2923,19 +2895,15 @@ export const emailTemplates = {
     Opportunity Details
     </th>
     </tr>
-
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Device Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${deviceUnits}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Budget Per Device</td><td style="padding:10px;border:1px solid #ddd;">${budgetPerDevice}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Revenue Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${revenue}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">INGRAM Account</td><td style="padding:10px;border:1px solid #ddd;">${ingramAccount}</td></tr>
-
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Quote #</td><td style="padding:10px;border:1px solid #ddd;">${quoteNumber}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Competitive Opportunity</td><td style="padding:10px;border:1px solid #ddd;">${competitiveOpportunity}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Estimated Close Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td></tr>
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">5G SIM Required</td><td style="padding:10px;border:1px solid #ddd;">${wants5gSim || "No"}</td></tr>
-
     <tr><td style="padding:10px;border:1px solid #ddd;background:#f8fafb;">Segment</td><td style="padding:10px;border:1px solid #ddd;">${segment}</td></tr>
-
     </table>
     </td>
     </tr>
@@ -2958,15 +2926,12 @@ export const emailTemplates = {
     </tr>
 
     </table>
-
     </td>
     </tr>
     </table>
     </div>
     `
-
     };
-
     },
 
     returnReminderEmail: ({
@@ -3305,8 +3270,9 @@ export const emailTemplates = {
             The Ingram Micro Surface Team`,
 
             html: `
-    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-        <table width="100%" cellpadding="0" cellspacing="0">
+
+            <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+            <table width="100%" cellpadding="0" cellspacing="0">
             <tr>
                 <td align="center">
                     <table width="720" cellpadding="0" cellspacing="0"
