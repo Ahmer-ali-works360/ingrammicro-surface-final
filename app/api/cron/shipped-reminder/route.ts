@@ -1,6 +1,6 @@
 //src/app/api/cron/shipped-reminder/route.ts
 
-import { emailTemplates, sendEmail } from "@/lib/email";
+import { emailTemplates,  sendCronEmail  } from "@/lib/email";
 import { ReturnReminderEmail, ShippedEmail } from "@/lib/emailconst";
 import { supabase } from "@/lib/supabase/client";
 import { NextResponse } from "next/server";
@@ -99,7 +99,7 @@ export async function GET() {
         ...ReturnReminderEmail,
       ].filter(Boolean);
 
-      await sendEmail({
+      await sendCronEmail({
         to: `ahmer.ali@works360.com`,
         subject: template.subject,
         text: template.text,
