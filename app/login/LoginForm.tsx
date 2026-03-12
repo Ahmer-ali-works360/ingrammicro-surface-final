@@ -197,20 +197,24 @@ export default function LoginForm() {
   };
 
   return (
-   <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd] min-h-screen">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2">
+  //  <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+        
 
         {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
-         <div className="relative min-h-[500px] lg:min-h-screen overflow-hidden">
+       {/* <div className="bg-gray text-white p-10 flex flex-col justify-center"> */}
+<div className="overflow-hidden">
           <img
             src="/image 64.png"
             alt="Login visual"
-            className="absolute inset-0 w-full h-full object-cover"
+            className="w-full h-full object-cover"
           />
         </div>
 
-        {/* ── RIGHT DIV — Login Form (same style as Register) ── */}
-                <div className="bg-white border-2 rounded-lg sm:m-12 m-5 sm:p-10 p-8">
+        {/* ── RIGHT DIV  */}
+        <div className="bg-white border-2 rounded-lg sm:m-12 m-5 sm:p-10 p-8">
+          
+                  
           <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Login</h2>
 
           <form onSubmit={signin} className="space-y-4">
@@ -278,6 +282,6 @@ export default function LoginForm() {
         </div>
 
       </div>
-    </div>
+    // </div>
   );
 }
