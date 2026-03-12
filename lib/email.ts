@@ -3976,4 +3976,110 @@ export const emailTemplates = {
     </div>
         `,
     }),
+
+    eolSubmissionEmail: ({
+        submittedBy,
+        submissionDate,
+        items,
+        note,
+    }: {
+        submittedBy: string;
+        submissionDate: string;
+        note: string;
+        items: Array<{
+            product_name: string;
+            sku: string;
+            quantity: number;
+            address: string;
+        }>;
+    }) => {
+        const itemRows = items.map((item, index) => `
+            <tr>
+                <td style="padding:10px; border:1px solid #ddd; text-align:center;">${index + 1}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.product_name}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.sku}</td>
+                <td style="padding:10px; border:1px solid #ddd; text-align:center;">${item.quantity}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.address}</td>
+            </tr>
+        `).join('');
+
+        const itemsText = items.map((item, i) =>
+            `${i + 1}. ${item.product_name} | SKU: ${item.sku} | Qty: ${item.quantity} | Address: ${item.address}`
+        ).join('\n');
+
+        return {
+            subject: `New EOL Submission | Ingram Micro Surface`,
+            text: `New EOL Device Submission | Ingram Micro Surface
+    Submitted By: ${submittedBy}
+    Date: ${submissionDate}
+    Note: ${note || '-'}
+
+    ITEMS
+    ${itemsText}
+
+    Best regards,
+    The Ingram Micro Surface Team`,
+            html: `
+    <div style="font-family:'Inter',sans-serif;background-color:#ffffff;padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr><td align="center">
+
+    <table width="720" cellpadding="0" cellspacing="0"
+        style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid black;">
+
+        <tr>
+            <td style="background:#1D76BC;padding:32px 30px;text-align:center;">
+                <h1 style="color:#ffffff;margin:0;font-size:20px;font-weight:500;">
+                    New EOL Submission | Ingram Micro Surface
+                </h1>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:24px 30px 0;text-align:center;">
+                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+                    style="width:220px;" />
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:30px;color:#333;">
+                <h2 style="color:#1D76BC;margin:0 0 16px;font-size:18px;font-weight:500;">
+                    EOL Device Submission
+                </h2>
+                <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
+                    <strong>Submitted By:</strong> ${submittedBy}
+                </p>
+                <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
+                    <strong>Date:</strong> ${submissionDate}
+                </p>
+                <p style="font-size:14px;color:#4a5568;margin:0 0 24px;">
+                    <strong>Note:</strong> ${note || '-'}
+                </p>
+            </td>
+        </tr>
+
+        <tr>
+            <td style="padding:0 30px 30px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                    <tr style="background:#1D76BC;color:#ffffff;">
+                        <th style="padding:10px;border:1px solid #ddd;text-align:center;width:40px;">#</th>
+                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Product Name</th>
+                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">SKU</th>
+                        <th style="padding:10px;border:1px solid #ddd;text-align:center;">Qty</th>
+                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Address</th>
+                    </tr>
+                    ${itemRows}
+                </table>
+            </td>
+        </tr>
+
+    </table>
+
+    </td></tr>
+    </table>
+    </div>
+            `,
+        };
+    },
 };

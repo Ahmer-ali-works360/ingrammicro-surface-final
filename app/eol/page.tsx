@@ -3,20 +3,20 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../context/AuthContext";
-import { createClient } from "@supabase/supabase-js";
 import { motion } from "framer-motion";
 import { Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
-
+import { sendEmail, emailTemplates, formatEmailDate } from "@/lib/email";
 
 export default function Page() {
     const { profile, isLoggedIn, loading, user } = useAuth();
     const router = useRouter();
 
     const [items, setItems] = useState([
-        { product_name: "", sku: "", quantity: 1, address: "", additional_note: "" },
+        { product_name: "", sku: "", quantity: 0, address: "" },
     ]);
+    const [note, setNote] = useState("");
     const [submitting, setSubmitting] = useState(false);
 
     useEffect(() => {
@@ -29,7 +29,7 @@ export default function Page() {
     const addRow = () => {
         setItems((prev) => [
             ...prev,
-            { product_name: "", sku: "", quantity: 1, address: "", additional_note: "" },
+            { product_name: "", sku: "", quantity: 0, address: "" },
         ]);
     };
 
@@ -66,7 +66,7 @@ export default function Page() {
                 sku: i.sku,
                 quantity: i.quantity,
                 address: i.address,
-                additional_note: i.additional_note,
+                additional_note: note,
             }));
 
             const { error: itemError } = await supabase
@@ -75,10 +75,33 @@ export default function Page() {
 
             if (itemError) throw itemError;
 
-            toast.success("EOL request submitted successfully");
-            setItems([
-                { product_name: "", sku: "", quantity: 1, address: "", additional_note: "" },
+            // 3️⃣ Emails
+            const submissionDate = formatEmailDate(new Date().toISOString());
+            const emailData = emailTemplates.eolSubmissionEmail({
+                submittedBy: user.email,
+                submissionDate,
+                items,
+                 note,
+            });
+
+            void Promise.all([
+                sendEmail({
+                    to: user.email,
+                    subject: emailData.subject,
+                    text: emailData.text,
+                    html: emailData.html,
+                }),
+                sendEmail({
+                    to: `ahmer.ali@works360.com`,
+                    subject: emailData.subject,
+                    text: emailData.text,
+                    html: emailData.html,
+                }),
             ]);
+
+            toast.success("EOL request submitted successfully");
+            setItems([{ product_name: "", sku: "", quantity: 1, address: "" }]);
+            setNote("");
         } catch (e: any) {
             toast.error(e.message);
         } finally {
@@ -126,7 +149,6 @@ export default function Page() {
                                             <Plus size={14} /> Add
                                         </button>
                                     )}
-
                                     {items.length > 1 && (
                                         <button
                                             onClick={() => removeRow(index)}
@@ -142,13 +164,10 @@ export default function Page() {
                                         <label className="text-sm text-gray-600">Product Name</label>
                                         <input
                                             value={item.product_name}
-                                            onChange={(e) =>
-                                                updateItem(index, "product_name", e.target.value)
-                                            }
+                                            onChange={(e) => updateItem(index, "product_name", e.target.value)}
                                             className="mt-1 w-full border rounded-xl px-3 py-2"
                                         />
                                     </div>
-
                                     <div>
                                         <label className="text-sm text-gray-600">SKU</label>
                                         <input
@@ -157,50 +176,41 @@ export default function Page() {
                                             className="mt-1 w-full border rounded-xl px-3 py-2"
                                         />
                                     </div>
-
                                     <div>
                                         <label className="text-sm text-gray-600">Quantity</label>
                                         <input
                                             type="number"
                                             value={item.quantity}
-                                            onChange={(e) =>
-                                                updateItem(index, "quantity", Number(e.target.value))
-                                            }
+                                            onChange={(e) => updateItem(index, "quantity", Number(e.target.value))}
                                             className="mt-1 w-full border rounded-xl px-3 py-2"
                                         />
                                     </div>
-
                                     <div>
                                         <label className="text-sm text-gray-600">Address</label>
                                         <input
                                             value={item.address}
-                                            onChange={(e) =>
-                                                updateItem(index, "address", e.target.value)
-                                            }
+                                            onChange={(e) => updateItem(index, "address", e.target.value)}
                                             className="mt-1 w-full border rounded-xl px-3 py-2"
                                         />
                                     </div>
-                                </div>
-
-                                <div className="mt-4">
-                                    <label className="text-sm text-gray-600">
-                                        Additional Note
-                                    </label>
-                                    <textarea
-                                        value={item.additional_note}
-                                        onChange={(e) =>
-                                            updateItem(index, "additional_note", e.target.value)
-                                        }
-                                        className="mt-1 w-full border rounded-xl px-3 py-2"
-                                        rows={3}
-                                    />
                                 </div>
                             </motion.div>
                         ))}
                     </div>
 
+                    {/* Common Note */}
+                    <div className="mt-6">
+                        <label className="text-sm text-gray-600">Additional Note</label>
+                        <textarea
+                            value={note}
+                            onChange={(e) => setNote(e.target.value)}
+                            className="mt-1 w-full border rounded-xl px-3 py-2"
+                            rows={3}
+                        />
+                    </div>
+
                     {/* Actions */}
-                    <div className="flex items-center justify-end mt-6">
+                    <div className="flex items-center justify-center mt-6">
                         <button
                             onClick={handleSubmit}
                             disabled={submitting}
