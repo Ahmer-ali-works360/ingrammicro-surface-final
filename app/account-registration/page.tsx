@@ -1,3 +1,5 @@
+// src/app/account-registration/page.tsx
+
 "use client";
 
 import { emailTemplates, sendEmail } from "@/lib/email";
@@ -100,7 +102,7 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full h-full grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+    <div className="w-full flex-1 grid grid-cols-1 lg:grid-cols-2">
 
       {/* Left Info Panel */}
       <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-8 lg:p-10 flex flex-col justify-center overflow-hidden">
