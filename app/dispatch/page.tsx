@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Plus, Trash2, MapPin } from "lucide-react";
 import { supabase } from "@/lib/supabase/client";
 import { toast } from "sonner";
+import { sendEmail, emailTemplates, formatEmailDate } from "@/lib/email"
 
 export default function Page() {
     const { profile, isLoggedIn, loading, user } = useAuth();
@@ -16,7 +17,7 @@ export default function Page() {
     const [shipmentDate, setShipmentDate] = useState("");
 
     const [items, setItems] = useState([
-        { product_name: "", product_sku: "", product_quantity: 1, inventory_owner: "" },
+        { product_name: "", product_sku: "", product_quantity: 0, inventory_owner: "" },
     ]);
 
     const [submitting, setSubmitting] = useState(false);
@@ -31,7 +32,7 @@ export default function Page() {
     const addRow = () => {
         setItems((prev) => [
             ...prev,
-            { product_name: "", product_sku: "", product_quantity: 1, inventory_owner: "" },
+            { product_name: "", product_sku: "", product_quantity: 0, inventory_owner: "" },
         ]);
     };
 
@@ -78,12 +79,39 @@ export default function Page() {
 
             if (itemError) throw itemError;
 
+
+            const emailData = emailTemplates.dispatchSubmissionEmail({
+    submittedBy: user.email,
+    submissionDate: new Date().toLocaleDateString('en-US', {
+        day: '2-digit', month: 'short', year: 'numeric'
+    }),
+    trackingNumber: trackingNumber || '-',
+    shipmentDate: shipmentDate || '-',
+    items,
+});
+
+// User ko email
+void Promise.all([
+    sendEmail({
+        to: user.email,
+        subject: emailData.subject,
+        text: emailData.text,
+        html: emailData.html,
+    }),
+    sendEmail({
+        to: `ahmer.ali@works360.com`,
+        subject: emailData.subject,
+        text: emailData.text,
+        html: emailData.html,
+    }),
+])
+
             toast.success("Dispatch submitted successfully");
 
             setTrackingNumber("");
             setShipmentDate("");
             setItems([
-                { product_name: "", product_sku: "", product_quantity: 1, inventory_owner: "" },
+                { product_name: "", product_sku: "", product_quantity: 0, inventory_owner: "" },
             ]);
         } catch (e: any) {
             toast.error(e.message);
@@ -111,7 +139,7 @@ export default function Page() {
                                 Send the devices on following address
                             </p>
                             <p className="text-sm text-gray-700 leading-relaxed">
-                                Works360 LABS (TD SYNNEX SURFACE)<br />
+                                Works360 LABS  (Ingrammicro Surface)<br />
                                 15345 Anacapa Rd Unit A<br />
                                 Victorville, CA 92392<br />
                                 (442)255-4006
@@ -228,7 +256,7 @@ export default function Page() {
                     </div>
 
                     {/* Submit */}
-                    <div className="flex justify-end mt-6">
+                    <div className="flex items-center justify-center mt-6">
                         <button
                             onClick={handleSubmit}
                             disabled={submitting}
