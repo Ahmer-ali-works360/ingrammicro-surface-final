@@ -204,62 +204,63 @@ export default function Page() {
     }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 min-h-[600px]">
+return (
+  <div className="flex-1 flex w-full bg-[#fbfbfd] min-h-screen">
+    <div className="w-full grid grid-cols-1 lg:grid-cols-2">
 
-        {/* Left: Blue Panel */}
-        <div
-          className="md:w-7/12 w-full flex flex-col justify-center px-10 py-12 rounded-2xl"
-          style={{
-            background: "linear-gradient(135deg, #1D76BC 0%, #1a5fa0 60%, #154d85 100%)",
-          }}
-        >
-          <h2 className="text-3xl font-bold text-white leading-tight mb-4">
-            Welcome to Ingram Micro and Microsoft Surface
-          </h2>
-          <p className="text-blue-100 text-sm mb-10 leading-relaxed">
-            Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
-          </p>
+      {/* ── LEFT DIV — Blue gradient panel ── */}
+      <div
+        className="flex flex-col justify-center px-12 py-16 min-h-[500px] lg:min-h-screen"
+        style={{
+          background: "linear-gradient(135deg, #1D76BC 0%, #1a5fa0 60%, #154d85 100%)",
+        }}
+      >
+        <h2 className="text-3xl font-bold text-white leading-tight mb-4">
+          Welcome to Ingram Micro and Microsoft Surface
+        </h2>
+        <p className="text-blue-100 text-sm mb-10 leading-relaxed">
+          Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
+        </p>
 
-          <div className="space-y-7">
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                </svg>
-                <p className="text-white font-bold text-base">Register</p>
-              </div>
-              <p className="text-blue-100 text-sm">Fill out a quick registration form if not registered yet.</p>
+        <div className="space-y-7">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+              </svg>
+              <p className="text-white font-bold text-base">Register</p>
             </div>
+            <p className="text-blue-100 text-sm">Fill out a quick registration form if not registered yet.</p>
+          </div>
 
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p className="text-white font-bold text-base">Approval</p>
-              </div>
-              <p className="text-blue-100 text-sm">Your registration will be approved by the Program Manager.</p>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <p className="text-white font-bold text-base">Approval</p>
             </div>
+            <p className="text-blue-100 text-sm">Your registration will be approved by the Program Manager.</p>
+          </div>
 
-            <div>
-              <div className="flex items-center gap-2 mb-1">
-                <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                </svg>
-                <p className="text-white font-bold text-base">Login</p>
-              </div>
-              <p className="text-blue-100 text-sm">Sign in to your account once it&apos;s approved.</p>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-white shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+              </svg>
+              <p className="text-white font-bold text-base">Login</p>
             </div>
+            <p className="text-blue-100 text-sm">Sign in to your account once it&apos;s approved.</p>
           </div>
         </div>
+      </div>
 
-        {/* Right: Form Panel */}
-        <div className="md:w-5/12 w-full flex flex-col justify-center px-10 py-12 bg-white rounded-2xl shadow-sm">
+      {/* ── RIGHT DIV — Form ── */}
+      <div className="flex items-center justify-center bg-[#fbfbfd] py-12 px-8">
+        <div className="bg-white border-2 rounded-lg w-full max-w-md p-10">
           <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Registration</h2>
 
-          <form onSubmit={signup} className="space-y-4">
+<form onSubmit={signup} className="space-y-4">
             {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -332,15 +333,16 @@ export default function Page() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-lg bg-[#1D76BC] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-sm bg-[#1D76BC] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Signing up..." : "Register"}
               </button>
             </div>
           </form>
         </div>
-
       </div>
+
     </div>
-  );
+  </div>
+);
 }

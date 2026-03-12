@@ -197,20 +197,20 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10">
-      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4 min-h-[500px]">
+   <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd] min-h-screen">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2">
 
         {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
-        <div className="md:w-7/12 w-full rounded-2xl overflow-hidden">
+         <div className="relative min-h-[500px] lg:min-h-screen overflow-hidden">
           <img
             src="/image 64.png"
             alt="Login visual"
-            className="w-full h-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
           />
         </div>
 
         {/* ── RIGHT DIV — Login Form (same style as Register) ── */}
-        <div className="md:w-5/12 w-full flex flex-col justify-center px-10 py-12 bg-white rounded-2xl shadow-sm">
+                <div className="bg-white border-2 rounded-lg sm:m-12 m-5 sm:p-10 p-8">
           <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Login</h2>
 
           <form onSubmit={signin} className="space-y-4">
