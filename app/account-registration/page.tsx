@@ -105,7 +105,7 @@ export default function Page() {
     <div className="w-full flex-1 grid grid-cols-1 lg:grid-cols-2">
 
       {/* Left Info Panel */}
-      <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-8 lg:p-10 flex flex-col justify-center overflow-hidden">
+      <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-6 lg:p-8 flex flex-col justify-center overflow-hidden">
         <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold mb-3 max-w-xl">
           Welcome to Ingram Micro and Microsoft Surface
         </h2>
@@ -131,7 +131,7 @@ export default function Page() {
 
       {/* Right: Form Panel */}
       <div className="bg-white flex items-center justify-center overflow-hidden p-4">
-        <div className="w-full max-w-md border-2 rounded-lg p-6 lg:p-8">
+        <div className="w-full max-w-md border-2 rounded-lg p-5 lg:p-6">
           <h2 className="text-2xl font-semibold text-gray-900 text-center mb-5">Registration</h2>
 
           <form onSubmit={signup} className="space-y-3">
