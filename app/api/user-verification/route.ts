@@ -89,14 +89,33 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'Invalid login credentials' }, { status: 401 })
         }
 
-        // ✅ WP password verify karo
-        const hasher = new PasswordHash(8, true)
-        const ok = hasher.checkPassword(password, wp.hash)
-        console.log('wp-upgrade:hashCheck', { email, ok })
+// ✅ WP password verify karo — $P$ aur $wp$ dono support
+let ok = false
 
-        if (!ok) {
-            return NextResponse.json({ error: 'Invalid login credentials' }, { status: 401 })
-        }
+if (wp.hash.startsWith('$P$') || wp.hash.startsWith('$H$')) {
+    // Purana phpass format
+    const hasher = new PasswordHash(8, true)
+    ok = hasher.checkPassword(password, wp.hash)
+} else if (wp.hash.startsWith('$wp$')) {
+    const bcrypt = await import('bcryptjs')
+    const crypto = await import('crypto')
+    
+    // WordPress exact algorithm: base64(hmac_sha384(password, 'wp-sha384'))
+    const prehashed = Buffer.from(
+        crypto.default.createHmac('sha384', 'wp-sha384')
+            .update(password.trim())
+            .digest()
+    ).toString('base64')
+    
+    const bcryptHash = wp.hash.replace('$wp$2y$', '$2y$')
+    ok = await bcrypt.default.compare(prehashed, bcryptHash)
+}
+
+console.log('wp-upgrade:hashCheck', { email, ok, format: wp.hash.substring(0, 4) })
+
+if (!ok) {
+    return NextResponse.json({ error: 'Invalid login credentials' }, { status: 401 })
+}
 
         // ✅ Auth user dhundo — pagination loop ki jagah direct email filter
         const emailLower = String(email).toLowerCase()

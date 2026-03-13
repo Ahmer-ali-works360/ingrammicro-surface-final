@@ -9,6 +9,8 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useAuth } from "../context/AuthContext";
 import { logger, logAuth, logError, logSuccess } from "@/lib/logger";
+import { LuLogIn } from "react-icons/lu";
+import { IoCheckmarkSharp, IoPersonAdd } from "react-icons/io5";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -197,90 +199,124 @@ export default function LoginForm() {
   };
 
   return (
-  //  <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
+  
+            <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[800px]">
         
 
         {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
        {/* <div className="bg-gray text-white p-10 flex flex-col justify-center"> */}
-<div className="overflow-hidden">
+      {/* <div className="overflow-hidden">
           <img
             src="/image 64.png"
             alt="Login visual"
             className="w-full h-full object-cover"
           />
+        </div> */}
+
+
+       {/* Left Info Panel */}
+        <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-10 flex flex-col justify-center">
+          <h2 className="text-4xl font-semibold mb-4">Welcome to Ingram Micro and Microsoft Surface</h2>
+          <p className="text-lg text-white/90 mb-8 max-w-lg">
+            Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
+          </p>
+
+          <div className="space-y-6 text-sm">
+            <div>
+              <div className="font-semibold text-xl flex gap-2 items-center"><IoPersonAdd /> Register</div>
+              <div className="text-white/90 text-lg mt-2">Fill out a quick registration form if not registered yet.</div>
+            </div>
+
+            <div>
+              <div className="font-semibold text-xl flex gap-2 items-center"><IoCheckmarkSharp /> Approval</div>
+              <div className="text-white/90 text-lg mt-2">Your registration will be approved by the Program Manager.</div>
+            </div>
+
+            <div>
+              <div className="font-semibold text-xl flex gap-2 items-center"><LuLogIn /> Login</div>
+              <div className="text-white/90 text-lg mt-2">Sign in to your account once it’s approved.</div>
+            </div>
+          </div>
         </div>
 
-        {/* ── RIGHT DIV  */}
-        <div className="bg-white border-2 rounded-lg sm:m-12 m-5 sm:p-10 p-8">
-          
-                  
-          <h2 className="text-3xl font-semibold text-gray-900 text-center mb-8">Login</h2>
 
-          <form onSubmit={signin} className="space-y-4">
 
-            {/* Email */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-              <input
-                id="email"
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
-                  submitted && errors.email ? "border-red-500 bg-red-50" : "border-transparent"
-                }`}
-              />
-              {submitted && errors.email && (
-                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.email}</div>
-              )}
-            </div>
+        {/* Right Form */}
+        <div className="flex items-center justify-center p-6 lg:p-12">
+          <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-24 p-8">
+            <h2 className="text-center text-2xl font-medium text-gray-800 mb-8">
+              Login
+            </h2>
 
-            {/* Password */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className={`w-full rounded-lg border bg-gray-100 px-4 py-2.5 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:bg-white transition ${
-                  submitted && errors.password ? "border-red-500 bg-red-50" : "border-transparent"
-                }`}
-              />
-              {submitted && errors.password && (
-                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">{errors.password}</div>
-              )}
-            </div>
+            <form onSubmit={signin} className="space-y-5">
+              {/* Email */}
+              <div className="my-8">
+                <label className="font-semibold text-gray-700 text-sm">
+                  Email
+                </label>
+                <input
+                  type="text"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value.toLowerCase())}
+                  className={`mt-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 transition ${submitted && errors.email ? "border-red-500" : "border-gray-300"
+                    }`}
+                />
+                {submitted && errors.email && (
+                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">
+                    {errors.email}
+                  </div>
+                )}
+              </div>
 
-            {/* Buttons */}
-            <div className="flex w-full gap-3 pt-2">
-              <button
-                type="submit"
-                disabled={isloading}
-                className="flex-1 rounded-lg bg-[#1D76BC] px-6 py-3 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isloading ? "Please wait..." : "Login"}
-              </button>
+              {/* Password */}
+              <div className="my-8">
+                <label className="font-semibold text-gray-700 text-sm">
+                  Password
+                </label>
+                <input
+                  type="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className={`mt-2 w-full rounded-md border px-3 py-2 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 transition ${submitted && errors.password ? "border-red-500" : "border-gray-300"
+                    }`}
+                />
+                {submitted && errors.password && (
+                  <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-1">
+                    {errors.password}
+                  </div>
+                )}
+              </div>
+
+              {/* Buttons */}
+              <div className="flex gap-4 pt-2 my-8">
+                <button
+                  type="submit"
+                  disabled={isloading}
+                  className="flex-1 rounded-md bg-[#1D76BC] cursor-pointer px-6 py-3 font-semibold text-white hover:bg-[#1660a0] disabled:opacity-50"
+                >
+                  {isloading ? "Please wait..." : "Login"}
+                </button>
+
+                <Link
+                  href={"/account-registration"}
+                  className="flex-1 flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50"
+                >
+                  Register
+                </Link>
+              </div>
+
               <Link
-                href="/account-registration"
-                className="flex-1 flex items-center justify-center rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition-all hover:bg-gray-50 hover:shadow-md"
+                href={"/password-reset"}
+                className="block text-center text-sm text-gray-500 hover:text-[#003031] pt-2"
               >
-                Register
+                Forgot your password?
               </Link>
-            </div>
-
-            {/* Forgot password */}
-            <Link
-              href="/password-reset"
-              className="flex justify-center text-sm font-normal text-[#7c7c7c] hover:text-[#1D76BC] transition-colors mt-2"
-            >
-              Forgot your password?
-            </Link>
-
-          </form>
+            </form>
+          </div>
         </div>
 
+      </div>
       </div>
     // </div>
   );
