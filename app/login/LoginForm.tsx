@@ -200,9 +200,11 @@ export default function LoginForm() {
 
   return (
   
-            <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
-      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[800px]">
+      //       <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      // <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[800px]">
         
+      <div className="h-screen w-full bg-[#fbfbfd] overflow-hidden">
+  <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
 
         {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
        {/* <div className="bg-gray text-white p-10 flex flex-col justify-center"> */}
@@ -243,7 +245,8 @@ export default function LoginForm() {
 
 
         {/* Right Form */}
-        <div className="flex items-center justify-center p-6 lg:p-12">
+        <div className="flex items-center justify-center p-6 lg:p-12 h-full overflow-y-auto">
+
           <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-24 p-8">
             <h2 className="text-center text-2xl font-medium text-gray-800 mb-8">
               Login
