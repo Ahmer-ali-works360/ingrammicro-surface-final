@@ -198,27 +198,15 @@ export default function LoginForm() {
     router.push(redirectPath);
   };
 
-  return (
-  
-      //       <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
-      // <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[800px]">
-        
-      <div className="h-screen w-full bg-[#fbfbfd] overflow-hidden">
-  <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 h-full">
-
-        {/* ── LEFT DIV — Blue gradient panel (same as Register) ── */}
-       {/* <div className="bg-gray text-white p-10 flex flex-col justify-center"> */}
-      {/* <div className="overflow-hidden">
-          <img
-            src="/image 64.png"
-            alt="Login visual"
-            className="w-full h-full object-cover"
-          />
-        </div> */}
 
 
-       {/* Left Info Panel */}
-        <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-10 flex flex-col justify-center">
+
+return (
+    <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      <div className="w-full grid grid-cols-1 lg:grid-cols-2 gap-0 items-stretch min-h-[800px]">
+
+        {/* Left Info Panel */}
+        <div className="bg-linear-to-b from-[#1D76BC] to-[#1660a0] text-white p-10 flex flex-col justify-center">
           <h2 className="text-4xl font-semibold mb-4">Welcome to Ingram Micro and Microsoft Surface</h2>
           <p className="text-lg text-white/90 mb-8 max-w-lg">
             Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
@@ -242,11 +230,8 @@ export default function LoginForm() {
           </div>
         </div>
 
-
-
         {/* Right Form */}
-        <div className="flex items-center justify-center p-6 lg:p-12 h-full overflow-y-auto">
-
+        <div className="flex items-center justify-center p-6 lg:p-12">
           <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-24 p-8">
             <h2 className="text-center text-2xl font-medium text-gray-800 mb-8">
               Login
@@ -311,7 +296,7 @@ export default function LoginForm() {
 
               <Link
                 href={"/password-reset"}
-                className="block text-center text-sm text-gray-500 hover:text-[#003031] pt-2"
+                className="block text-center text-sm text-gray-500 hover:text-[#1660a0] pt-2"
               >
                 Forgot your password?
               </Link>
@@ -320,7 +305,8 @@ export default function LoginForm() {
         </div>
 
       </div>
-      </div>
-    // </div>
+    </div>
   );
+
+
 }
