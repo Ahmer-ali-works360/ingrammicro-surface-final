@@ -76,6 +76,7 @@ const ProductSkeleton = () => {
                         </div>
 
                         {/* Right Column - Info Skeleton */}
+
                         <div>
                             <Skeleton active paragraph={{ rows: 2 }} />
                             <div className="my-8">
@@ -508,7 +509,7 @@ export default function Page() {
                 <button
                     onClick={() => handleAddToCart(product.id)}
                     disabled={isUpdating && addingProductId === product.id}
-                    className="flex items-center justify-center gap-2 px-5 py-2 cursor-pointer border border-[#1D76BC] text-[#1D76BC] rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
+                    className="flex items-center justify-center gap-2 px-9 py-2 cursor-pointer border bg-[#1570EF] text-white rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                 >
                     <ShoppingCart className="h-4 w-4" />
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
@@ -583,7 +584,7 @@ export default function Page() {
                         handleAddToCart(product.id);
                     }}
                     disabled={isUpdating && addingProductId === product.id}
-                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
+                    className="sm:px-8 px-5 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                 >
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                 </button>
@@ -1002,7 +1003,7 @@ export default function Page() {
                         {/* Left Column - Product Images */}
                         <div>
                             {galleryImages.length > 0 ? (
-                                <div className="relative rounded-lg overflow-hidden mb-4">
+                                <div className="relative rounded-lg overflow-hidden mb-4 border border-gray-200">
                                     {shopManager === profile?.role ? (
                                         <div className="absolute top-8 left-5 z-10">
                                             <div className="flex gap-2">
@@ -1089,14 +1090,14 @@ export default function Page() {
                                                     <ChevronRight className="h-6 w-6" />
                                                 </button>
 
-                                                <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full z-10">
+                                                {/* <div className="absolute bottom-4 right-4 bg-black/70 text-white text-xs px-3 py-1.5 rounded-full z-10">
                                                     {selectedImage + 1} / {galleryImages.length}
-                                                </div>
+                                                </div> */}
                                             </>
                                         )}
                                     </div>
 
-                                    {product?.five_g_Enabled && (
+                                    {/* {product?.five_g_Enabled && (
                                         <div className="absolute top-4 right-4 z-10">
                                             <div className="bg-white/90 backdrop-blur-sm rounded-full p-2">
                                                 <img
@@ -1106,7 +1107,7 @@ export default function Page() {
                                                 />
                                             </div>
                                         </div>
-                                    )}
+                                    )} */}
                                 </div>
                             ) : (
                                 <div className="relative rounded-lg overflow-hidden mb-4 h-96 md:h-125 bg-gray-100 flex items-center justify-center">
@@ -1125,7 +1126,7 @@ export default function Page() {
                                                     carouselRef.current.goTo(index);
                                                 }
                                             }}
-                                            className={`relative h-20 rounded-lg overflow-hidden border-2 ${selectedImage === index ? 'border-[#0e4647]' : 'border-transparent'}`}
+                                            className={`relative h-20 rounded-lg overflow-hidden border-2 ${selectedImage === index ? 'border-[#0e4647]' : 'border-gray-200'}`}
                                         >
                                             <img
                                                 src={image}
@@ -1144,8 +1145,17 @@ export default function Page() {
 
                         {/* Right Column - Product Info */}
                         <div>
-                            <div className="mb-6 border-b pb-3">
-                                <div className="flex items-center justify-between mb-2">
+                            <div className="mb-3 pb-2">
+                                <div className="flex flex-col mb-2">
+                                    {product?.five_g_Enabled && (
+                                        <div className="mb-2">
+                                            <img
+                                                src="/5g-logo.png"
+                                                alt="5G Enabled"
+                                                className="w-10 h-10 object-contain"
+                                            />
+                                        </div>
+                                    )}
                                     <h1 className="text-xl md:text-2xl sm:text-lg font-semibold text-gray-900">
                                         {product?.product_name}
                                     </h1>
@@ -1156,18 +1166,18 @@ export default function Page() {
                             </div>
 
                             {/* Description Points with ID for Read More button */}
-                            <div id="product-description" className="border-b mb-2">
+                            <div id="product-description" className=" mb-2">
                                 {descriptionPoints.length > 0 && (
                                     <div className="mb-6">
                                         <ul className="space-y-2">
                                             {descriptionPoints.map((point, index) => (
                                                 <li key={index} className="flex items-center">
-                                                    <span className="mr-2 text-[#1D76BC] text-lg leading-none">•</span>
+                                                    <span className="mr-2 text-black text-lg leading-none">•</span>
                                                     <span className="text-gray-700 text-sm">{point}</span>
                                                 </li>
                                             ))}
                                         </ul>
-                                        <h3 className={`text-sm font-semibold my-7 ${product?.stock_quantity === 0 ? "text-red-500" : "text-green-500"}`}>
+                                        <h3 className={`text-sm font-semibold my-7 ${product?.stock_quantity === 0 ? "text-red-500" : "text-gray-500"}`}>
                                             {product?.stock_quantity} / {product?.total_inventory} In Stock
                                         </h3>
                                     </div>
@@ -1176,7 +1186,28 @@ export default function Page() {
 
                             {product?.stock_quantity != 0 ? (
                                 <div className="space-y-4">
-                                    {renderMainActionButton()}
+<div className="flex items-center gap-3">
+    <select
+        value={quantity}
+        onChange={(e) => {
+            const selected = Number(e.target.value);
+            if (selected > 1) {
+                toast.error("You cannot add more than 1 of this product.", {
+                    style: { background: "black", color: "white" },
+                });
+            } else {
+                setQuantity(selected);
+            }
+        }}
+        className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
+    >
+        {[1, 2, 3, 4, 5].map((num) => (
+            <option key={num} value={num}>{num}</option>
+        ))}
+    </select>
+    {renderMainActionButton()}
+</div>
+                                   
                                 </div>
                             ) : (
                                 <div className="space-y-4">
@@ -1243,7 +1274,11 @@ export default function Page() {
                 {/* Related Products */}
                 {relatedProducts.length > 0 && (
                     <div className="mt-8">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6 sm:mx-0 mx-4">Related Products</h2>
+
+                       <div className="flex items-center gap-4 mb-6 sm:mx-0 mx-4">
+                            <h2 className="text-2xl font-bold text-gray-900 whitespace-nowrap">Related Products</h2>
+                            <div className="flex-1 h-px bg-gray-200"></div>
+                        </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 sm:gap-6 gap-4 sm:mx-0 mx-4">
                             {relatedProducts.map(product => {
                                 if (product.post_status !== "Publish") {
@@ -1251,7 +1286,7 @@ export default function Page() {
                                 }
                                 return (
                                     <Link href={`/product/${product.slug}`} key={product.id}>
-                                        <div className="bg-white border border-gray-300 sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col">
+                                        <div className="bg-gray-50 border border-gray-300 rounded-lg sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col">
                                             {product.stock_quantity == 0 && (
                                                 <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
                                                     Out of stock
