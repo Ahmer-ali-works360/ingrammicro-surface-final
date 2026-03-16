@@ -464,7 +464,7 @@ export default function Page() {
     {/* Proceed to Checkout Button — outside card */}
     <button
         onClick={handleCheckout}
-        className="w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md bg-[#1570EF] hover:bg-[#1660a0] text-white"
+        className="w-full py-4 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md bg-[#1570EF] hover:bg-[#1660a0] text-white"
         disabled={isUpdating || cartItems.length === 0}
     >
         {isUpdating ? 'Processing...' : 'Proceed to Checkout'}
