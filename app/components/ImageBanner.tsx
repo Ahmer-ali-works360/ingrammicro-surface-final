@@ -23,7 +23,7 @@ export default function ImageBanner() {
         {/* Medium and small screens */}
         <div className="lg:hidden">
           <Image
-            src="/description2.png"
+            src="/ingram-mob.png"
             alt="Description for mobile and tablet"
             width={800}
             height={300}
