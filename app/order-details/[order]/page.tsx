@@ -262,16 +262,16 @@
                     }
 
                     const processedOrder: Order = {
-                        ...data[0],
-                        product_id: data[0].product_id,
-                        quantity: data[0].quantity,
-                        product_ids_array: [data[0].product_id],
-                        quantities_array: [data[0].quantity],
-                        products_array: data[0].products ? [data[0].products] : [],
-                        approved_user: data[0].approved_user || undefined,
-                        rejected_user: data[0].rejected_user || undefined,
-                        order_by_user: data[0].order_by_user || undefined,
-                    };
+    ...data[0],
+    product_id: data[0].product_id,
+    quantity: data[0].quantity,
+    product_ids_array: data.map(d => d.product_id),
+    quantities_array: data.map(d => d.quantity),
+    products_array: data.map(d => d.products).filter(Boolean),
+    approved_user: data[0].approved_user || undefined,
+    rejected_user: data[0].rejected_user || undefined,
+    order_by_user: data[0].order_by_user || undefined,
+};
 
                     setOrders([processedOrder]);
 
@@ -299,58 +299,104 @@
             }
         }, [loading, isLoggedIn, profile, isAuthorized]);
 
-        const renderAllProducts = () => {
-            if (!order.products) {
-                return (
-                    <TableRow>
-                        <TableCell colSpan={2} className="text-center">
-                            <span className="text-gray-500">No product found</span>
-                        </TableCell>
-                    </TableRow>
-                );
-            }
+        // const renderAllProducts = () => {
+        //     if (!order.products) {
+        //         return (
+        //             <TableRow>
+        //                 <TableCell colSpan={2} className="text-center">
+        //                     <span className="text-gray-500">No product found</span>
+        //                 </TableCell>
+        //             </TableRow>
+        //         );
+        //     }
 
-            const isEditing = editingField === "product_id" && editingRowId === "product";
+        //     const isEditing = editingField === "product_id" && editingRowId === "product";
 
-            return (
-                <TableRow>
+        //     return (
+        //         <TableRow>
+        //             <TableCell className="w-[85%]">
+        //                 {isEditing ? (
+        //                     <div className="flex items-center gap-2">
+        //                         <Select value={editedValue} onValueChange={setEditedValue}>
+        //                             <SelectTrigger className="flex-1">
+        //                                 <SelectValue placeholder="Select product" />
+        //                             </SelectTrigger>
+        //                             <SelectContent>
+        //                                 {allProducts.map(product => (
+        //                                     <SelectItem key={product.id} value={product.id}>
+        //                                         {product.product_name} ({product.sku})
+        //                                     </SelectItem>
+        //                                 ))}
+        //                             </SelectContent>
+        //                         </Select>
+        //                         <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!(isAdmin || isSMRole)}>Save</Button>
+        //                         <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer" disabled={!(isAdmin || isSMRole)}>Cancel</Button>
+        //                     </div>
+        //                 ) : (
+        //                     <div className="flex items-center justify-between group">
+        //                         <div className="flex items-center gap-2">
+        //                             <span>{order.products?.product_name}</span>
+        //                             {order.products?.sku && <span className="text-xs text-gray-500">(SKU: {order.products.sku})</span>}
+        //                         </div>
+        //                         {(isAdmin || isSMRole) && (
+        //                             <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 cursor-pointer"
+        //                                 onClick={() => { setEditingField("product_id"); setEditedValue(order.product_id || ""); setEditingRowId("product"); }}>
+        //                                 <Pencil className="h-3 w-3" />
+        //                             </Button>
+        //                         )}
+        //                     </div>
+        //                 )}
+        //             </TableCell>
+        //             <TableCell className="w-[15%] border-l text-center">{order.quantity || 0}</TableCell>
+        //         </TableRow>
+        //     );
+        // };
+const renderAllProducts = () => {
+    if (!order.products_array || order.products_array.length === 0) {
+        return (
+            <TableRow>
+                <TableCell colSpan={2} className="text-center">
+                    <span className="text-gray-500">No product found</span>
+                </TableCell>
+            </TableRow>
+        );
+    }
+
+    return (
+        <>
+            {order.products_array.map((product, index) => (
+                <TableRow key={product.id}>
                     <TableCell className="w-[85%]">
-                        {isEditing ? (
+                        <div className="flex items-center justify-between group">
                             <div className="flex items-center gap-2">
-                                <Select value={editedValue} onValueChange={setEditedValue}>
-                                    <SelectTrigger className="flex-1">
-                                        <SelectValue placeholder="Select product" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        {allProducts.map(product => (
-                                            <SelectItem key={product.id} value={product.id}>
-                                                {product.product_name} ({product.sku})
-                                            </SelectItem>
-                                        ))}
-                                    </SelectContent>
-                                </Select>
-                                <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!(isAdmin || isSMRole)}>Save</Button>
-                                <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer" disabled={!(isAdmin || isSMRole)}>Cancel</Button>
-                            </div>
-                        ) : (
-                            <div className="flex items-center justify-between group">
-                                <div className="flex items-center gap-2">
-                                    <span>{order.products?.product_name}</span>
-                                    {order.products?.sku && <span className="text-xs text-gray-500">(SKU: {order.products.sku})</span>}
-                                </div>
-                                {(isAdmin || isSMRole) && (
-                                    <Button size="sm" variant="ghost" className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 cursor-pointer"
-                                        onClick={() => { setEditingField("product_id"); setEditedValue(order.product_id || ""); setEditingRowId("product"); }}>
-                                        <Pencil className="h-3 w-3" />
-                                    </Button>
+                                <span>{product.product_name}</span>
+                                {product.sku && (
+                                    <span className="text-xs text-gray-500">(SKU: {product.sku})</span>
                                 )}
                             </div>
-                        )}
+                            {(isAdmin || isSMRole) && (
+                                <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 cursor-pointer"
+                                    onClick={() => {
+                                        setEditingField("product_id");
+                                        setEditedValue(product.id || "");
+                                        setEditingRowId(`product_${index}`);
+                                    }}>
+                                    <Pencil className="h-3 w-3" />
+                                </Button>
+                            )}
+                        </div>
                     </TableCell>
-                    <TableCell className="w-[15%] border-l text-center">{order.quantity || 0}</TableCell>
+                    <TableCell className="w-[15%] border-l text-center">
+                        {order.quantities_array?.[index] || 0}
+                    </TableCell>
                 </TableRow>
-            );
-        };
+            ))}
+        </>
+    );
+};
 
         const handleReturnSubmit = async () => {
             if (!order || !canEditStatus) { toast.error("Not authorized or no order"); return; }

@@ -288,7 +288,13 @@ export default function OrderDetails() {
           },
           status: "completed",
         });
-        setOrders(data as Order[]);
+        const seen = new Set();
+const uniqueOrders = data.filter((order) => {
+    if (seen.has(order.order_no)) return false;
+    seen.add(order.order_no);
+    return true;
+});
+setOrders(uniqueOrders as Order[]);
       }
     } catch (err: unknown) {
       await logActivity({
