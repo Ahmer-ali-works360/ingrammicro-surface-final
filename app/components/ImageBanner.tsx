@@ -10,7 +10,7 @@ export default function ImageBanner() {
         <div className="hidden lg:block">
           <div className="flex justify-center">
             <Image
-              src="/description1.png"
+              src="/productpanel.png"
               alt="Description for large screens"
               width={1000}
               height={350}

@@ -69,7 +69,7 @@ export default function StepCard({ icon, title, description }: StepCardProps) {
     <div className="w-full max-w-[520px] rounded-3xl shadow-[0_8px_20px_rgba(0,0,0,0.08),0_-1px_3px_rgba(0,0,0,0.05)] p-8">
       {/* Icon */}
       <div className="mb-6">
-        <div className="h-12 w-12 rounded-2xl bg-[#1D76BC] flex items-center justify-center text-white">
+        <div className="h-12 w-12 rounded-2xl bg-[#878787] flex items-center justify-center text-white">
           {icon}
         </div>
       </div>

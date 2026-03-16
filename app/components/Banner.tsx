@@ -198,9 +198,9 @@ export default function Banner() {
           <h1
             style={{
               fontFamily: "'Segoe UI', 'Arial', sans-serif",
-              fontSize: "clamp(18px, 2.4vw, 38px)",
+              fontSize: "clamp(18px, 2.4vw, 60px)",
               fontWeight: "700",
-              lineHeight: "1.18",
+              lineHeight: "1.28",
               letterSpacing: "-0.3px",
               color: "#3d3d3d",
               marginBottom: "14px",
@@ -249,20 +249,21 @@ export default function Banner() {
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#1D76BC",
+              backgroundColor: "#1570EF",
               color: "#ffffff",
               fontFamily: "'Segoe UI', 'Arial', sans-serif",
-              fontSize: "clamp(11px, 0.85vw, 14px)",
+              fontSize: "18px",
               fontWeight: "600",
               letterSpacing: "0.2px",
               lineHeight: "1",
-              padding: "10px 20px",
+              padding: "16px 35px",
+              borderRadius: "2px",
               textDecoration: "none",
               transition: "background-color 0.2s ease",
               whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#1660a0")}
-            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1D76BC")}
+            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1570EF")}
           >
             Create Demo Kit
           </Link>

@@ -281,7 +281,7 @@ return (
                 <button
                   type="submit"
                   disabled={isloading}
-                  className="flex-1 rounded-md bg-[#1D76BC] cursor-pointer px-6 py-3 font-semibold text-white hover:bg-[#1660a0] disabled:opacity-50"
+                  className="flex-1 rounded-md bg-[#1570EF] cursor-pointer px-6 py-3 font-semibold text-white hover:bg-[#1660a0] disabled:opacity-50"
                 >
                   {isloading ? "Please wait..." : "Login"}
                 </button>

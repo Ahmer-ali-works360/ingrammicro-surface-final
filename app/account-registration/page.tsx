@@ -201,7 +201,7 @@ export default function Page() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-sm bg-[#1D76BC] px-6 py-2.5 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-sm bg-[#1570EF] px-6 py-2.5 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Signing up..." : "Register"}
               </button>

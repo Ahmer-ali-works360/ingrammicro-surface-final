@@ -146,7 +146,7 @@ export default function Page() {
                             <button
                                 type="submit"
                                 disabled={loading}
-                                className="w-full rounded-md bg-[#1D76BC] px-6 py-3 cursor-pointer font-semibold text-white transition-colors hover:bg-[#1660a0] disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="w-full rounded-md bg-[#1570EF] px-6 py-3 cursor-pointer font-semibold text-white transition-colors hover:bg-[#1660a0] disabled:opacity-50 disabled:cursor-not-allowed"
                             >
                                 {loading ? "Sending..." : "Reset Password"}
                             </button>
