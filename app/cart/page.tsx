@@ -10,6 +10,7 @@ import { MdDeleteSweep, MdOutlineDeleteOutline } from 'react-icons/md';
 import { useAuth } from '../context/AuthContext';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircleIcon, Trash } from 'lucide-react';
+import { toast } from "sonner";
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { logActivity, logError, logSuccess, logInfo, logWarning } from "@/lib/logger";
 
@@ -303,18 +304,18 @@ export default function Page() {
     return (
         <div className="min-h-screen py-8 px-4">
             <div className="max-w-6xl mx-auto">
-                <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h1>
+                {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h1> */}
                 <div className="flex flex-col lg:flex-row gap-8">
 
                     {/* Cart Items Section */}
                     <div className="lg:w-2/3">
-                        <div className="border px-3 mb-6">
+                        <div className="px-3 mb-6 pt-4">
                             {cartItems.map((item) => {
                                 const isRemovingThisItem = removingItemId === item.product_id;
                                 return (
                                     <div
                                         key={item.product_id}
-                                        className="flex flex-col sm:flex-row gap-6 py-2 border-b border-gray-200 last:border-0"
+                                        className="flex flex-col sm:flex-row gap-6 py-4 mb-4 "
                                     >
                                         {/* Product Image */}
                                         <div className="sm:w-1/4 flex justify-center">
@@ -336,35 +337,44 @@ export default function Page() {
                                         {/* Product Details */}
                                         <div className="sm:w-3/4">
                                             <Link href={`/product/${item.product?.slug}`}>
-                                                <h3 className="text-md font-semibold text-[#1D76BC] mb-2">
+                                                <h3 className="text-md font-semibold text-black mb-2">
                                                     {item.product?.product_name || 'Product Name Not Available'}
                                                 </h3>
                                             </Link>
 
                                             {item.product?.sku && (
                                                 <Link href={`/product/${item.product?.slug}`}>
-                                                    <p className="text-sm text-gray-500 mb-2">SKU: <b className='text-cyan-800'>{item.product.sku}</b></p>
+                                                    <p className="text-sm text-gray-500 mb-2">SKU: <b className='text-gray-500'>{item.product.sku}</b></p>
                                                 </Link>
                                             )}
 
                                             {/* Quantity Controls */}
-                                            <div className="flex items-center space-x-4 mb-4">
+                                            <div className="flex items-center gap-3 mb-4">
+                                                <select
+                                                    defaultValue={1}
+                                                    onChange={(e) => {
+                                                        const selected = Number(e.target.value);
+                                                        if (selected > 1) {
+                                                            toast.error("Maximum 1 unit allowed per order.", {
+                                                                style: { background: "black", color: "white" },
+                                                            });
+                                                            e.target.value = "1";
+                                                        }
+                                                    }}
+                                                    className="border border-gray-300 rounded-sm px-2 py-1.5 text-sm text-gray-700 bg-white cursor-pointer focus:outline-none focus:border-gray-400"
+                                                >
+                                                    {[1, 2, 3].map((num) => (
+                                                        <option key={num} value={num}>{num}</option>
+                                                    ))}
+                                                </select>
+
                                                 <button
                                                     onClick={() => handleRemoveItem(item.product_id)}
-                                                    className="text-red-600 hover:text-red-800 font-medium"
                                                     disabled={isRemovingThisItem || isUpdating}
+                                                    className="text-gray-400 hover:text-red-500 transition-colors cursor-pointer duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    title="Remove item"
                                                 >
-                                                    {isRemovingThisItem ? (
-                                                        <div className='flex items-center gap-2 border py-1 px-4 rounded-sm border-red-500 cursor-pointer opacity-70'>
-                                                            <MdDeleteSweep />
-                                                            <span className='text-sm font-medium'>Removing...</span>
-                                                        </div>
-                                                    ) : (
-                                                        <div className='flex items-center gap-2 border py-1 px-4 rounded-sm border-red-500 cursor-pointer hover:bg-red-50'>
-                                                            <Trash size={12} />
-                                                            <span className='text-sm font-medium'>Remove</span>
-                                                        </div>
-                                                    )}
+                                                    <Trash size={18} />
                                                 </button>
                                             </div>
                                         </div>
@@ -406,85 +416,61 @@ export default function Page() {
                         )} */}
                     </div>
 
-                    {/* Order Summary Section */}
-                    <div className="lg:w-1/3">
-                        <div className="bg-white rounded border p-6 sticky top-8">
+{/* Order Summary Section */}
+<div className="lg:w-1/3 flex flex-col gap-4 sticky top-8">
+    
+    {/* Cart Summary Card */}
+    <div className="bg-white rounded border p-6 shadow-md">
+        <h2 className="text-center text-lg font-semibold text-gray-800 mb-4">Cart Summary</h2>
+        
+        {/* Cart Summary Details */}
+        <div className="space-y-4 mb-4">
+            <div className="flex justify-between items-center border border-gray-200 rounded-sm bg-gray-100">
+                <span className="text-gray-600 text-xs px-4 py-3">Number of Item(s)</span>
+                <span className="font-medium text-xs bg-gray-100 px-4 py-3 rounded-r-sm">{cartItems.length}</span>
+            </div>
+            <div className="flex justify-between items-center border border-gray-200 rounded-sm bg-gray-100">
+                <span className="text-gray-600 text-xs px-4 py-3">Ships Within</span>
+                <span className="font-medium text-xs bg-gray-100 px-4 py-3 rounded-r-sm">{cartSummary.shipsWithin}</span>
+            </div>
+            <div className="flex justify-between items-center border border-gray-200 rounded-sm bg-gray-100">
+                <span className="text-gray-600 text-xs px-4 py-3">Shipment Type</span>
+                <span className="font-medium text-xs bg-gray-100 px-4 py-3 rounded-r-sm">{cartSummary.shipmentType}</span>
+            </div>
+            <div className="flex justify-between items-center border border-gray-200 rounded-sm bg-gray-100">
+                <span className="text-gray-600 text-xs px-4 py-3">Demo Period</span>
+                <span className="font-medium text-xs bg-gray-100 px-4 py-3 rounded-r-sm">{cartSummary.demoPeriod}</span>
+            </div>
+        </div>
 
-                            {/* Cart Summary Details */}
-                            <div className="space-y-4 mb-6">
-                                <div className="flex justify-between">
-                                    <span className="text-gray-600 text-xs">Number of Item(s)</span>
-                                    <span className="font-medium text-xs">{cartItems.length} item(s)</span>
-                                </div>
-                                <div className="flex justify-between mt-8">
-                                    <span className="text-gray-600 text-xs">Ships Within</span>
-                                    <span className="font-medium text-xs">{cartSummary.shipsWithin}</span>
-                                </div>
-                                <div className="flex justify-between mt-8">
-                                    <span className="text-gray-600 text-xs">Shipment Type</span>
-                                    <span className="font-medium text-xs">{cartSummary.shipmentType}</span>
-                                </div>
-                                <div className="flex justify-between mt-8">
-                                    <span className="text-gray-600 text-xs">Demo Period</span>
-                                    <span className="font-medium text-xs">{cartSummary.demoPeriod}</span>
-                                </div>
-                            </div>
-
-                            <div className="border-t border-gray-200 pt-6 space-y-4">
-                            </div>
-
-                            {/* Show alert if multiple products */}
-                            {showSingleProductAlert && (
-                                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-md">
-                                    <div className="flex items-start">
-                                        <AlertCircleIcon className="h-5 w-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
-                                        <div>
-                                            <p className="text-sm text-red-700 font-medium">
-                                                Only one product can be selected for checkout
-                                            </p>
-                                            <p className="text-xs text-red-600 mt-1">
-                                                Please remove other items from your cart to proceed.
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            )}
-
-                            {/* <button
-                                onClick={handleCheckout}
-                                className={`w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${cartItems.length > 1 || cartItems.some(item => item.quantity > 1)
-                                        ? 'bg-gray-400 hover:bg-gray-400'
-                                        : 'bg-[#1d76bc] hover:bg-[#1660a0] text-white'
-                                    }`}
-                                disabled={
-                                    isUpdating ||
-                                    cartItems.length === 0 ||
-                                    cartItems.length > 1 ||
-                                    cartItems.some(item => item.quantity > 1)
-                                }
-                            >
-                                {isUpdating
-                                    ? 'Processing...'
-                                    : (cartItems.length > 1 || cartItems.some(item => item.quantity > 1))
-                                        ? 'Cannot Proceed - Demo Unit Limit'
-                                        : 'Proceed to Checkout'
-                                }
-                            </button> */}
-                            <button
-    onClick={handleCheckout}
-    className="w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed bg-[#1d76bc] hover:bg-[#1660a0] text-white"
-    disabled={
-        isUpdating ||
-        cartItems.length === 0
-    }
->
-    {isUpdating
-        ? 'Processing...'
-        : 'Proceed to Checkout'
-    }
-</button>
-                        </div>
+        {/* Show alert if multiple products */}
+        {showSingleProductAlert && (
+            <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-md">
+                <div className="flex items-start">
+                    <AlertCircleIcon className="h-5 w-5 text-red-600 mt-0.5 mr-2 flex-shrink-0" />
+                    <div>
+                        <p className="text-sm text-red-700 font-medium">
+                            Only one product can be selected for checkout
+                        </p>
+                        <p className="text-xs text-red-600 mt-1">
+                            Please remove other items from your cart to proceed.
+                        </p>
                     </div>
+                </div>
+            </div>
+        )}
+    </div>
+
+    {/* Proceed to Checkout Button — outside card */}
+    <button
+        onClick={handleCheckout}
+        className="w-full py-3 px-4 cursor-pointer font-semibold transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed rounded-md bg-[#1570EF] hover:bg-[#1660a0] text-white"
+        disabled={isUpdating || cartItems.length === 0}
+    >
+        {isUpdating ? 'Processing...' : 'Proceed to Checkout'}
+    </button>
+
+</div>
                 </div>
             </div>
         </div >

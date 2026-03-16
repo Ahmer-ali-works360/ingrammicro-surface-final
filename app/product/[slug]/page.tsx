@@ -1201,7 +1201,7 @@ export default function Page() {
         }}
         className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
     >
-        {[1, 2, 3, 4, 5].map((num) => (
+        {[1, 2, 3].map((num) => (
             <option key={num} value={num}>{num}</option>
         ))}
     </select>
