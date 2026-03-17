@@ -1,3 +1,5 @@
+//src/app/view-windetails/page.tsx
+
 "use client"
 
 import * as React from "react"
@@ -92,7 +94,6 @@ export default function Page() {
     const viewRoles = [subscriberRole, superSubscriberRole, smRole].filter(Boolean);
     const isViewAuthorized = profile?.role && viewRoles.includes(profile.role);
 
-
     const columnDisplayNames: Record<string, string> = {
         "order_no": "Order #",
         "customerName": "Customer Name",
@@ -130,20 +131,13 @@ export default function Page() {
 
     }, [loading, isLoggedIn, profile, router, isAuthorized]);
 
-    // Check if user has permission to access this page
-
-    // useEffect(() => {
-    //     if (!isAuthorized) {
-    //         router.replace('/product-category/alldevices');
-    //         return;
-    //     }
-    // }, [isAuthorized, router]);
     useEffect(() => {
         if (smRole == profile?.role) {
             router.replace('/product-category/alldevices');
             return;
         }
     }, [isAuthorized, router, subscriberRole, smRole, profile]);
+
     useEffect(() => {
         if (subscriberRole == profile?.role) {
             router.replace('/product-category/alldevices');
@@ -154,15 +148,12 @@ export default function Page() {
     // Format date to dd-MMM-yyyy
     const formatDateToCustomFormat = (dateString: string | null) => {
         if (!dateString) return 'N/A';
-
         try {
             const date = new Date(dateString);
             if (isNaN(date.getTime())) return 'N/A';
-
             const day = date.getDate().toString().padStart(2, '0');
             const month = date.toLocaleString('default', { month: 'short' });
             const year = date.getFullYear();
-
             return `${day}-${month}-${year}`;
         } catch (error) {
             return 'N/A';
@@ -175,38 +166,24 @@ export default function Page() {
             setIsLoading(true);
             setError(null);
 
-            logInfo(
-                'db',
-                'wins_fetch_started',
-                'Started fetching wins data',
-                {
-                    isAuthorized,
-                    userId: profile?.id,
-                    role: profile?.role
-                },
-                profile?.id,
-                source
-            );
+            logInfo('db', 'wins_fetch_started', 'Started fetching wins data', {
+                isAuthorized, userId: profile?.id, role: profile?.role
+            }, profile?.id, source);
 
-            // First, fetch wins data
             if (isAuthorized) {
                 const { data: winsData, error: winsError } = await supabase
                     .from('wins')
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                if (winsError) {
-                    throw winsError;
-                }
+                if (winsError) throw winsError;
 
                 if (winsData) {
-                    // Fetch order details for each win and merge them
                     const winsWithOrderDetails = await Promise.all(
                         winsData.map(async (win) => {
                             let orderNo = 0;
-                            let companyName = win.customerName; // Fallback to customerName
+                            let companyName = win.customerName;
 
-                            // Get order_no from orders table using order_id
                             if (win.order_id) {
                                 const { data: orderData, error: orderError } = await supabase
                                     .from('orders')
@@ -220,27 +197,14 @@ export default function Page() {
                                 }
                             }
 
-                            return {
-                                ...win,
-                                order_no: orderNo,
-                                // Don't include order_data property
-                            } as Win;
+                            return { ...win, order_no: orderNo } as Win;
                         })
                     );
 
                     const executionTime = Date.now() - startTime;
-                    logSuccess(
-                        'db',
-                        'wins_fetch_success',
-                        `Successfully fetched ${winsWithOrderDetails.length} wins`,
-                        {
-                            count: winsWithOrderDetails.length,
-                            executionTime,
-                            isAuthorized: true
-                        },
-                        profile?.id,
-                        source
-                    );
+                    logSuccess('db', 'wins_fetch_success', `Successfully fetched ${winsWithOrderDetails.length} wins`, {
+                        count: winsWithOrderDetails.length, executionTime, isAuthorized: true
+                    }, profile?.id, source);
 
                     setWins(winsWithOrderDetails);
                 }
@@ -252,18 +216,14 @@ export default function Page() {
                     .order('created_at', { ascending: false })
                     .eq('user_id', profile?.id);
 
-                if (winsError) {
-                    throw winsError;
-                }
+                if (winsError) throw winsError;
 
                 if (winsData) {
-                    // Fetch order details for each win and merge them
                     const winsWithOrderDetails = await Promise.all(
                         winsData.map(async (win) => {
                             let orderNo = 0;
                             let companyName = win.customerName;
 
-                            // Get order_no from orders table using order_id
                             if (win.order_id) {
                                 const { data: orderData, error: orderError } = await supabase
                                     .from('orders')
@@ -277,30 +237,14 @@ export default function Page() {
                                 }
                             }
 
-                            return {
-                                ...win,
-                                order_no: orderNo,
-                                // Update customerName if we got company_name from orders
-                                customerName: companyName,
-                            } as Win;
+                            return { ...win, order_no: orderNo, customerName: companyName } as Win;
                         })
                     );
 
                     const executionTime = Date.now() - startTime;
-
-                    logSuccess(
-                        'db',
-                        'wins_fetch_success',
-                        `Successfully fetched ${winsWithOrderDetails.length} wins (user-specific)`,
-                        {
-                            count: winsWithOrderDetails.length,
-                            executionTime,
-                            isAuthorized: false,
-                            userId: profile?.id
-                        },
-                        profile?.id,
-                        source
-                    );
+                    logSuccess('db', 'wins_fetch_success', `Successfully fetched ${winsWithOrderDetails.length} wins (user-specific)`, {
+                        count: winsWithOrderDetails.length, executionTime, isAuthorized: false, userId: profile?.id
+                    }, profile?.id, source);
 
                     setWins(winsWithOrderDetails);
                 }
@@ -308,24 +252,10 @@ export default function Page() {
         } catch (err: unknown) {
             if (err instanceof Error) {
                 setError(err.message || 'Failed to fetch wins');
-                logError(
-                    'db',
-                    'wins_fetch_failed',
-                    `Failed to fetch wins: ${err.message}`,
-                    err,
-                    profile?.id,
-                    source
-                );
+                logError('db', 'wins_fetch_failed', `Failed to fetch wins: ${err.message}`, err, profile?.id, source);
             } else {
                 setError('Failed to fetch wins');
-                logError(
-                    'db',
-                    'wins_fetch_failed',
-                    'Failed to fetch wins',
-                    { error: err },
-                    profile?.id,
-                    source
-                );
+                logError('db', 'wins_fetch_failed', 'Failed to fetch wins', { error: err }, profile?.id, source);
             }
         } finally {
             setIsLoading(false);
@@ -345,27 +275,16 @@ export default function Page() {
         setEditErrors({});
         setIsEditDrawerOpen(true);
 
-        logInfo(
-            'ui',
-            'edit_win_clicked',
-            `Edit win clicked for win ID: ${win.id}`,
-            {
-                winId: win.id,
-                customerName: win.customerName,
-                orderNo: win.order_no
-            },
-            profile?.id,
-            source
-        );
+        logInfo('ui', 'edit_win_clicked', `Edit win clicked for win ID: ${win.id}`, {
+            winId: win.id, customerName: win.customerName, orderNo: win.order_no
+        }, profile?.id, source);
     };
 
     // Handle form input changes
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (!selectedWin) return;
-
         const { name, value, type } = e.target;
 
-        // Clear error for this field
         if (editErrors[name]) {
             setEditErrors(prev => {
                 const newErrors = { ...prev };
@@ -376,25 +295,13 @@ export default function Page() {
 
         setSelectedWin(prev => {
             if (!prev) return prev;
-
             if (type === 'number') {
-                return {
-                    ...prev,
-                    [name]: value === "" ? 0 : parseFloat(value)
-                };
+                return { ...prev, [name]: value === "" ? 0 : parseFloat(value) };
             }
-
             if (name === 'isOther') {
-                return {
-                    ...prev,
-                    [name]: value === "true"
-                };
+                return { ...prev, [name]: value === "true" };
             }
-
-            return {
-                ...prev,
-                [name]: value === "" ? "" : value
-            };
+            return { ...prev, [name]: value === "" ? "" : value };
         });
     };
 
@@ -402,7 +309,6 @@ export default function Page() {
     const handleSelectChange = (name: string, value: string) => {
         if (!selectedWin) return;
 
-        // Clear error for this field
         if (editErrors[name]) {
             setEditErrors(prev => {
                 const newErrors = { ...prev };
@@ -413,10 +319,7 @@ export default function Page() {
 
         setSelectedWin(prev => {
             if (!prev) return prev;
-            return {
-                ...prev,
-                [name]: value === "" ? "" : value
-            };
+            return { ...prev, [name]: value === "" ? "" : value };
         });
     };
 
@@ -424,7 +327,6 @@ export default function Page() {
     const handleBooleanChange = (name: string, value: boolean) => {
         if (!selectedWin) return;
 
-        // Clear error for this field
         if (editErrors[name]) {
             setEditErrors(prev => {
                 const newErrors = { ...prev };
@@ -435,10 +337,7 @@ export default function Page() {
 
         setSelectedWin(prev => {
             if (!prev) return prev;
-            return {
-                ...prev,
-                [name]: value
-            };
+            return { ...prev, [name]: value };
         });
     };
 
@@ -449,8 +348,8 @@ export default function Page() {
         const newErrors: Record<string, string> = {};
         let isValid = true;
 
-        // Required fields validation
-        const requiredFields = ['customerName', 'reseller', 'orderHash', 'resellerAccount', 'units', 'deal_rev', 'purchaseType', 'purchaseDate'];
+        // ✅ reseller removed, orderHash renamed to Ingram Order #
+        const requiredFields = ['customerName', 'orderHash', 'resellerAccount', 'units', 'deal_rev', 'purchaseType', 'purchaseDate'];
 
         for (const field of requiredFields) {
             const value = selectedWin[field as keyof typeof selectedWin];
@@ -460,7 +359,6 @@ export default function Page() {
             }
         }
 
-        // Validate numbers
         if (selectedWin.units <= 0) {
             newErrors.units = "Number of units must be greater than 0";
             isValid = false;
@@ -471,7 +369,6 @@ export default function Page() {
             isValid = false;
         }
 
-        // If isOther is true, otherDesc is required
         if (selectedWin.isOther && (!selectedWin.otherDesc || selectedWin.otherDesc.trim() === "")) {
             newErrors.otherDesc = "Other description is required when 'Other' is selected";
             isValid = false;
@@ -479,20 +376,10 @@ export default function Page() {
 
         setEditErrors(newErrors);
 
-
         if (!isValid) {
-            logWarning(
-                'validation',
-                'edit_validation_failed',
-                `Edit form validation failed with ${Object.keys(newErrors).length} errors`,
-                {
-                    winId: selectedWin.id,
-                    errors: newErrors,
-                    errorCount: Object.keys(newErrors).length
-                },
-                profile?.id,
-                source
-            );
+            logWarning('validation', 'edit_validation_failed', `Edit form validation failed with ${Object.keys(newErrors).length} errors`, {
+                winId: selectedWin.id, errors: newErrors, errorCount: Object.keys(newErrors).length
+            }, profile?.id, source);
         }
 
         return isValid;
@@ -502,21 +389,11 @@ export default function Page() {
     const handleUpdateWin = async () => {
         if (!selectedWin) return;
 
-
         const startTime = Date.now();
 
-        logInfo(
-            'win',
-            'win_update_started',
-            `Started updating win ID: ${selectedWin.id}`,
-            {
-                winId: selectedWin.id,
-                customerName: selectedWin.customerName,
-                orderNo: selectedWin.order_no
-            },
-            profile?.id,
-            source
-        );
+        logInfo('win', 'win_update_started', `Started updating win ID: ${selectedWin.id}`, {
+            winId: selectedWin.id, customerName: selectedWin.customerName, orderNo: selectedWin.order_no
+        }, profile?.id, source);
 
         if (!validateEditForm()) {
             toast.error("Please fill in all required fields correctly", { style: { color: "white", backgroundColor: "red" } });
@@ -526,14 +403,8 @@ export default function Page() {
         setIsSubmitting(true);
 
         try {
-            // Prepare updated win data
             const { order_no, ...rest } = selectedWin;
-
-            const updatedWin = {
-                ...rest,
-                updated_at: new Date().toISOString()
-            };
-
+            const updatedWin = { ...rest, updated_at: new Date().toISOString() };
 
             const { error } = await supabase
                 .from('wins')
@@ -542,51 +413,25 @@ export default function Page() {
 
             if (error) throw error;
 
-            // Update local state
-            setWins(prev => prev.map(win =>
-                win.id === selectedWin.id ? updatedWin : win
-            ));
-
+            setWins(prev => prev.map(win => win.id === selectedWin.id ? updatedWin : win));
 
             const executionTime = Date.now() - startTime;
-            logSuccess(
-                'win',
-                'win_update_success',
-                `Successfully updated win ID: ${selectedWin.id}`,
-                {
-                    winId: selectedWin.id,
-                    customerName: selectedWin.customerName,
-                    orderNo: selectedWin.order_no,
-                    dealRev: selectedWin.deal_rev,
-                    units: selectedWin.units,
-                    executionTime,
-                    updatedBy: profile?.email
-                },
-                profile?.id,
-                source
-            );
-
+            logSuccess('win', 'win_update_success', `Successfully updated win ID: ${selectedWin.id}`, {
+                winId: selectedWin.id, customerName: selectedWin.customerName, orderNo: selectedWin.order_no,
+                dealRev: selectedWin.deal_rev, units: selectedWin.units, executionTime, updatedBy: profile?.email
+            }, profile?.id, source);
 
             toast.success("Win updated successfully!", { style: { color: "white", backgroundColor: "black" } });
             setIsEditDrawerOpen(false);
             setSelectedWin(null);
             setEditErrors({});
-            fetchWins(); // Refresh data
+            fetchWins();
 
         } catch (err: any) {
             const executionTime = Date.now() - startTime;
-            logError(
-                'db',
-                'win_update_failed',
-                `Failed to update win ID: ${selectedWin.id}`,
-                {
-                    error: err.message,
-                    winId: selectedWin.id,
-                    executionTime
-                },
-                profile?.id,
-                source
-            );
+            logError('db', 'win_update_failed', `Failed to update win ID: ${selectedWin.id}`, {
+                error: err.message, winId: selectedWin.id, executionTime
+            }, profile?.id, source);
 
             toast.error(err.message || "Failed to update win", { style: { color: "white", backgroundColor: "red" } });
         } finally {
@@ -598,62 +443,28 @@ export default function Page() {
     const handleDeleteWin = async (winId: string, customerName: string, orderNo?: number) => {
         const startTime = Date.now();
 
-        logWarning(
-            'win',
-            'win_delete_requested',
-            `Delete requested for win ID: ${winId}`,
-            {
-                winId,
-                customerName,
-                orderNo,
-                deletedBy: profile?.email
-            },
-            profile?.id,
-            source
-        );
-        try {
-            const { error } = await supabase
-                .from('wins')
-                .delete()
-                .eq('id', winId);
+        logWarning('win', 'win_delete_requested', `Delete requested for win ID: ${winId}`, {
+            winId, customerName, orderNo, deletedBy: profile?.email
+        }, profile?.id, source);
 
+        try {
+            const { error } = await supabase.from('wins').delete().eq('id', winId);
             if (error) throw error;
 
-            // Update local state
             setWins(prev => prev.filter(win => win.id !== winId));
 
             const executionTime = Date.now() - startTime;
-            logSuccess(
-                'win',
-                'win_delete_success',
-                `Successfully deleted win ID: ${winId}`,
-                {
-                    winId,
-                    customerName,
-                    orderNo,
-                    executionTime,
-                    deletedBy: profile?.email
-                },
-                profile?.id,
-                source
-            );
+            logSuccess('win', 'win_delete_success', `Successfully deleted win ID: ${winId}`, {
+                winId, customerName, orderNo, executionTime, deletedBy: profile?.email
+            }, profile?.id, source);
 
             toast.success("Win deleted successfully!", { style: { color: "white", backgroundColor: "black" } });
 
         } catch (err: any) {
             const executionTime = Date.now() - startTime;
-            logError(
-                'db',
-                'win_delete_failed',
-                `Failed to delete win ID: ${winId}`,
-                {
-                    error: err.message,
-                    winId,
-                    executionTime
-                },
-                profile?.id,
-                source
-            );
+            logError('db', 'win_delete_failed', `Failed to delete win ID: ${winId}`, {
+                error: err.message, winId, executionTime
+            }, profile?.id, source);
 
             toast.error(err.message || "Failed to delete win", { style: { color: "white", backgroundColor: "red" } });
         }
@@ -662,10 +473,7 @@ export default function Page() {
     // Format currency
     const formatCurrency = (amount: number) => {
         return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0
+            style: 'currency', currency: 'USD', minimumFractionDigits: 0, maximumFractionDigits: 0
         }).format(amount);
     };
 
@@ -682,27 +490,18 @@ export default function Page() {
     // Handle export CSV
     const handleExportCSV = () => {
         if (wins.length === 0) {
-            logWarning(
-                'export',
-                'csv_export_empty',
-                'Attempted to export CSV with no wins data',
-                {
-                    winsCount: wins.length
-                },
-                profile?.id,
-                source
-            );
-
+            logWarning('export', 'csv_export_empty', 'Attempted to export CSV with no wins data', {
+                winsCount: wins.length
+            }, profile?.id, source);
             toast.info("No data to export");
             return;
         }
 
         try {
-            // Prepare the data with specified columns
             const data = wins.map(win => ({
                 'Order #': win.order_no || win.orderHash || 'N/A',
                 'Customer Name': win.customerName || '',
-                'Date of Submission': formatDateToCustomFormat(win.created_at), // Updated to use custom format
+                'Date of Submission': formatDateToCustomFormat(win.created_at),
                 'Total Deal Revenue ($)': `$${win.deal_rev?.toFixed(2) || '0.00'}`,
                 'Number of Units': win.units || 0,
                 'Reseller': win.reseller || '',
@@ -714,46 +513,22 @@ export default function Page() {
                 'Other Description': win.otherDesc || ''
             }));
 
-            // Convert to CSV string
             const csvString = convertToCSV(data);
-
-            // Download file
             downloadCSV(csvString, `wins_${new Date().toISOString().split('T')[0]}.csv`);
 
-            logSuccess(
-                'export',
-                'csv_export_success',
-                `Successfully exported ${wins.length} wins to CSV`,
-                {
-                    winsCount: wins.length,
-                    exportDate: new Date().toISOString()
-                },
-                profile?.id,
-                source
-            );
+            logSuccess('export', 'csv_export_success', `Successfully exported ${wins.length} wins to CSV`, {
+                winsCount: wins.length, exportDate: new Date().toISOString()
+            }, profile?.id, source);
 
         } catch (error) {
             setError('Failed to export CSV');
-            logError(
-                'export',
-                'csv_export_failed',
-                `Failed to export CSV`,
-                {
-                    winsCount: wins.length
-                },
-                profile?.id,
-                source
-            );
+            logError('export', 'csv_export_failed', `Failed to export CSV`, { winsCount: wins.length }, profile?.id, source);
         }
     };
 
-    // Helper function to convert array of objects to CSV
     const convertToCSV = (data: any[]) => {
         if (data.length === 0) return '';
-
         const headers = Object.keys(data[0]);
-
-        // Escape quotes and wrap in quotes if contains comma
         const escapeCSV = (field: any) => {
             if (field === null || field === undefined) return '';
             const string = String(field);
@@ -762,67 +537,42 @@ export default function Page() {
             }
             return string;
         };
-
         const headerRow = headers.map(escapeCSV).join(',');
-        const dataRows = data.map(row =>
-            headers.map(header => escapeCSV(row[header])).join(',')
-        );
-
+        const dataRows = data.map(row => headers.map(header => escapeCSV(row[header])).join(','));
         return [headerRow, ...dataRows].join('\n');
     };
 
-    // Helper function to download CSV
     const downloadCSV = (csvContent: string, fileName: string) => {
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
-
         const link = document.createElement('a');
         link.setAttribute('href', url);
         link.setAttribute('download', fileName);
         link.style.visibility = 'hidden';
-
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-
         URL.revokeObjectURL(url);
     };
 
     const handleRefresh = async () => {
-        logInfo(
-            'ui',
-            'manual_refresh',
-            'Manually refreshing wins data',
-            {
-                currentCount: wins.length,
-                lastRefresh: new Date().toISOString()
-            },
-            profile?.id,
-            source
-        );
-
+        logInfo('ui', 'manual_refresh', 'Manually refreshing wins data', {
+            currentCount: wins.length, lastRefresh: new Date().toISOString()
+        }, profile?.id, source);
         await fetchWins();
     };
 
     // Define columns
     const columns: ColumnDef<Win>[] = [
-
-
-        // Order # column
         {
             accessorKey: "order_no",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Order #
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Order #
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => {
                 const win = row.original;
                 return (
@@ -832,90 +582,54 @@ export default function Page() {
                 )
             },
         },
-
-        // Customer Name column
         {
             accessorKey: "customerName",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Customer Name
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Customer Name
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => <div className="text-left ps-2">{row.getValue("customerName")}</div>,
         },
-
-        // Date of Submission column
         {
             accessorKey: "created_at",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Date of Submission
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Date of Submission
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => {
                 const date = row.getValue("created_at") as string;
-                return (
-                    <div className="text-left ps-2">
-                        {formatDateToCustomFormat(date)}
-                    </div>
-                )
+                return <div className="text-left ps-2">{formatDateToCustomFormat(date)}</div>
             },
         },
-
-        // Total Deal Revenue ($) column
         {
             accessorKey: "deal_rev",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Total Deal Revenue ($)
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Total Deal Revenue ($)
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => {
                 const amount = row.getValue("deal_rev") as number;
-                return (
-                    <div className="text-left ps-2 font-medium">
-                        ${amount?.toLocaleString()}
-                    </div>
-                )
+                return <div className="text-left ps-2 font-medium">${amount?.toLocaleString()}</div>
             },
         },
-
-        // Number of Units column
         {
             accessorKey: "units",
-            header: ({ column }) => {
-                return (
-                    <Button
-                        variant="ghost"
-                        className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
-                        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                    >
-                        Number of Units
-                        <ArrowUpDown className="ml-2 h-4 w-4" />
-                    </Button>
-                )
-            },
+            header: ({ column }) => (
+                <Button variant="ghost" className="hover:bg-transparent hover:text-current cursor-pointer justify-start w-full"
+                    onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
+                    Number of Units
+                    <ArrowUpDown className="ml-2 h-4 w-4" />
+                </Button>
+            ),
             cell: ({ row }) => {
                 const units = row.getValue("units") as number;
                 return <div className="text-left ps-2 font-medium">{units?.toLocaleString() || 0}</div>
@@ -924,96 +638,75 @@ export default function Page() {
     ]
 
     if (!isViewAuthorized) {
-        columns.unshift(
-            // Actions column - Always add for authorized users
-            {
-                id: "actions",
-                enableHiding: false,
-                cell: ({ row }) => {
-                    const win = row.original;
-                    const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+        columns.unshift({
+            id: "actions",
+            enableHiding: false,
+            cell: ({ row }) => {
+                const win = row.original;
+                const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
 
-                    const handleDeleteClick = () => {
-                        setIsDeleteDialogOpen(true);
-                    };
-
-                    const handleConfirmDelete = async () => {
-                        await handleDeleteWin(win.id, win.customerName, win.order_no);
-                        setIsDeleteDialogOpen(false);
-                    };
-
-                    return (
-                        <div className="flex space-x-2 ps-2">
-                            <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
-                                        <span className="sr-only">Open menu</span>
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                                    <DropdownMenuItem
-                                        className="cursor-pointer"
-                                        onClick={() => {
-                                            router.push(`/view-windetails/${win.id}`);
-                                        }}
-                                    >
-                                        <Eye className="mr-2 h-4 w-4" />
-                                        View Details
-                                    </DropdownMenuItem>
-                                    {!isViewAuthorized && (
-                                        <>
-                                            <DropdownMenuItem
-                                                className="cursor-pointer"
-                                                onClick={() => handleEditWin(win)}
-                                            >
-                                                <Edit className="mr-2 h-4 w-4" />
-                                                Edit Win
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem
-                                                className="cursor-pointer text-red-600 focus:text-red-600"
-                                                onClick={handleDeleteClick}
-                                            >
-                                                <Trash className="mr-2 h-4 w-4" />
-                                                Delete Win
-                                            </DropdownMenuItem>
-                                        </>
-                                    )}
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-
-                            {/* Delete Confirmation Dialog */}
-                            <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This will permanently delete the win report for
-                                            <b> {win.customerName}</b> (Order # {win.order_no || win.orderHash || 'N/A'}).
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                                        <AlertDialogAction
-                                            onClick={handleConfirmDelete}
-                                            className="bg-red-500 hover:bg-red-600"
-                                        >
+                return (
+                    <div className="flex space-x-2 ps-2">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" className="h-8 w-8 p-0 cursor-pointer">
+                                    <span className="sr-only">Open menu</span>
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuLabel>Actions</DropdownMenuLabel>
+                                <DropdownMenuItem className="cursor-pointer" onClick={() => router.push(`/view-windetails/${win.id}`)}>
+                                    <Eye className="mr-2 h-4 w-4" />
+                                    View Details
+                                </DropdownMenuItem>
+                                {!isViewAuthorized && (
+                                    <>
+                                        <DropdownMenuItem className="cursor-pointer" onClick={() => handleEditWin(win)}>
+                                            <Edit className="mr-2 h-4 w-4" />
+                                            Edit Win
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem className="cursor-pointer text-red-600 focus:text-red-600"
+                                            onClick={() => setIsDeleteDialogOpen(true)}>
+                                            <Trash className="mr-2 h-4 w-4" />
                                             Delete Win
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
-                        </div>
-                    )
-                },
+                                        </DropdownMenuItem>
+                                    </>
+                                )}
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+
+                        <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the win report for
+                                        <b> {win.customerName}</b> (Order # {win.order_no || win.orderHash || 'N/A'}).
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction
+                                        onClick={async () => {
+                                            await handleDeleteWin(win.id, win.customerName, win.order_no);
+                                            setIsDeleteDialogOpen(false);
+                                        }}
+                                        className="bg-red-500 hover:bg-red-600"
+                                    >
+                                        Delete Win
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
+                    </div>
+                )
             },
-        )
+        })
     }
 
     const [globalFilter, setGlobalFilter] = useState<string>("")
 
-    // Initialize table
     const table = useReactTable({
         data: wins,
         columns,
@@ -1026,17 +719,10 @@ export default function Page() {
         onColumnVisibilityChange: setColumnVisibility,
         onRowSelectionChange: setRowSelection,
         onGlobalFilterChange: setGlobalFilter,
-        globalFilterFn: "auto", // or use "includesString" for case-insensitive search
-        state: {
-            sorting,
-            columnFilters,
-            columnVisibility,
-            rowSelection,
-            globalFilter, // Add this
-        },
+        globalFilterFn: "auto",
+        state: { sorting, columnFilters, columnVisibility, rowSelection, globalFilter },
     })
 
-    // Show loading states
     if (loading) {
         return (
             <div className="flex items-center justify-center h-screen">
@@ -1050,12 +736,7 @@ export default function Page() {
             <div className="flex justify-between items-center mb-6">
                 <h1 className="sm:text-3xl text-xl font-bold"></h1>
                 <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        onClick={handleRefresh}
-                        disabled={isLoading}
-                        className="cursor-pointer"
-                    >
+                    <Button variant="outline" onClick={handleRefresh} disabled={isLoading} className="cursor-pointer">
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
                     <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
@@ -1073,7 +754,7 @@ export default function Page() {
 
             <div className="w-full">
                 <div className="flex items-center justify-between py-4 gap-4">
-                    <div className="">
+                    <div>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
                                 <Button variant="outline" className="ml-auto">
@@ -1081,23 +762,16 @@ export default function Page() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                {table
-                                    .getAllColumns()
-                                    .filter((column) => column.getCanHide())
-                                    .map((column) => {
-                                        return (
-                                            <DropdownMenuCheckboxItem
-                                                key={column.id}
-                                                className="capitalize"
-                                                checked={column.getIsVisible()}
-                                                onCheckedChange={(value: boolean) =>
-                                                    column.toggleVisibility(!!value)
-                                                }
-                                            >
-                                                {columnDisplayNames[column.id] || column.id}
-                                            </DropdownMenuCheckboxItem>
-                                        )
-                                    })}
+                                {table.getAllColumns().filter((column) => column.getCanHide()).map((column) => (
+                                    <DropdownMenuCheckboxItem
+                                        key={column.id}
+                                        className="capitalize"
+                                        checked={column.getIsVisible()}
+                                        onCheckedChange={(value: boolean) => column.toggleVisibility(!!value)}
+                                    >
+                                        {columnDisplayNames[column.id] || column.id}
+                                    </DropdownMenuCheckboxItem>
+                                ))}
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
@@ -1110,86 +784,53 @@ export default function Page() {
                         />
                     </div>
                 </div>
+
                 <div className="overflow-hidden rounded-md border">
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
                                 <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
-                                    {headerGroup.headers.map((header) => {
-                                        return (
-                                            <TableHead
-                                                key={header.id}
-                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
-                                            >
-                                                {header.isPlaceholder
-                                                    ? null
-                                                    : flexRender(
-                                                        header.column.columnDef.header,
-                                                        header.getContext()
-                                                    )}
-                                            </TableHead>
-                                        )
-                                    })}
+                                    {headerGroup.headers.map((header) => (
+                                        <TableHead key={header.id} className="text-white font-semibold border-r border-[#1660a0] last:border-r-0">
+                                            {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                                        </TableHead>
+                                    ))}
                                 </TableRow>
                             ))}
                         </TableHeader>
                         <TableBody>
                             {table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
-                                    <TableRow
-                                        key={row.id}
-                                        data-state={row.getIsSelected() && "selected"}
-                                        className="hover:bg-gray-50"
-                                    >
+                                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="hover:bg-gray-50">
                                         {row.getVisibleCells().map((cell) => (
-                                            <TableCell
-                                                key={cell.id}
-                                                className="border-r border-gray-200 last:border-r-0 align-middle"
-                                            >
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext()
-                                                )}
+                                            <TableCell key={cell.id} className="border-r border-gray-200 last:border-r-0 align-middle">
+                                                {flexRender(cell.column.columnDef.cell, cell.getContext())}
                                             </TableCell>
                                         ))}
                                     </TableRow>
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        className="h-24 text-center border-r-0"
-                                    >
+                                    <TableCell colSpan={columns.length} className="h-24 text-center border-r-0">
                                         {isLoading ? (
                                             <div className="flex items-center justify-center">
                                                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                                                 <span className="ml-2">Loading wins data...</span>
                                             </div>
-                                        ) : (
-                                            "No wins found."
-                                        )}
+                                        ) : "No wins found."}
                                     </TableCell>
                                 </TableRow>
                             )}
                         </TableBody>
                     </Table>
                 </div>
+
                 <div className="flex items-center justify-end space-x-2 py-4">
                     <div className="space-x-2">
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.previousPage()}
-                            disabled={!table.getCanPreviousPage()}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
                             Previous
                         </Button>
-                        <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => table.nextPage()}
-                            disabled={!table.getCanNextPage()}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
                             Next
                         </Button>
                     </div>
@@ -1200,9 +841,7 @@ export default function Page() {
             <Drawer
                 title={
                     <div>
-                        <div className="text-xl font-bold text-gray-800">
-                            Edit Win Report
-                        </div>
+                        <div className="text-xl font-bold text-gray-800">Edit Win Report</div>
                         <div className="text-gray-600 text-sm mt-1">
                             Update win report information. All fields marked with * are required.
                         </div>
@@ -1214,19 +853,11 @@ export default function Page() {
                 size={600}
                 footer={
                     <div className="flex justify-end gap-3">
-                        <Button
-                            onClick={() => setIsEditDrawerOpen(false)}
-                            variant="outline"
-                            className="flex items-center"
-                        >
+                        <Button onClick={() => setIsEditDrawerOpen(false)} variant="outline" className="flex items-center">
                             <X className="mr-2 h-4 w-4" />
                             Cancel
                         </Button>
-                        <Button
-                            onClick={handleUpdateWin}
-                            disabled={isSubmitting}
-                            className="flex items-center bg-[#1D76BC] hover:bg-[#1660a0]"
-                        >
+                        <Button onClick={handleUpdateWin} disabled={isSubmitting} className="flex items-center bg-[#1D76BC] hover:bg-[#1660a0]">
                             <Save className="mr-2 h-4 w-4" />
                             {isSubmitting ? "Saving..." : "Save Changes"}
                         </Button>
@@ -1243,63 +874,39 @@ export default function Page() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Customer Name *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Customer Name *</label>
                                     <AntInput
                                         name="customerName"
                                         value={selectedWin.customerName || ''}
                                         onChange={handleInputChange}
                                         status={editErrors.customerName ? 'error' : ''}
                                     />
-                                    {editErrors.customerName && (
-                                        <p className="text-xs text-red-500">{editErrors.customerName}</p>
-                                    )}
+                                    {editErrors.customerName && <p className="text-xs text-red-500">{editErrors.customerName}</p>}
                                 </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Reseller *
-                                    </label>
-                                    <AntInput
-                                        name="reseller"
-                                        value={selectedWin.reseller || ''}
-                                        onChange={handleInputChange}
-                                        status={editErrors.reseller ? 'error' : ''}
-                                    />
-                                    {editErrors.reseller && (
-                                        <p className="text-xs text-red-500">{editErrors.reseller}</p>
-                                    )}
-                                </div>
+                                {/* ✅ Reseller field REMOVED */}
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Order Hash *
-                                    </label>
+                                    {/* ✅ Label changed: Order Hash → Ingram Order # */}
+                                    <label className="text-sm font-medium text-gray-700">Ingram Order # *</label>
                                     <AntInput
                                         name="orderHash"
                                         value={selectedWin.orderHash || ''}
                                         onChange={handleInputChange}
                                         status={editErrors.orderHash ? 'error' : ''}
                                     />
-                                    {editErrors.orderHash && (
-                                        <p className="text-xs text-red-500">{editErrors.orderHash}</p>
-                                    )}
+                                    {editErrors.orderHash && <p className="text-xs text-red-500">{editErrors.orderHash}</p>}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Reseller Account *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Reseller Account *</label>
                                     <AntInput
                                         name="resellerAccount"
                                         value={selectedWin.resellerAccount || ''}
                                         onChange={handleInputChange}
                                         status={editErrors.resellerAccount ? 'error' : ''}
                                     />
-                                    {editErrors.resellerAccount && (
-                                        <p className="text-xs text-red-500">{editErrors.resellerAccount}</p>
-                                    )}
+                                    {editErrors.resellerAccount && <p className="text-xs text-red-500">{editErrors.resellerAccount}</p>}
                                 </div>
                             </div>
                         </div>
@@ -1312,24 +919,20 @@ export default function Page() {
                             </h3>
                             <div className="space-y-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Is this an "Other" device? *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Is this an "Other" device? *</label>
                                     <Select
                                         value={selectedWin.isOther ? "true" : "false"}
                                         onChange={(value) => handleBooleanChange("isOther", value === "true")}
                                         style={{ width: '100%' }}
                                     >
                                         <Select.Option value="false">No (Standard Product)</Select.Option>
-                                        <Select.Option value="true">Yes (Other Device Part  )</Select.Option>
+                                        <Select.Option value="true">Yes (Other Device Part)</Select.Option>
                                     </Select>
                                 </div>
 
                                 {selectedWin.isOther && (
                                     <div className="space-y-2">
-                                        <label className="text-sm font-medium text-gray-700">
-                                            Other Device Description *
-                                        </label>
+                                        <label className="text-sm font-medium text-gray-700">Other Device Description *</label>
                                         <AntInput
                                             name="otherDesc"
                                             value={selectedWin.otherDesc || ''}
@@ -1337,9 +940,7 @@ export default function Page() {
                                             placeholder="Describe the other device"
                                             status={editErrors.otherDesc ? 'error' : ''}
                                         />
-                                        {editErrors.otherDesc && (
-                                            <p className="text-xs text-red-500">{editErrors.otherDesc}</p>
-                                        )}
+                                        {editErrors.otherDesc && <p className="text-xs text-red-500">{editErrors.otherDesc}</p>}
                                     </div>
                                 )}
                             </div>
@@ -1353,9 +954,7 @@ export default function Page() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Number of Units *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Number of Units *</label>
                                     <AntInput
                                         name="units"
                                         type="number"
@@ -1364,15 +963,11 @@ export default function Page() {
                                         onChange={handleInputChange}
                                         status={editErrors.units ? 'error' : ''}
                                     />
-                                    {editErrors.units && (
-                                        <p className="text-xs text-red-500">{editErrors.units}</p>
-                                    )}
+                                    {editErrors.units && <p className="text-xs text-red-500">{editErrors.units}</p>}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Total Deal Revenue ($) *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Total Deal Revenue ($) *</label>
                                     <AntInput
                                         name="deal_rev"
                                         type="number"
@@ -1382,9 +977,7 @@ export default function Page() {
                                         onChange={handleInputChange}
                                         status={editErrors.deal_rev ? 'error' : ''}
                                     />
-                                    {editErrors.deal_rev && (
-                                        <p className="text-xs text-red-500">{editErrors.deal_rev}</p>
-                                    )}
+                                    {editErrors.deal_rev && <p className="text-xs text-red-500">{editErrors.deal_rev}</p>}
                                 </div>
                             </div>
                         </div>
@@ -1397,9 +990,7 @@ export default function Page() {
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Purchase Type *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Purchase Type *</label>
                                     <Select
                                         value={selectedWin.purchaseType || ''}
                                         onChange={(value) => handleSelectChange("purchaseType", value)}
@@ -1409,15 +1000,11 @@ export default function Page() {
                                         <Select.Option value="one-time">One Time Purchase</Select.Option>
                                         <Select.Option value="roll-out">Roll Out</Select.Option>
                                     </Select>
-                                    {editErrors.purchaseType && (
-                                        <p className="text-xs text-red-500">{editErrors.purchaseType}</p>
-                                    )}
+                                    {editErrors.purchaseType && <p className="text-xs text-red-500">{editErrors.purchaseType}</p>}
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">
-                                        Purchase Date *
-                                    </label>
+                                    <label className="text-sm font-medium text-gray-700">Purchase Date *</label>
                                     <AntInput
                                         name="purchaseDate"
                                         type="date"
@@ -1425,9 +1012,7 @@ export default function Page() {
                                         onChange={handleInputChange}
                                         status={editErrors.purchaseDate ? 'error' : ''}
                                     />
-                                    {editErrors.purchaseDate && (
-                                        <p className="text-xs text-red-500">{editErrors.purchaseDate}</p>
-                                    )}
+                                    {editErrors.purchaseDate && <p className="text-xs text-red-500">{editErrors.purchaseDate}</p>}
                                 </div>
                             </div>
                         </div>
@@ -1456,9 +1041,7 @@ export default function Page() {
 
                 {Object.keys(editErrors).length > 0 && (
                     <div className="mt-6 p-3 bg-red-50 border border-red-200 rounded text-center">
-                        <p className="text-sm text-red-600 font-medium">
-                            Please fix the errors above before saving.
-                        </p>
+                        <p className="text-sm text-red-600 font-medium">Please fix the errors above before saving.</p>
                     </div>
                 )}
             </Drawer>
