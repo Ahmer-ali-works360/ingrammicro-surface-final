@@ -159,7 +159,7 @@ export default function Page() {
                                 selectedProductId: orderProducts[0].id,
                                 otherPartNumber: "",
                                 customerName: selectedOrder.company_name || "",
-                                resellerAccountNumber: selectedOrder.crm_account || prev.resellerAccountNumber,
+                                // resellerAccountNumber: selectedOrder.ingram_account || prev.resellerAccountNumber,
                                 numberOfUnits: selectedOrder.dev_opportunity?.toString() || prev.numberOfUnits,
                                 totalDealRevenue: selectedOrder.rev_opportunity !== null && selectedOrder.rev_opportunity !== undefined
                                     ? Math.round(Number(selectedOrder.rev_opportunity)).toString()
@@ -347,7 +347,7 @@ export default function Page() {
                 return;
             }
 
-            const orderHash = selectedOrder.orderHash || "";
+            const orderHash = selectedOrder.order_no?.toString() || "";
             const isOther = formData.deviceType === "other";
             const selectedProduct = products.find(p => p.id === formData.selectedProductId);
             const deviceName = isOther ? formData.otherPartNumber : (selectedProduct?.name || "");
@@ -361,7 +361,7 @@ export default function Page() {
                 otherDesc: isOther ? formData.otherPartNumber : null,
                 reseller: "",
                 orderHash: orderHash,
-                resellerAccount: formData.resellerAccountNumber,
+                account: formData.resellerAccountNumber,
                 customerName: formData.customerName,
                 units: parseInt(formData.numberOfUnits),
                 deal_rev: parseFloat(formData.totalDealRevenue),
@@ -436,7 +436,7 @@ export default function Page() {
                 productName: productText,
                 productDetails: productRowsHTML,
                 quantity: totalQuantity,
-                resellerAccount: oData.resellerAccount,
+                resellerAccount: oData.account,
                 units: oData.units,
                 pType: oData.purchaseType,
                 dealRev: oData.deal_rev,

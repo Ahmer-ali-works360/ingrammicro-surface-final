@@ -3480,10 +3480,6 @@ html:`
                                                 <td style="padding:20px 10px; border:1px solid #ddd;">${resellerAccount}</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Reseller Name </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${reseller}</td>
-                                            </tr>
-                                            <tr>
                                                 <td style="padding:20px 10px; border:1px solid #ddd;"> Ingram Order# </td>
                                                 <td style="padding:20px 10px; border:1px solid #ddd;">${ingramOrderNumber || orderNumber}</td>
                                             </tr>
@@ -3576,7 +3572,7 @@ html:`
                                     <!-- INTRO -->
                                     <tr>
                                     <td style="padding:30px 30px 0 30px; color:#333;">
-                                        <strong>roduct Subscribed</strong>
+                                        <strong>Product Subscribed</strong>
                                     </td>
                                     </tr>
                                 

@@ -60,7 +60,7 @@ export type Win = {
     otherDesc: string
     reseller: string
     orderHash: string
-    resellerAccount: string
+    account: string
     purchaseType: string
     purchaseDate: string
     notes: string
@@ -349,7 +349,7 @@ export default function Page() {
         let isValid = true;
 
         // ✅ reseller removed, orderHash renamed to Ingram Order #
-        const requiredFields = ['customerName', 'orderHash', 'resellerAccount', 'units', 'deal_rev', 'purchaseType', 'purchaseDate'];
+        const requiredFields = ['customerName', 'orderHash', 'account', 'units', 'deal_rev', 'purchaseType', 'purchaseDate'];
 
         for (const field of requiredFields) {
             const value = selectedWin[field as keyof typeof selectedWin];
@@ -505,7 +505,7 @@ export default function Page() {
                 'Total Deal Revenue ($)': `$${win.deal_rev?.toFixed(2) || '0.00'}`,
                 'Number of Units': win.units || 0,
                 'Reseller': win.reseller || '',
-                'Reseller Account': win.resellerAccount || '',
+                'Account': win.account || '',
                 'Purchase Type': win.purchaseType || '',
                 'Purchase Date': win.purchaseDate || '',
                 'Notes': win.notes || '',
@@ -891,7 +891,7 @@ export default function Page() {
                                     <label className="text-sm font-medium text-gray-700">Ingram Order # *</label>
                                     <AntInput
                                         name="orderHash"
-                                        value={selectedWin.orderHash || ''}
+                                        value={selectedWin.order_no?.toString() || selectedWin.orderHash || ''}
                                         onChange={handleInputChange}
                                         status={editErrors.orderHash ? 'error' : ''}
                                     />
@@ -901,12 +901,12 @@ export default function Page() {
                                 <div className="space-y-2">
                                     <label className="text-sm font-medium text-gray-700">Reseller Account *</label>
                                     <AntInput
-                                        name="resellerAccount"
-                                        value={selectedWin.resellerAccount || ''}
+                                        name="Account #"
+                                        value={selectedWin.account || ''}
                                         onChange={handleInputChange}
-                                        status={editErrors.resellerAccount ? 'error' : ''}
+                                        status={editErrors.account ? 'error' : ''}
                                     />
-                                    {editErrors.resellerAccount && <p className="text-xs text-red-500">{editErrors.resellerAccount}</p>}
+                                    {editErrors.account && <p className="text-xs text-red-500">{editErrors.account}</p>}
                                 </div>
                             </div>
                         </div>
@@ -1025,7 +1025,7 @@ export default function Page() {
                             </h3>
                             <div className="space-y-2">
                                 <label className="text-sm font-medium text-gray-700">
-                                    How did TD Synnex Surface Demo help you close this deal?
+                                    How did Ingrammicro Surface demo help you close this deal?
                                 </label>
                                 <AntInput.TextArea
                                     name="notes"

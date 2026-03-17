@@ -24,7 +24,7 @@ export type Win = {
     otherDesc: string
     reseller: string
     orderHash: string
-    resellerAccount: string
+    account: string
     customerName: string
     units: number
     deal_rev: number
@@ -84,7 +84,7 @@ export default function WinDetailsPage() {
             // First, fetch the win record with LEFT JOIN on orders
             const { data: winData, error: winError } = await supabase
                 .from('wins')
-                .select('*, orders:order_id ( order_no, company_name, reseller, crm_account, order_date )')
+                .select('*, orders:order_id ( order_no, company_name, ingram_account, order_date )')
                 .eq('id', winId)
                 .single();
 
@@ -317,24 +317,24 @@ export default function WinDetailsPage() {
 
 
                         {/* Reseller Name */}
-                        <TableRow>
+                        {/* <TableRow>
                             <TableCell className="w-[65%] font-semibold">Reseller Name</TableCell>
                             <TableCell className="w-[35%] border-l">
                                 {win.reseller || "-"}
                             </TableCell>
-                        </TableRow>
+                        </TableRow> */}
 
                         {/* Reseller Account # */}
                         <TableRow>
-                            <TableCell className="w-[65%] font-semibold">Reseller Account #</TableCell>
+                            <TableCell className="w-[65%] font-semibold">Account #</TableCell>
                             <TableCell className="w-[35%] border-l">
-                                {win.resellerAccount || "-"}
+                                {win.account || "-"}
                             </TableCell>
                         </TableRow>
 
                         {/* Synnex Order # - FIXED: Using orderHash */}
                         <TableRow>
-                            <TableCell className="w-[65%] font-semibold">Synnex Order #</TableCell>
+                            <TableCell className="w-[65%] font-semibold">Ingram Order #</TableCell>
                             <TableCell className="w-[35%] border-l">
                                 {getSynnexOrderNumber()}
                             </TableCell>
