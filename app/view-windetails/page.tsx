@@ -899,7 +899,7 @@ export default function Page() {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-sm font-medium text-gray-700">Reseller Account *</label>
+                                    <label className="text-sm font-medium text-gray-700">Account *</label>
                                     <AntInput
                                         name="Account #"
                                         value={selectedWin.account || ''}

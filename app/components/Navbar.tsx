@@ -31,7 +31,7 @@ const publicNavigation: NavigationItem[] = [
 
 const authNavigation: NavigationItem[] = [
   { name: 'Report a Win', href: '/wins' },
-  { name: '360Dashboard', href: 'https://ingrammicro-surface.com/360dashboard/' },
+  { name: '360Dashboard', href: '360dashboard/' },
 ]
 
 const menuItems = [
@@ -354,7 +354,7 @@ export default function Navbar() {
         { name: 'Live Inventory', href: '/live+inventory' }
       ] : []),
       ...((profile?.role === admin || profile?.role === superSubscriber)
-        ? [{ name: '360Dashboard', href: 'https://ingrammicro-surface.com/360dashboard/' }]
+        ? [{ name: '360Dashboard', href: '/360dashboard' }]
         : [])
     ]
     : publicNavigation;
