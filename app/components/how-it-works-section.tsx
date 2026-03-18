@@ -62,11 +62,11 @@ import { FaBriefcase, FaCircleCheck, FaPlaneDeparture, FaTrophy } from "react-ic
 import { IoReturnUpBack } from "react-icons/io5"
 
 const STEPS = [
-  { title: 'Register & Login', description: 'Complete the registration process to start using the portal', icon: <TfiWrite className="h-5 w-5 text-[#ffffff]" />, number: 1 },
+  { title: 'REGISTRATION', description: 'Complete the registration process to start using the portal', icon: <TfiWrite className="h-5 w-5 text-[#ffffff]" />, number: 1 },
   { title: 'CREATE DEMO KIT', description: 'Choose between different products for a 30-day demo', icon: <FaBriefcase  className="h-5 w-5 text-[#ffffff]" />, number: 2 },
   { title: 'CHECKOUT', description: 'Fill out the form with shipping & opportunity details and checkout easily', icon: <FaCircleCheck className="h-5 w-5 text-[#ffffff]" />, number: 3 },
-  { title: 'Order Approval', description: 'Your order will be reviewed and approved by the Program Manager.', icon: <FaPlaneDeparture className="h-5 w-5 text-[#ffffff]" />, number: 4 }, // Changed from 3 to 4
-  { title: 'Shipping & Return', description: 'Approved orders are shipped overnight. Use the provided return label when returning after the demo trial.', icon: <IoReturnUpBack className="h-5 w-5 text-[#ffffff]" />, number: 5 },
+  { title: 'ORDER SHIPMENT', description: 'Seamless overnight shipment to customer after order approval.', icon: <FaPlaneDeparture className="h-5 w-5 text-[#ffffff]" />, number: 4 }, // Changed from 3 to 4
+  { title: 'RETURN ORDER', description: 'Simple order return using hard/soft copy of provided prepaid return label', icon: <IoReturnUpBack className="h-5 w-5 text-[#ffffff]" />, number: 5 },
   { title: 'REPORT A WIN', description: 'Close customer after demo period and enter win details', icon: <FaTrophy className="h-5 w-5 text-[#ffffff]" />, number: 6 },
 ]
 

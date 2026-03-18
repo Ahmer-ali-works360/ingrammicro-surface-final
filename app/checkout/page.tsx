@@ -890,21 +890,21 @@ addon_sim: has5GAddon,
         note: formData.notes || "",
       });
 
-      const adminEmails = await getAdminEmails();
+      // const adminEmails = await getAdminEmails();
 
-      // Merge DB + static emails
-      const mergedAdminEmails = [
-        ...new Set([
-          ...adminEmails,
-          ...NewOrderEmail
-        ])
-      ];
+      // // Merge DB + static emails
+      // const mergedAdminEmails = [
+      //   ...new Set([
+      //     ...adminEmails,
+      //     ...NewOrderEmail
+      //   ])
+      // ];
 
 
       await sendEmail({
         to: process.env.NODE_ENV === "development"
           ? ["ahmer.ali@works360.com"]
-          : mergedAdminEmails,
+          : ["ahmer.ali@works360.com"],
         subject: template.subject,
         text: template.text,
         html: template.html,
@@ -917,80 +917,80 @@ addon_sim: has5GAddon,
 
 
   // Add this function to fetch admin emails
-  const getAdminEmails = async () => {
-    const startTime = Date.now();
+  // const getAdminEmails = async () => {
+  //   const startTime = Date.now();
 
-    await logActivity({
-      type: 'user',
-      level: 'info',
-      action: 'admin_emails_fetch_attempt',
-      message: 'Attempting to fetch admin emails',
-      userId: profile?.id || null,
-      details: {
-        adminRole: process.env.NEXT_PUBLIC_ADMINISTRATOR
-      }
-    });
+  //   await logActivity({
+  //     type: 'user',
+  //     level: 'info',
+  //     action: 'admin_emails_fetch_attempt',
+  //     message: 'Attempting to fetch admin emails',
+  //     userId: profile?.id || null,
+  //     details: {
+  //       adminRole: process.env.NEXT_PUBLIC_ADMINISTRATOR
+  //     }
+  //   });
 
-    try {
-      const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
+  //   try {
+  //     const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
 
-      const { data: admins, error } = await supabase
-        .from("users")
-        .select("email")
-        .eq("role", adminRole);
+  //     const { data: admins, error } = await supabase
+  //       .from("users")
+  //       .select("email")
+  //       .eq("role", adminRole);
 
-      if (error) {
-        await logActivity({
-          type: 'user',
-          level: 'error',
-          action: 'admin_emails_fetch_failed',
-          message: `Failed to fetch admin emails: ${error.message}`,
-          userId: profile?.id || null,
-          details: {
-            error: error,
-            executionTimeMs: Date.now() - startTime
-          },
-          status: 'failed'
-        });
-        return [];
-      }
+  //     if (error) {
+  //       await logActivity({
+  //         type: 'user',
+  //         level: 'error',
+  //         action: 'admin_emails_fetch_failed',
+  //         message: `Failed to fetch admin emails: ${error.message}`,
+  //         userId: profile?.id || null,
+  //         details: {
+  //           error: error,
+  //           executionTimeMs: Date.now() - startTime
+  //         },
+  //         status: 'failed'
+  //       });
+  //       return [];
+  //     }
 
-      // Extract emails and filter out any null/undefined
-      const adminEmails = admins
-        .map(admin => admin.email)
-        .filter(email => email && email.trim() !== "");
+  //     // Extract emails and filter out any null/undefined
+  //     const adminEmails = admins
+  //       .map(admin => admin.email)
+  //       .filter(email => email && email.trim() !== "");
 
 
-      await logActivity({
-        type: 'user',
-        level: 'success',
-        action: 'admin_emails_fetch_success',
-        message: `Successfully fetched ${adminEmails.length} admin emails`,
-        userId: profile?.id || null,
-        details: {
-          adminCount: adminEmails.length,
-          executionTimeMs: Date.now() - startTime
-        },
-        status: 'completed'
-      });
+  //     await logActivity({
+  //       type: 'user',
+  //       level: 'success',
+  //       action: 'admin_emails_fetch_success',
+  //       message: `Successfully fetched ${adminEmails.length} admin emails`,
+  //       userId: profile?.id || null,
+  //       details: {
+  //         adminCount: adminEmails.length,
+  //         executionTimeMs: Date.now() - startTime
+  //       },
+  //       status: 'completed'
+  //     });
 
-      return adminEmails;
+  //     return adminEmails;
 
-    } catch (error) {
-      await logActivity({
-        type: 'user',
-        level: 'error',
-        action: 'admin_emails_fetch_error',
-        message: `Failed to fetch admin emails`,
-        userId: profile?.id || null,
-        details: {
-          executionTimeMs: Date.now() - startTime
-        },
-        status: 'failed'
-      });
-      return [];
-    }
-  };
+  //   } catch (error) {
+  //     await logActivity({
+  //       type: 'user',
+  //       level: 'error',
+  //       action: 'admin_emails_fetch_error',
+  //       message: `Failed to fetch admin emails`,
+  //       userId: profile?.id || null,
+  //       details: {
+  //         executionTimeMs: Date.now() - startTime
+  //       },
+  //       status: 'failed'
+  //     });
+  //     return [];
+  //   }
+  // };
 
   // Helper function to get error class
   const getErrorClass = (fieldName: string) => {

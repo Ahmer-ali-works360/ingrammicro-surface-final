@@ -86,6 +86,7 @@ export default function Page() {
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     const [rowSelection, setRowSelection] = useState({})
+    const [approvingId, setApprovingId] = useState<string | null>(null);
 
     // Role constants from environment variables
     const smRole = process.env.NEXT_PUBLIC_SHOPMANAGER;
@@ -233,55 +234,57 @@ export default function Page() {
     };
 
 
-    const handleVerifyUser = async (userId: string, email: string) => {
-        const startTime = Date.now();
-        try {
-            const { error } = await supabase
-                .from('users')
-                .update({ isVerified: true })
-                .eq('id', userId);
+const handleVerifyUser = async (userId: string, email: string) => {
+    if (approvingId === userId) return; // ✅ double click guard
+    setApprovingId(userId);
+    const startTime = Date.now();
+    try {
+        const { error } = await supabase
+            .from('users')
+            .update({ isVerified: true })
+            .eq('id', userId);
 
-            if (error) throw error;
+        if (error) throw error;
 
-            const executionTime = Date.now() - startTime;
-            logSuccess(
-                'user',
-                'user_approved',
-                `User approved: ${email}`,
-                {
-                    userId,
-                    email,
-                    executionTime,
-                    approvedBy: profile?.email
-                },
-                profile?.id,
-                source
-            );
+        const executionTime = Date.now() - startTime;
+        logSuccess(
+            'user',
+            'user_approved',
+            `User approved: ${email}`,
+            {
+                userId,
+                email,
+                executionTime,
+                approvedBy: profile?.email
+            },
+            profile?.id,
+            source
+        );
 
-            // Send approval email
-            await sendApprovedEmail(email);
-
-            fetchUsers(); // Refresh data
-            toast.success("User approved successfully!");
-        } catch (error: any) {
-            const executionTime = Date.now() - startTime;
-            setError('Failed to approve user');
-            logError(
-                'db',
-                'user_approval_failed',
-                `Failed to approve user ${email}`,
-                {
-                    error: error.message,
-                    userId,
-                    email,
-                    executionTime
-                },
-                profile?.id,
-                source
-            );
-            toast.error("Failed to approve user");
-        }
-    };
+        await sendApprovedEmail(email);
+        toast.success("User approved successfully!");
+        await fetchUsers();
+    } catch (error: any) {
+        const executionTime = Date.now() - startTime;
+        setError('Failed to approve user');
+        logError(
+            'db',
+            'user_approval_failed',
+            `Failed to approve user ${email}`,
+            {
+                error: error.message,
+                userId,
+                email,
+                executionTime
+            },
+            profile?.id,
+            source
+        );
+        toast.error("Failed to approve user");
+    } finally {
+        setApprovingId(null); // ✅ reset
+    }
+};
 
     // Update useEffect to depend on searchParams
     useEffect(() => {
@@ -518,6 +521,7 @@ export default function Page() {
                                         onClick={() => handleVerifyUser(user.id, user.email)}
                                         className="bg-[#1D76BC] hover:bg-[#1660a0] text-white cursor-pointer"
                                         size="sm"
+                                        disabled={approvingId === user.id}
                                     >
                                         <CheckCircle className="h-4 w-4" />
                                     </Button>

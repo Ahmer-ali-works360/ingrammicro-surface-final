@@ -49,19 +49,20 @@ export default function Page() {
     return now.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", hour12: true });
   };
 
-  const getAdminEmails = async (): Promise<string[]> => {
-    try {
-      const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
-      const { data: admins, error } = await supabase.from("users").select("email").eq("role", adminRole).not("email", "is", null);
-      if (error) return [];
-      return admins.map((admin: { email: string }) => admin.email).filter((e: string) => e && e.trim() !== "");
-    } catch { return []; }
-  };
+  // const getAdminEmails = async (): Promise<string[]> => {
+  //   try {
+  //     const adminRole = process.env.NEXT_PUBLIC_ADMINISTRATOR;
+  //     const { data: admins, error } = await supabase.from("users").select("email").eq("role", adminRole).not("email", "is", null);
+  //     if (error) return [];
+  //     return admins.map((admin: { email: string }) => admin.email).filter((e: string) => e && e.trim() !== "");
+  //   } catch { return []; }
+  // };
 
   const sendRegistrationEmails = async (name: string, userEmail: string, resellerName: string, registrationDate: string) => {
     try {
-      const adminEmails = await getAdminEmails();
-      const mergedAdminEmails = [...new Set([...adminEmails, ...UserRegisterEmail])];
+      // const adminEmails = await getAdminEmails();
+      // const mergedAdminEmails = [...new Set([...adminEmails, ...UserRegisterEmail])];
+      const mergedAdminEmails = UserRegisterEmail.filter((e) => e && e.trim() !== "");
       const userEmailData = { name, email: userEmail, reseller: resellerName, registrationDate };
       const adminTemplate = emailTemplates.registrationAdminNotification(userEmailData);
       await sendEmail({ to: process.env.NODE_ENV === "development" ? ["ahmer.ali@works360.com"] : mergedAdminEmails, subject: adminTemplate.subject, text: adminTemplate.text, html: adminTemplate.html });
@@ -92,7 +93,7 @@ export default function Page() {
       await supabase.auth.signOut();
       sendRegistrationEmails(name, email, reseller, registrationDate);
       setEmail(""); setName(""); setPassword(""); setConfirmPassword(""); setReseller("");
-      toast.success("Registration successful! Please wait for PM approval.", { style: { background: "black", color: "white" } });
+      toast.success("Registration successful! Awaiting for PM approval.", { style: { background: "black", color: "white" } });
       router.push("/login");
     } catch (err: any) {
       toast.error(err?.message || "An unexpected error occurred", { style: { background: "black", color: "white" } });
@@ -201,7 +202,7 @@ export default function Page() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-sm bg-[#1570EF] px-6 py-2.5 font-semibold text-white transition-all hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full rounded-sm bg-[#1570EF] px-6 py-2.5 font-semibold text-white transition-all cursor-pointer hover:bg-[#1660a0] hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? "Signing up..." : "Register"}
               </button>
