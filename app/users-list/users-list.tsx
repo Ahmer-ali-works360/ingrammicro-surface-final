@@ -1147,7 +1147,7 @@ export default function UsersList() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -1217,12 +1217,12 @@ export default function UsersList() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1D76BC]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#1660a0] last:border-r-0"
+                                                className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -1435,7 +1435,7 @@ export default function UsersList() {
                         }} className="cursor-pointer">
                             Cancel
                         </Button>
-                        <Button onClick={handleSaveEdit} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                        <Button onClick={handleSaveEdit} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                             Save changes
                         </Button>
                     </DialogFooter>
@@ -1489,7 +1489,7 @@ export default function UsersList() {
                         }} className="cursor-pointer">
                             Cancel
                         </Button>
-                        <Button onClick={handleSaveRole} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                        <Button onClick={handleSaveRole} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                             Update Role
                         </Button>
                     </DialogFooter>

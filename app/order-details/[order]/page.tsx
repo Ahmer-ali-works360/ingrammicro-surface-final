@@ -1,4 +1,4 @@
-    //src/app/order-details/[order]/page.tsx
+//src/app/order-details/[order]/page.tsx
 
     "use client"
 
@@ -329,7 +329,7 @@
         //                                 ))}
         //                             </SelectContent>
         //                         </Select>
-        //                         <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!(isAdmin || isSMRole)}>Save</Button>
+        //                         <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!(isAdmin || isSMRole)}>Save</Button>
         //                         <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer" disabled={!(isAdmin || isSMRole)}>Cancel</Button>
         //                     </div>
         //                 ) : (
@@ -383,7 +383,7 @@ const renderAllProducts = () => {
                                         ))}
                                     </SelectContent>
                                 </Select>
-                                <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">Save</Button>
+                                <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">Save</Button>
                                 <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer">Cancel</Button>
                             </div>
                         ) : (
@@ -533,7 +533,7 @@ const renderAllProducts = () => {
                     <div className="flex justify-end space-x-3 pt-4 border-t">
                         <Button variant="outline" onClick={() => { setIsReturnModalOpen(false); setReturnedProducts([]); toast.info("Return process cancelled"); }} className="cursor-pointer">Cancel</Button>
                         <Button onClick={() => { if (!order) { toast.error("No order data"); return; } if (!canEditStatus) { toast.error("You are not authorized"); return; } handleReturnSubmit(); }}
-                            className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!order || !canEditStatus}>
+                            className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!order || !canEditStatus}>
                             Confirm Return
                         </Button>
                     </div>
@@ -904,7 +904,7 @@ const renderAllProducts = () => {
             if (isEditing) return (
                 <div className="flex items-center gap-2">
                     <Input value={editedValue} onChange={(e) => setEditedValue(e.target.value)} className="flex-1" autoFocus />
-                    <Button size="sm" onClick={() => handleSaveEdit(field)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!canEdit}>Save</Button>
+                    <Button size="sm" onClick={() => handleSaveEdit(field)} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!canEdit}>Save</Button>
                     <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer" disabled={!canEdit}>Cancel</Button>
                 </div>
             );
@@ -929,7 +929,7 @@ const renderAllProducts = () => {
                         <SelectTrigger className="flex-1"><SelectValue placeholder="Select status" /></SelectTrigger>
                         <SelectContent>{statusOptions.map(o => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}</SelectContent>
                     </Select>
-                    <Button size="sm" onClick={() => { if (editedValue !== process.env.NEXT_PUBLIC_STATUS_RETURNED) handleSaveEdit(field); }} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!canEditStatus}>
+                    <Button size="sm" onClick={() => { if (editedValue !== process.env.NEXT_PUBLIC_STATUS_RETURNED) handleSaveEdit(field); }} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!canEditStatus}>
                         {isPendingShipped ? "Awaiting Tracking..." : isPendingReturned ? "Processing Return..." : "Save"}
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => { if (pendingStatusChange) setPendingStatusChange(null); handleCancelEdit(); }} className="cursor-pointer" disabled={!canEditStatus}>Cancel</Button>
@@ -948,13 +948,13 @@ const renderAllProducts = () => {
 
         const renderReturnLabelUpload = (field: string, currentValue: any) => (
             <div className="flex flex-col items-center justify-center gap-2">
-                {currentValue ? <Link href={currentValue} target="_blank" rel="noopener noreferrer" className="bg-[#1D76BC] text-white px-4 py-2 rounded-md hover:bg-[#1660a0] cursor-pointer">View Return Label (PDF)</Link>
+                {currentValue ? <Link href={currentValue} target="_blank" rel="noopener noreferrer" className="bg-[#E5E7EB] text-black px-4 py-2 rounded-md hover:bg-[#9CA3AF] cursor-pointer">View Return Label (PDF)</Link>
                     : <span className="text-gray-500">No Return Label uploaded</span>}
                 {uploadError && <div className="text-sm text-red-600 mt-1 text-center">{uploadError}</div>}
                 {canUploadReturnLabel && (
                     <div className="mt-2">
                         <input type="file" accept=".pdf" onChange={handleFileUpload} className="hidden" id="return-label-upload" />
-                        <label htmlFor="return-label-upload" className="inline-flex items-center justify-center px-3 py-1.5 text-sm bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] cursor-pointer">
+                        <label htmlFor="return-label-upload" className="inline-flex items-center justify-center px-3 py-1.5 text-sm bg-[#E5E7EB] text-black rounded-md hover:bg-[#9CA3AF] cursor-pointer">
                             {isUploading ? "Uploading..." : currentValue ? "Replace PDF" : "Upload PDF"}
                         </label>
                     </div>
@@ -967,7 +967,7 @@ const renderAllProducts = () => {
             if (isEditing) return (
                 <div className="flex items-center gap-2">
                     <Input value={editedValue} onChange={(e) => setEditedValue(e.target.value)} className="flex-1" autoFocus />
-                    <Button size="sm" onClick={() => handleSaveEdit("notes")} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!canEditAll}>Save</Button>
+                    <Button size="sm" onClick={() => handleSaveEdit("notes")} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!canEditAll}>Save</Button>
                     <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer" disabled={!canEditAll}>Cancel</Button>
                 </div>
             );
@@ -988,7 +988,7 @@ const renderAllProducts = () => {
                 <div className="space-y-6">
                     <Table className="border">
                         <TableHeader>
-                            <TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Tracking & Return Tracking</TableHead></TableRow>
+                            <TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Tracking & Return Tracking</TableHead></TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow>
@@ -1023,7 +1023,7 @@ const renderAllProducts = () => {
                                                     )}
                                                     <div className="flex justify-end space-x-2 pt-4">
                                                         <Button variant="outline" onClick={() => setIsModalOpen(false)} className="cursor-pointer">Cancel</Button>
-                                                        <Button onClick={handleTrackingUpdate} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer" disabled={!canEditTracking}>Save Changes</Button>
+                                                        <Button onClick={handleTrackingUpdate} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer" disabled={!canEditTracking}>Save Changes</Button>
                                                     </div>
                                                 </DialogContent>
                                             </Dialog>
@@ -1043,7 +1043,7 @@ const renderAllProducts = () => {
                     <Table className="border">
                         <TableHeader>
                             <TableRow>
-                                <TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>
+                                <TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>
                                     Return Label 
                                 </TableHead>
                             </TableRow>
@@ -1095,12 +1095,12 @@ const renderAllProducts = () => {
                                 <Table className="border">
                                     {order.order_status === process.env.NEXT_PUBLIC_STATUS_REJECTED ? (
                                         <>
-                                            <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }}>Rejected By</TableHead><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }}>Date</TableHead></TableRow></TableHeader>
+                                            <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }}>Rejected By</TableHead><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }}>Date</TableHead></TableRow></TableHeader>
                                             <TableBody><TableRow><TableCell>{order.rejected_user?.email || order.rejectedBy || "N/A"}</TableCell><TableCell>{order.action_date ? formatActionDate(order.action_date) : "-"}</TableCell></TableRow></TableBody>
                                         </>
                                     ) : (
                                         <>
-                                            <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }}>Approved By</TableHead><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }}>Date</TableHead></TableRow></TableHeader>
+                                            <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }}>Approved By</TableHead><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }}>Date</TableHead></TableRow></TableHeader>
                                             <TableBody><TableRow><TableCell>{order.approved_user?.email || order.approvedBy || "-"}</TableCell><TableCell>{order.action_date ? formatActionDate(order.action_date) : "-"}</TableCell></TableRow></TableBody>
                                         </>
                                     )}
@@ -1111,7 +1111,7 @@ const renderAllProducts = () => {
                         {/* Products */}
                         <div>
                             <Table className="border">
-                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} className="w-[85%]">Products</TableHead><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} className="w-[15%]">Quantity</TableHead></TableRow></TableHeader>
+                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} className="w-[85%]">Products</TableHead><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} className="w-[15%]">Quantity</TableHead></TableRow></TableHeader>
                                 <TableBody>{renderAllProducts()}</TableBody>
                             </Table>
                         </div>
@@ -1119,7 +1119,7 @@ const renderAllProducts = () => {
                         {/* Team Details - Sales Executive only */}
                         <div>
                             <Table className="border">
-                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Team Details</TableHead></TableRow></TableHeader>
+                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Team Details</TableHead></TableRow></TableHeader>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell className="w-[65%] font-semibold">Sales Executive</TableCell>
@@ -1136,7 +1136,7 @@ const renderAllProducts = () => {
                         {/* Shipping Details */}
                         <div>
                             <Table className="border">
-                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Shipping Details</TableHead></TableRow></TableHeader>
+                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Shipping Details</TableHead></TableRow></TableHeader>
                                 <TableBody>
                                     <TableRow><TableCell className="w-[65%] font-semibold">Company Name</TableCell><TableCell className="w-[35%] border-l">{renderEditableCell("company_name", order.company_name, "shipping_company")}</TableCell></TableRow>
                                     <TableRow><TableCell className="w-[65%] font-semibold">Contact Name</TableCell><TableCell className="w-[35%] border-l">{renderEditableCell("contact_name", order.contact_name, "shipping_contact")}</TableCell></TableRow>
@@ -1153,7 +1153,7 @@ const renderAllProducts = () => {
                         {/* Opportunity Details - New Fields */}
                         <div>
                             <Table className="border">
-                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Opportunity Details</TableHead></TableRow></TableHeader>
+                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Opportunity Details</TableHead></TableRow></TableHeader>
                                 <TableBody>
                                     <TableRow><TableCell className="w-[65%] font-semibold">Device Opportunity Size (Units)</TableCell><TableCell className="w-[35%] border-l">{renderEditableCell("dev_opportunity", order.dev_opportunity, "opp_units")}</TableCell></TableRow>
                                     <TableRow><TableCell className="w-[65%] font-semibold">Budget Per Device ($)</TableCell><TableCell className="w-[35%] border-l">{renderEditableCell("dev_budget", order.dev_budget, "opp_budget")}</TableCell></TableRow>
@@ -1179,7 +1179,7 @@ const renderAllProducts = () => {
                             {!isSubscriber && !isSMRole && order.order_status === "Awaiting Approval" && <div className="mb-40"></div>}
                             {isSMRole && order.order_status === "Awaiting Approval" && <div className="mb-28"></div>}
                             <Table className="border">
-                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Status</TableHead></TableRow></TableHeader>
+                                <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Status</TableHead></TableRow></TableHeader>
                                 <TableBody>
                                     <TableRow>
                                         <TableCell colSpan={2}>
@@ -1197,7 +1197,7 @@ const renderAllProducts = () => {
                         {order.shipped_date && !isSubscriber && (
                             <div>
                                 <Table className="border">
-                                    <TableHeader><TableRow><TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>Win Status</TableHead></TableRow></TableHeader>
+                                    <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Win Status</TableHead></TableRow></TableHeader>
                                     <TableBody>
                                         {order.wins && order.wins.length === 0 && (
                                             <>

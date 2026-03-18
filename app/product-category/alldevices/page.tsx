@@ -908,12 +908,12 @@ export default function Page() {
                 e.stopPropagation();
                 setShowCartDrawer(true);
             }}
-            className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm text-[#1D76BC] border border-[#1D76BC] rounded-sm cursor-pointer hover:bg-[#1D76BC] hover:text-white transition-colors flex items-center justify-center gap-2"
+            className="sm:px-4 px-3 sm:py-2.5 py-1.5 text-sm text-[#1D76BC] border border-[#1D76BC] rounded-sm cursor-pointer hover:bg-[#1D76BC] hover:text-white transition-colors flex items-center justify-center gap-2"
         >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
             </svg>
-            Add to Cart
+            Added to Cart
         </button>
     </div>
                                                                         ) : (
@@ -1029,7 +1029,7 @@ export default function Page() {
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}  // <-- onClose mein showCartDrawer false karein
                     open={showCartDrawer}  // <-- open ko showCartDrawer se control karein
-                    size={400}
+                    size={300}
                     className="cart-drawer"
                 >
                     {cartLoading ? (
@@ -1124,7 +1124,7 @@ export default function Page() {
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
-                                        View Cart Details
+                                        View Cart
                                     </button>
                                     <button
                                         onClick={handleCheckout}

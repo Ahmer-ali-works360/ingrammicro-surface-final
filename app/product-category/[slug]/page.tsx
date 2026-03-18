@@ -1139,7 +1139,7 @@ export default function Page() {
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}
                     open={showCartDrawer}
-                    size={400}
+                    size={300}
                     className="cart-drawer"
                 >
                     {cartLoading ? (
@@ -1226,7 +1226,7 @@ export default function Page() {
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1d76bc] text-[#1d76bc] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
-                                        View Cart Details
+                                        View Cart
                                     </button>
                                     <button
                                         onClick={handleCheckout}

@@ -514,12 +514,12 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     <TooltipProvider>
                         <div className="flex space-x-2 ps-2">
 
-                            {/* ✅ Approve Button with Tooltip - Same as before */}
+                            {/* ✅ Approve Button with Tooltip */}
                             <Tooltip>
                                 <TooltipTrigger asChild>
                                     <Button
                                         onClick={() => handleVerifyUser(user.id, user.email)}
-                                        className="bg-[#1D76BC] hover:bg-[#1660a0] text-white cursor-pointer"
+                                        className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
                                         size="sm"
                                         disabled={approvingId === user.id}
                                     >
@@ -775,7 +775,7 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -845,12 +845,12 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead
                                                 key={header.id}
-                                                className="text-white font-semibold border-r border-[#1D76BC] last:border-r-0"
+                                                className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0"
                                             >
                                                 {header.isPlaceholder
                                                     ? null

@@ -202,114 +202,118 @@ export const dateFormatters = {
 export const emailTemplates = {
 
     registrationAdminNotification: (userData: {
-        name: string;
-        email: string;
-        reseller: string;
-        registrationDate: string;
-        formId?: string;
-    }) => ({
-        subject: `New User Registration | Ingram Micro Surface (Awaiting Approval)`,
-        text: `Dear Program Manager(s),\n\nYou have received a new user registration on Ingram Micro Surface.\nPlease review to approve or reject this user.\n\nReview Pending User(s)\n\nBelow are the details for this user:\n \nEmail (Username): ${userData.email}\nName: ${userData.name}\nReseller: ${userData.reseller}\n\nPlease login to the admin panel to review this user.\n\nBest regards,\nIngram Micro Surface Team`,
-         html: `
-        <table style="font-family: 'Inter', sans-serif; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dddddd;"
-        border="0" width="600" cellspacing="0" cellpadding="0" align="center">
-        <tr>
-            <td align="center">
+            name: string;
+            email: string;
+            reseller: string;
+            registrationDate: string;
+            formId?: string;
+        }) => ({
+            subject: `New User Registration | Ingram Micro Surface (Awaiting Approval)`,
+            text: `Dear Program Manager(s),\n\nYou have received a new user registration on Ingram Micro Surface.\nPlease review to approve or reject this user.\n\nReview Pending User(s)\n\nBelow are the details for this user:\n \nEmail (Username): ${userData.email}\nName: ${userData.name}\nReseller: ${userData.reseller}\n\nPlease login to the admin panel to review this user.\n\nBest regards,\nIngram Micro Surface Team`,
+            html: `
+            <table style="font-family: 'Inter', sans-serif; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dddddd;"
+            border="0" width="600" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td align="center">
 
-                <table width="720" cellpadding="0" cellspacing="0"
-                    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+                    <table width="720" cellpadding="0" cellspacing="0"
+                        style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
 
-                    <!-- HEADER -->
-                    <tr>
-                        <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
-                            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Micro Surface"
-                                style="max-width:400px; width:220px;">
-                        </td>
-                    </tr>
+                        <!-- HEADER -->
+                        <tr>
+                            <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
+                                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
+                                    alt="Ingram Micro Surface"
+                                    width="220"
+                                    height="auto"
+                                    border="0"
+                                    style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
+                            </td>
+                        </tr>
 
-                    
+                        
 
-                    <!-- Content -->
-                    <tr>
-                        <td style="padding:30px; color:#333;">
-                            <h2 style="color: #000000; margin: 0 0 24px; font-size: 20px; font-weight: 500;">Dear
-                                Program Manager(s),
-                            </h2>
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:30px; color:#333;">
+                                <h2 style="color: #000000; margin: 0 0 24px; font-size: 20px; font-weight: 500;">Dear
+                                    Program Manager(s),
+                                </h2>
 
-                            <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 8px;">
-                                A new user has registered on <strong>Ingramicro surface portal</strong>.
-                            </p>
-                            <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 32px;">
-                                Please review and approve or reject this request.
-                            </p>
-                        </td>
-                    </tr>
+                                <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 8px;">
+                                    A new user has registered on <strong>Ingramicro surface portal</strong>.
+                                </p>
+                                <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 32px;">
+                                    Please review and approve or reject this request.
+                                </p>
+                            </td>
+                        </tr>
 
-                    <tr>
-                        <td align="center" style="padding:0px 30px;">
-                            <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                <tr>
-                                    <td align="center"
-                                        style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
-                                        <a href="https://ingrammicro-surface-final.vercel.app/pending-users${userData.formId ? `?formId=${userData.formId}` : ''}"
-                                            style="color:#ffffff; text-decoration:none; font-size:20px; font-family:Arial, sans-serif; display:inline-block;">
-                                            Review Pending User(s)
-                                        </a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding:30px; color:#333;">
-
-                            <!-- User Details - Simple Table Style -->
-                            <div
-                                style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
-                                <h3
-                                    style="color: #1D76BC; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-                                    USER DETAILS</h3>
-
-                                <table style="width: 100%; border-collapse: collapse;">
+                        <tr>
+                            <td align="center" style="padding:0px 30px;">
+                                <table border="0" cellspacing="0" cellpadding="0" align="center">
                                     <tr>
-                                        <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">
-                                            Registered:</td>
-                                        <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
-                                            ${userData.registrationDate}
+                                        <td align="center"
+                                            style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
+                                            <a href="https://ingrammicro-surface-final.vercel.app/pending-users${userData.formId ? `?formId=${userData.formId}` : ''}"
+                                                style="color:#ffffff; text-decoration:none; font-size:20px; font-family:Arial, sans-serif; display:inline-block;">
+                                                Review Pending User(s)
+                                            </a>
                                         </td>
                                     </tr>
-                                    <tr>
-                                        <td
-                                            style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                            Email:</td>
-                                        <td
-                                            style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                            ${userData.email}</td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">Name:</td>
-                                        <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">${userData.name}</td>
-                                    </tr>
-                                    <tr>
-                                        <td
-                                            style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                            Reseller:</td>
-                                        <td
-                                            style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                            ${userData.reseller}</td>
-                                    </tr>
                                 </table>
-                            </div>
+                            </td>
+                        </tr>
 
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-    </table>
-        `,
-    }),
+                        <tr>
+                            <td style="padding:30px; color:#333;">
+
+                                <!-- User Details - Simple Table Style -->
+                                <div
+                                    style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
+                                    <h3
+                                        style="color: #000000; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                                        USER DETAILS</h3>
+
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">
+                                                Registered:</td>
+                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
+                                                ${userData.registrationDate}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                Email:</td>
+                                            <td
+                                                style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                ${userData.email}</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">Name:</td>
+                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">${userData.name}</td>
+                                        </tr>
+                                        <tr>
+                                            <td
+                                                style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                Reseller:</td>
+                                            <td
+                                                style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                ${userData.reseller}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+            `,
+        }),
 
 
     // Registration Email to User (Waiting for Approval)
@@ -629,8 +633,12 @@ export const emailTemplates = {
 
             <tr>
             <td style="background:#f5f5f5; padding:32px 30px; text-align:center;">
-            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-            style="max-width:400px; width:220px;">
+            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
+              alt="Ingram Micro Surface"
+              width="220"
+              height="auto"
+              border="0"
+              style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
             </td>
             </tr>
 
@@ -1687,20 +1695,20 @@ export const emailTemplates = {
 
     }) => {
 
-    const productRows = products.map(product => `
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-    <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
-    </tr>
-    `).join('');
+        const productRows = products.map(product => `
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd; width:60%;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; width:40%; text-align:center;">${product.quantity}</td>
+        </tr>
+        `).join('');
 
-    const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
+        const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
 
-    return {
+        return {
 
-    subject: `Rejected Order #${orderNumber} | Ingram Micro Surface`,
+        subject: `Rejected Order #${orderNumber} | Ingram Micro Surface`,
 
-    text: `Rejected Ingram Micro Surface Order (#${orderNumber})
+        text: `Rejected Ingram Micro Surface Order (#${orderNumber})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello,
@@ -1745,353 +1753,354 @@ export const emailTemplates = {
     Best regards,
     The Ingram Micro Surface Team`,
 
-    html: `
-      <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-      <table width="100%" cellpadding="0" cellspacing="0">
-      <tr>
-      <td align="center">
-  
-      <table width="720" cellpadding="0" cellspacing="0"
-      style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
-  
-      <!-- HEADER WITH LOGO -->
-      <tr>
-      <td style="background:#f5f5f5; padding:30px; text-align:center;">
-      <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-      style="max-width:400px; width:220px;" />
-      </td>
-      </tr>
-  
-      <tr>
-      <td style="padding:30px; color:#333;">
-      <p style="margin:0 0 8px; font-size:15px;"><strong>Rejected Order (#${orderNumber}) </p>
-      <p style="color:#666; margin:0 0 20px; font-size:15px;">Placed On ${formatEmailDate(orderDate)}</p>
-      </td>
-      </tr>
-  
-      <tr>
-      <td style="padding:0 30px 30px;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr style="background:#f5f5f5; color:#000000;">
-      <th style="padding:10px; border:1px solid #ddd; text-align:left;">Product</th>
-      <th style="padding:10px; border:1px solid #ddd; text-align:center;">Quantity</th>
-      </tr>
-      ${productRows}
-      </table>
-      </td>
-      </tr>
-  
-      <!-- TEAM DETAILS -->
-      <tr>
-      <td style="padding:0 30px 30px;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr>
-      <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
-      Team Details
-      </th>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Sales Executive 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">
-      ${salesExecutive}
-      </td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Sales Executive Email 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">
-      ${salesExecutiveEmail}
-      </td>
-      </tr>
-  
-      </table>
-      </td>
-      </tr>
-  
-      <!-- SHIPPING DETAILS -->
-      <tr>
-      <td style="padding:0 30px 30px;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr>
-      <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
-      Shipping Details
-      </th>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Company Name 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Contact Name 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${contactName}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Email Address 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Shipping Address 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       City 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${city}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       State 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${state}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Zip 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${zip}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">
-       Desired Demo Delivery Date 
-      </td>
-      <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td>
-      </tr>
-  
-      </table>
-      </td>
-      </tr>
-  
-      <!-- OPPORTUNITY DETAILS -->
-      <tr>
-      <td style="padding:0 30px 30px;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr>
-      <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
-      Opportunity Details
-      </th>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Device Opportunity Size (Units) </td>
-      <td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Budget Per Device ($) </td>
-      <td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Revenue Opportunity Size ($) </td>
-      <td style="padding:10px; border:1px solid #ddd;">${revenue}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> INGRAM Account # </td>
-      <td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Quote # </td>
-      <td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Competitive Opportunity </td>
-      <td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Estimated Close Date </td>
-      <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> 5G SIM Required </td>
-      <td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td>
-      </tr>
-  
-      <tr>
-      <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;"> Segment </td>
-      <td style="padding:10px; border:1px solid #ddd;">${segment}</td>
-      </tr>
-  
-      </table>
-      </td>
-      </tr>
-  
-      <!-- NOTE -->
-      <tr>
-      <td style="padding:0 30px 30px;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-      <tr>
-      <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
-      Note
-      </th>
-      </tr>
-  
-      <tr>
-      <td style="padding:12px; border:1px solid #ddd; color:#555;">
-      ${note}
-      </td>
-      </tr>
-  
-      </table>
-      </td>
-      </tr>
-  
-      </table>
-      </td>
-      </tr>
-      </table>
-      </div>
-      `    };
-
-    },
-
-    returnedOrderEmail: ({
-    orderNumber,
-    orderDate,
-    customerName,
-    customerEmail,
-
-    products,
-    totalQuantity,
-    totalReturned,
-    totalLeft,
-
-    salesExecutive,
-    salesExecutiveEmail,
-
-    companyName,
-    contactName,
-    contactEmail,
-    shippingAddress,
-    city,
-    state,
-    zip,
-    deliveryDate,
-
-    deviceUnits,
-    budgetPerDevice,
-    revenue,
-    ingramAccount,
-    segment,
-
-    note,
-
-    quoteNumber,
-    competitiveOpportunity,
-    estimatedCloseDate,
-    wants5gSim,
-
-    }: {
-    orderNumber: string | number;
-    orderDate: string;
-    customerName: string;
-    customerEmail: string;
-
-    products: Array<{
-    name: string;
-    shippedQuantity: number;
-    returnedQuantity: number;
-    leftWithCustomer: number;
-    }>;
-
-    totalQuantity: number;
-    totalReturned: number;
-    totalLeft: number;
-
-    salesExecutive: string;
-    salesExecutiveEmail: string;
-
-    companyName: string;
-    contactName: string;
-    contactEmail: string;
-    shippingAddress: string;
-    city: string;
-    state: string;
-    zip: string;
-    deliveryDate: string;
-
-    deviceUnits: number | string;
-    budgetPerDevice: number | string;
-    revenue: number | string;
-    ingramAccount: string;
-    segment: string;
-
-    note: string;
-
-    quoteNumber: string;
-    competitiveOpportunity: string;
-    estimatedCloseDate: string;
-    wants5gSim: string;
-
-    }) => {
-
-    const productRows = products.map(product => {
-
-    const returnedText = product.returnedQuantity > 0
-    ? `<span>${product.returnedQuantity}</span>`
-    : `<span>0</span>`;
-
-    const leftText = product.leftWithCustomer > 0
-    ? `<span>${product.leftWithCustomer}</span>`
-    : `<span>0</span>`;
-
-    return `
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
-    <td style="padding:12px;border:1px solid #ddd;font-size:14px;">
-    ${product.name}
-    </td>
+    <td align="center">
 
-    <td style="padding:12px;border:1px solid #ddd;">
-    <table width="100%">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+
+    <!-- HEADER WITH LOGO -->
     <tr>
-    <td style="font-size:13px;text-align:center;">
-    ${returnedText} <del style="color:red;">${leftText}</del>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
     </td>
     </tr>
+
+    <tr>
+    <td style="padding:30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:15px;"><strong>Rejected Order (#${orderNumber})</strong></p>
+    <p style="color:#666; margin:0 0 20px; font-size:15px;">Placed On ${formatEmailDate(orderDate)}</p>
+    </td>
+    </tr>
+
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
+    </tr>
+    ${productRows}
     </table>
     </td>
     </tr>
-    `;
-    }).join('');
 
-    const productListText = products.map(p => {
-    const returnedText = p.returnedQuantity > 0
-    ? ` (${p.returnedQuantity} returned, ${p.leftWithCustomer} left)`
-    : '';
-    return `- ${p.name}: Shipped ${p.shippedQuantity}${returnedText}`;
-    }).join('\n');
+    <!-- TEAM DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Team Details
+    </th>
+    </tr>
 
-    return {
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Sales Executive
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">
+    ${salesExecutive}
+    </td>
+    </tr>
 
-    subject:`Order Returned #${orderNumber} | Ingram Micro Surface`,
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Sales Executive Email
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">
+    ${salesExecutiveEmail}
+    </td>
+    </tr>
 
-    text:`Returned Ingram Micro Surface Order (#${orderNumber})
+    </table>
+    </td>
+    </tr>
+
+    <!-- SHIPPING DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Shipping Details
+    </th>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Company Name
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Contact Name
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Email Address
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Shipping Address
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    City
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    State
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Zip
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
+    Desired Demo Delivery Date
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    <!-- OPPORTUNITY DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Opportunity Details
+    </th>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Device Opportunity Size (Units)</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Budget Per Device ($)</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Revenue Opportunity Size ($)</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">INGRAM Account #</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Quote #</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Competitive Opportunity</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Estimated Close Date</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">5G SIM Required</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Segment</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    <!-- NOTE -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Note
+    </th>
+    </tr>
+
+    <tr>
+    <td style="padding:12px; border:1px solid #ddd; color:#555;">
+    ${note}
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `
+        };
+    },
+
+    returnedOrderEmail: ({
+        orderNumber,
+        orderDate,
+        customerName,
+        customerEmail,
+
+        products,
+        totalQuantity,
+        totalReturned,
+        totalLeft,
+
+        salesExecutive,
+        salesExecutiveEmail,
+
+        companyName,
+        contactName,
+        contactEmail,
+        shippingAddress,
+        city,
+        state,
+        zip,
+        deliveryDate,
+
+        deviceUnits,
+        budgetPerDevice,
+        revenue,
+        ingramAccount,
+        segment,
+
+        note,
+
+        quoteNumber,
+        competitiveOpportunity,
+        estimatedCloseDate,
+        wants5gSim,
+
+    }: {
+        orderNumber: string | number;
+        orderDate: string;
+        customerName: string;
+        customerEmail: string;
+
+        products: Array<{
+            name: string;
+            shippedQuantity: number;
+            returnedQuantity: number;
+            leftWithCustomer: number;
+        }>;
+
+        totalQuantity: number;
+        totalReturned: number;
+        totalLeft: number;
+
+        salesExecutive: string;
+        salesExecutiveEmail: string;
+
+        companyName: string;
+        contactName: string;
+        contactEmail: string;
+        shippingAddress: string;
+        city: string;
+        state: string;
+        zip: string;
+        deliveryDate: string;
+
+        deviceUnits: number | string;
+        budgetPerDevice: number | string;
+        revenue: number | string;
+        ingramAccount: string;
+        segment: string;
+
+        note: string;
+
+        quoteNumber: string;
+        competitiveOpportunity: string;
+        estimatedCloseDate: string;
+        wants5gSim: string;
+
+    }) => {
+
+        const productRows = products.map(product => {
+
+            const returnedText = product.returnedQuantity > 0
+                ? `<span>${product.returnedQuantity}</span>`
+                : `<span>0</span>`;
+
+            const leftText = product.leftWithCustomer > 0
+                ? `<span>${product.leftWithCustomer}</span>`
+                : `<span>0</span>`;
+
+            return `
+            <tr>
+                <td style="padding:12px; border:1px solid #ddd; font-size:14px; width:60%;">
+                    ${product.name}
+                </td>
+                <td style="padding:12px; border:1px solid #ddd; width:40%;">
+                    <table width="100%">
+                    <tr>
+                    <td style="font-size:13px; text-align:center;">
+                        ${returnedText} <del style="color:red;">${leftText}</del>
+                    </td>
+                    </tr>
+                    </table>
+                </td>
+            </tr>
+            `;
+        }).join('');
+
+        const productListText = products.map(p => {
+            const returnedText = p.returnedQuantity > 0
+                ? ` (${p.returnedQuantity} returned, ${p.leftWithCustomer} left)`
+                : '';
+            return `- ${p.name}: Shipped ${p.shippedQuantity}${returnedText}`;
+        }).join('\n');
+
+        return {
+
+        subject: `Order Returned #${orderNumber} | Ingram Micro Surface`,
+
+        text: `Returned Ingram Micro Surface Order (#${orderNumber})
     Placed On ${orderDate}
 
     Hello ${customerName},
@@ -2139,19 +2148,22 @@ export const emailTemplates = {
     Best regards,
     The Ingram Micro Surface Team`,
 
-html:`
-    <div style="font-family:'Inter',sans-serif;background:#fff;padding:30px 0;">
-    <table width="100%">
+        html: `
+    <div style="font-family:'Inter',sans-serif; background:#fff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
     <td align="center">
 
-    <table width="720" style="background:#fff;border-radius:10px;border:1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#fff; border-radius:10px; border:1px solid black;">
 
     <!-- HEADER WITH LOGO -->
     <tr>
-    <td style="background:#f5f5f5;padding:30px;text-align:center;">
-    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-    style="width:220px;">
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
     </td>
     </tr>
 
@@ -2160,23 +2172,26 @@ html:`
     <p><strong>Returned Order (#${orderNumber})</strong></p>
     <p>Placed On ${formatEmailDate(orderDate)}</p>
     <p>Hello ${customerName}</p>
-      <p>Your order has been returned.<br>
-      If this Ingram micro Surface order helped you close, you can Report a Win on the program.</p>
+    <p>Your order has been returned.<br>
+    If this Ingram micro Surface order helped you close, you can Report a Win on the program.</p>
     </td>
     </tr>
-     <tr>
-    <td style="padding: 30px;">
-    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-4.png"
-    style="width:100%; max-width:720px;" width="720" />
+
+    <tr>
+    <td style="padding:30px;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-4.png"
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 4" />
     </td>
     </tr>
 
     <tr>
     <td style="padding:20px 30px;">
-    <table width="100%" style="border-collapse:collapse;border:1px solid #ddd;">
-    <tr style="background:#f5f5f5;color:#000000;">
-    <th style="padding:12px;border:1px solid #ddd;text-align:left;">Product</th>
-    <th style="padding:12px;border:1px solid #ddd;text-align:center;">Quantity</th>
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; border:1px solid #ddd;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:12px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
+    <th style="padding:12px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
     </tr>
     ${productRows}
     </table>
@@ -2186,21 +2201,21 @@ html:`
     <!-- TEAM DETAILS -->
     <tr>
     <td style="padding:20px 30px;">
-    <table width="100%" style="border-collapse:collapse;border:1px solid #ddd;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; border:1px solid #ddd;">
     <tr>
-    <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Team Details
     </th>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive</td>
-    <td style="padding:10px;border:1px solid #ddd;">${salesExecutive}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive Email</td>
-    <td style="padding:10px;border:1px solid #ddd;">${salesExecutiveEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
@@ -2210,21 +2225,21 @@ html:`
     <!-- SHIPPING DETAILS -->
     <tr>
     <td style="padding:20px 30px;">
-    <table width="100%" style="border-collapse:collapse;border:1px solid #ddd;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; border:1px solid #ddd;">
     <tr>
-    <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Shipping Details
     </th>
     </tr>
 
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Company Name</td><td style="padding:10px;border:1px solid #ddd;">${companyName}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Contact Name</td><td style="padding:10px;border:1px solid #ddd;">${contactName}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Email Address</td><td style="padding:10px;border:1px solid #ddd;">${contactEmail}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Shipping Address</td><td style="padding:10px;border:1px solid #ddd;">${shippingAddress}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">City</td><td style="padding:10px;border:1px solid #ddd;">${city}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">State</td><td style="padding:10px;border:1px solid #ddd;">${state}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Zip</td><td style="padding:10px;border:1px solid #ddd;">${zip}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Desired Demo Delivery Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Company Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Contact Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Email Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">City</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">State</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Zip</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td></tr>
 
     </table>
     </td>
@@ -2233,22 +2248,22 @@ html:`
     <!-- OPPORTUNITY DETAILS -->
     <tr>
     <td style="padding:0 30px 30px;">
-    <table width="100%" style="border-collapse:collapse;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Opportunity Details
     </th>
     </tr>
 
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Device Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${deviceUnits}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Budget Per Device</td><td style="padding:10px;border:1px solid #ddd;">${budgetPerDevice}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Revenue Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${revenue}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">INGRAM Account #</td><td style="padding:10px;border:1px solid #ddd;">${ingramAccount}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Quote #</td><td style="padding:10px;border:1px solid #ddd;">${quoteNumber}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Competitive Opportunity</td><td style="padding:10px;border:1px solid #ddd;">${competitiveOpportunity}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Estimated Close Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">5G SIM Required</td><td style="padding:10px;border:1px solid #ddd;">${wants5gSim || "No"}</td></tr>
-    <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Segment</td><td style="padding:10px;border:1px solid #ddd;">${segment}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">INGRAM Account #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Quote #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Segment</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td></tr>
 
     </table>
     </td>
@@ -2257,12 +2272,12 @@ html:`
     <!-- NOTE -->
     <tr>
     <td style="padding:0 30px 30px;">
-    <table width="100%">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <th style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">Note</th>
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">Note</th>
     </tr>
     <tr>
-    <td style="padding:12px;border:1px solid #ddd;">${note}</td>
+    <td style="padding:12px; border:1px solid #ddd;">${note}</td>
     </tr>
     </table>
     </td>
@@ -2274,112 +2289,111 @@ html:`
     </table>
     </div>
     `
-
-    };
+        };
     },
 
     shippedOrderEmail: ({
-    orderNumber,
-    orderDate,
-    customerName,
-    customerEmail,
+        orderNumber,
+        orderDate,
+        customerName,
+        customerEmail,
 
-    products,
-    totalQuantity,
+        products,
+        totalQuantity,
 
-    returnTracking,
-    orderTracking,
-    fileLink,
-    caseType,
-    returnTrackingLink,
-    orderTrackingLink,
+        returnTracking,
+        orderTracking,
+        fileLink,
+        caseType,
+        returnTrackingLink,
+        orderTrackingLink,
 
-    salesExecutive,
-    salesExecutiveEmail,
+        salesExecutive,
+        salesExecutiveEmail,
 
-    companyName,
-    contactName,
-    contactEmail,
-    shippingAddress,
-    city,
-    state,
-    zip,
-    deliveryDate,
+        companyName,
+        contactName,
+        contactEmail,
+        shippingAddress,
+        city,
+        state,
+        zip,
+        deliveryDate,
 
-    deviceUnits,
-    budgetPerDevice,
-    revenue,
-    ingramAccount,
-    segment,
+        deviceUnits,
+        budgetPerDevice,
+        revenue,
+        ingramAccount,
+        segment,
 
-    note,
+        note,
 
-    quoteNumber,
-    competitiveOpportunity,
-    estimatedCloseDate,
-    wants5gSim,
+        quoteNumber,
+        competitiveOpportunity,
+        estimatedCloseDate,
+        wants5gSim,
 
     }: {
-    orderNumber: string | number;
-    orderDate: string;
-    customerName: string;
-    customerEmail: string;
+        orderNumber: string | number;
+        orderDate: string;
+        customerName: string;
+        customerEmail: string;
 
-    products: Array<{
-    name: string;
-    quantity: number;
-    }>;
+        products: Array<{
+            name: string;
+            quantity: number;
+        }>;
 
-    totalQuantity: number;
+        totalQuantity: number;
 
-    returnTracking: string;
-    orderTracking: string;
-    fileLink: string;
-    caseType: string;
-    orderTrackingLink: string;
-    returnTrackingLink: string;
+        returnTracking: string;
+        orderTracking: string;
+        fileLink: string;
+        caseType: string;
+        orderTrackingLink: string;
+        returnTrackingLink: string;
 
-    salesExecutive: string;
-    salesExecutiveEmail: string;
+        salesExecutive: string;
+        salesExecutiveEmail: string;
 
-    companyName: string;
-    contactName: string;
-    contactEmail: string;
-    shippingAddress: string;
-    city: string;
-    state: string;
-    zip: string;
-    deliveryDate: string;
+        companyName: string;
+        contactName: string;
+        contactEmail: string;
+        shippingAddress: string;
+        city: string;
+        state: string;
+        zip: string;
+        deliveryDate: string;
 
-    deviceUnits: number | string;
-    budgetPerDevice: number | string;
-    revenue: number | string;
-    ingramAccount: string;
-    segment: string;
+        deviceUnits: number | string;
+        budgetPerDevice: number | string;
+        revenue: number | string;
+        ingramAccount: string;
+        segment: string;
 
-    note: string;
+        note: string;
 
-    quoteNumber: string;
-    competitiveOpportunity: string;
-    estimatedCloseDate: string;
-    wants5gSim: string;
+        quoteNumber: string;
+        competitiveOpportunity: string;
+        estimatedCloseDate: string;
+        wants5gSim: string;
 
     }) => {
 
-    const productRows = products.map(product => `
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-    <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
-    </tr>
-    `).join('');
+        const productRows = products.map(product => `
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd; width:60%;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; width:40%; text-align:center;">${product.quantity}</td>
+        </tr>
+        `).join('');
 
-    const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
+        const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
 
-    return {
+        return {
 
-    subject: `Order Shipped #${orderNumber} | Ingram Micro Surface`,
+        subject: `Order Shipped #${orderNumber} | Ingram Micro Surface`,
 
-    text:`Shipped Ingram Micro Surface Order (#${orderNumber})
+        text: `Shipped Ingram Micro Surface Order (#${orderNumber})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello,
@@ -2424,290 +2438,291 @@ html:`
     Best regards,
     The Ingram Micro Surface Team`,
 
-    html:`
-        <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-        <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-        <td align="center">
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-        <table width="720" cellpadding="0" cellspacing="0"
-        style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-        <!-- HEADER WITH LOGO -->
-        <tr>
-        <td style="background:#f5f5f5; padding:30px; text-align:center;">
+    <!-- HEADER WITH LOGO -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
         <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-        style="max-width:400px; width:220px;" />
-        </td>
-        </tr>
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
+    </td>
+    </tr>
 
-        <tr>
-        <td style="padding:30px 30px 0 30px;">
-        <p style="margin:0 0 8px;"><strong>Shipped Order (#${orderNumber})</strong></p>
-        <p style="color:#666;">Placed On ${formatEmailDate(orderDate)}</p>
-        <p><strong>Hello, ${customerName}</strong></p>
-        <p>Your order on Ingram micro Surface has been shipped. You can find below Tracking information and Return Label for your order.</p>
-        </td>
-        </tr>
+    <tr>
+    <td style="padding:30px 30px 0 30px;">
+    <p style="margin:0 0 8px;"><strong>Shipped Order (#${orderNumber})</strong></p>
+    <p style="color:#666;">Placed On ${formatEmailDate(orderDate)}</p>
+    <p><strong>Hello, ${customerName}</strong></p>
+    <p>Your order on Ingram micro Surface has been shipped. You can find below Tracking information and Return Label for your order.</p>
+    </td>
+    </tr>
 
-        <tr>
-        <td style="padding:30px;">
+    <tr>
+    <td style="padding:30px;">
         <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
-        style="width:100%; max-width:720px;" />
-        </td>
-        </tr>
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 3" />
+    </td>
+    </tr>
 
-        <!-- TRACKING INFO -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr>
-        <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Tracking Information
-        </th>
-        </tr>
+    <!-- TRACKING INFO -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Tracking Information
+    </th>
+    </tr>
 
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">
-        Order Tracking #
-        </td>
-        <td style="padding:10px;border:1px solid #ddd;">
-        <a href=${orderTrackingLink}>${orderTracking}</a>
-        </td>
-        </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
+    Order Tracking #
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">
+    <a href="${orderTrackingLink}">${orderTracking}</a>
+    </td>
+    </tr>
 
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">
-        Return Tracking #
-        </td>
-        <td style="padding:10px;border:1px solid #ddd;">
-        <a href=${returnTrackingLink}>${returnTracking}</a>
-        </td>
-        </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
+    Return Tracking #
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">
+    <a href="${returnTrackingLink}">${returnTracking}</a>
+    </td>
+    </tr>
 
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">
-        Case Type
-        </td>
-        <td style="padding:10px;border:1px solid #ddd;">
-        ${caseType}
-        </td>
-        </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
+    Case Type
+    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">
+    ${caseType}
+    </td>
+    </tr>
 
-        </table>
-        </td>
-        </tr>
+    </table>
+    </td>
+    </tr>
 
-        <tr>
-        <td style="text-align:center;padding:10px 30px 30px;">
-        <a href=${fileLink} style="background:#1D76BC;color:#fff;padding:14px 34px;border-radius:6px;text-decoration:none;font-weight:600;">
-        View Return Label
-        </a>
-        </td>
-        </tr>
+    <tr>
+    <td style="text-align:center; padding:10px 30px 30px;">
+    <a href="${fileLink}" style="background:#1D76BC; color:#fff; padding:14px 34px; border-radius:6px; text-decoration:none; font-weight:600;">
+    View Return Label
+    </a>
+    </td>
+    </tr>
 
-        <!-- PRODUCT TABLE -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr style="background:#f5f5f5;color:#000000;">
-        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Product</th>
-        <th style="padding:10px;border:1px solid #ddd;text-align:center;">Quantity</th>
-        </tr>
-        ${productRows}
-        </table>
-        </td>
-        </tr>
+    <!-- PRODUCT TABLE -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
+    </tr>
+    ${productRows}
+    </table>
+    </td>
+    </tr>
 
-        <!-- TEAM DETAILS -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr>
-        <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Team Details
-        </th>
-        </tr>
+    <!-- TEAM DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Team Details
+    </th>
+    </tr>
 
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive</td>
-        <td style="padding:10px;border:1px solid #ddd;">${salesExecutive}</td>
-        </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+    </tr>
 
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive Email</td>
-        <td style="padding:10px;border:1px solid #ddd;">${salesExecutiveEmail}</td>
-        </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+    </tr>
 
-        </table>
-        </td>
-        </tr>
+    </table>
+    </td>
+    </tr>
 
-        <!-- SHIPPING DETAILS -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr>
-        <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Shipping Details
-        </th>
-        </tr>
+    <!-- SHIPPING DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Shipping Details
+    </th>
+    </tr>
 
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Company Name</td><td style="padding:10px;border:1px solid #ddd;">${companyName}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Contact Name</td><td style="padding:10px;border:1px solid #ddd;">${contactName}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Email Address</td><td style="padding:10px;border:1px solid #ddd;">${contactEmail}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Shipping Address</td><td style="padding:10px;border:1px solid #ddd;">${shippingAddress}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">City</td><td style="padding:10px;border:1px solid #ddd;">${city}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">State</td><td style="padding:10px;border:1px solid #ddd;">${state}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Zip</td><td style="padding:10px;border:1px solid #ddd;">${zip}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Desired Demo Delivery Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Company Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Contact Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Email Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">City</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">State</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Zip</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td></tr>
 
-        </table>
-        </td>
-        </tr>
+    </table>
+    </td>
+    </tr>
 
-        <!-- OPPORTUNITY DETAILS -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr>
-        <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Opportunity Details
-        </th>
-        </tr>
+    <!-- OPPORTUNITY DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Opportunity Details
+    </th>
+    </tr>
 
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Device Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${deviceUnits}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Budget Per Device</td><td style="padding:10px;border:1px solid #ddd;">${budgetPerDevice}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Revenue Opportunity Size</td><td style="padding:10px;border:1px solid #ddd;">${revenue}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">INGRAM Account</td><td style="padding:10px;border:1px solid #ddd;">${ingramAccount}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Quote #</td><td style="padding:10px;border:1px solid #ddd;">${quoteNumber}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Competitive Opportunity</td><td style="padding:10px;border:1px solid #ddd;">${competitiveOpportunity}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Estimated Close Date</td><td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">5G SIM Required</td><td style="padding:10px;border:1px solid #ddd;">${wants5gSim || "No"}</td></tr>
-        <tr><td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Segment</td><td style="padding:10px;border:1px solid #ddd;">${segment}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">INGRAM Account</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Quote #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Segment</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td></tr>
 
-        </table>
-        </td>
-        </tr>
+    </table>
+    </td>
+    </tr>
 
-        <!-- NOTE -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%">
-        <tr>
-        <th style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Note
-        </th>
-        </tr>
-        <tr>
-        <td style="padding:12px;border:1px solid #ddd;">
-        ${note}
-        </td>
-        </tr>
-        </table>
-        </td>
-        </tr>
+    <!-- NOTE -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Note
+    </th>
+    </tr>
+    <tr>
+    <td style="padding:12px; border:1px solid #ddd;">
+    ${note}
+    </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
 
-        </table>
-        </td>
-        </tr>
-        </table>
-        </div>
-        `
-
-    };
-
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `
+        };
     },
 
 
     shippedReminderEmail: ({
-    orderNumber,
-    orderDate,
-    customerName,
-    customerEmail,
-    shippedDate,
-    products,
-    totalQuantity,
-    returnTracking,
-    orderTracking,
-    fileLink,
-    caseType,
-    returnTrackingLink,
-    orderTrackingLink,
-    salesExecutive,
-    salesExecutiveEmail,
-    companyName,
-    contactName,
-    contactEmail,
-    shippingAddress,
-    city,
-    state,
-    zip,
-    deliveryDate,
-    deviceUnits,
-    budgetPerDevice,
-    revenue,
-    ingramAccount,
-    segment,
-    note,
-    quoteNumber,
-    competitiveOpportunity,
-    estimatedCloseDate,
-    wants5gSim,
+        orderNumber,
+        orderDate,
+        customerName,
+        customerEmail,
+        shippedDate,
+        products,
+        totalQuantity,
+        returnTracking,
+        orderTracking,
+        fileLink,
+        caseType,
+        returnTrackingLink,
+        orderTrackingLink,
+        salesExecutive,
+        salesExecutiveEmail,
+        companyName,
+        contactName,
+        contactEmail,
+        shippingAddress,
+        city,
+        state,
+        zip,
+        deliveryDate,
+        deviceUnits,
+        budgetPerDevice,
+        revenue,
+        ingramAccount,
+        segment,
+        note,
+        quoteNumber,
+        competitiveOpportunity,
+        estimatedCloseDate,
+        wants5gSim,
     }: {
-    orderNumber: string | number;
-    orderDate: string;
-    customerName: string;
-    customerEmail: string;
-    shippedDate: string;
-    products: Array<{
-    name: string;
-    quantity: number;
-    }>;
-    totalQuantity: number;
-    returnTracking: string;
-    orderTracking: string;
-    fileLink: string;
-    caseType: string;
-    orderTrackingLink: string;
-    returnTrackingLink: string;
-    salesExecutive: string;
-    salesExecutiveEmail: string;
-    companyName: string;
-    contactName: string;
-    contactEmail: string;
-    shippingAddress: string;
-    city: string;
-    state: string;
-    zip: string;
-    deliveryDate: string;
-    deviceUnits: number | string;
-    budgetPerDevice: number | string;
-    revenue: number | string;
-    ingramAccount: string;
-    segment: string;
-    note: string;
-    quoteNumber: string;
-    competitiveOpportunity: string;
-    estimatedCloseDate: string;
-    wants5gSim: string;
+        orderNumber: string | number;
+        orderDate: string;
+        customerName: string;
+        customerEmail: string;
+        shippedDate: string;
+        products: Array<{
+            name: string;
+            quantity: number;
+        }>;
+        totalQuantity: number;
+        returnTracking: string;
+        orderTracking: string;
+        fileLink: string;
+        caseType: string;
+        orderTrackingLink: string;
+        returnTrackingLink: string;
+        salesExecutive: string;
+        salesExecutiveEmail: string;
+        companyName: string;
+        contactName: string;
+        contactEmail: string;
+        shippingAddress: string;
+        city: string;
+        state: string;
+        zip: string;
+        deliveryDate: string;
+        deviceUnits: number | string;
+        budgetPerDevice: number | string;
+        revenue: number | string;
+        ingramAccount: string;
+        segment: string;
+        note: string;
+        quoteNumber: string;
+        competitiveOpportunity: string;
+        estimatedCloseDate: string;
+        wants5gSim: string;
     }) => {
 
-    const productRows = products.map(product => `
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-    <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
-    </tr>
-    `).join('');
+        const productRows = products.map(product => `
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd; width:60%;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; width:40%; text-align:center;">${product.quantity}</td>
+        </tr>
+        `).join('');
 
-    const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
+        const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
 
-    return {
+        return {
 
-    // ✅ Subject fix kiya
-    subject: `25-Day Return Reminder – Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
+        subject: `25-Day Return Reminder – Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
 
-    text: `25-Day Return Reminder – Order #${orderNumber} (${companyName})
+        text: `25-Day Return Reminder – Order #${orderNumber} (${companyName})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello,
@@ -2753,131 +2768,134 @@ html:`
     Best regards,
     The Ingram Micro Surface Team`,
 
-    html:`
-        <div style="font-family:'Inter',sans-serif;background-color:#ffffff;padding:30px 0;">
-        <table width="100%" cellpadding="0" cellspacing="0">
-        <tr>
-        <td align="center">
+        html: `
+    <div style="font-family:'Inter',sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-        <table width="720" cellpadding="0" cellspacing="0"
-        style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-        <!-- HEADER WITH LOGO -->
-        <tr>
-        <td style="background:#f5f5f5;padding:30px;text-align:center;">
+    <!-- HEADER WITH LOGO -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
         <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-        style="max-width:400px;width:220px;" />
-        </td>
-        </tr>
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
+    </td>
+    </tr>
 
-        <tr>
-        <td style="padding:30px 30px 0 30px;color:#333;">
-        <p style="margin:0 0 8px;font-size:15px;">
-        <strong>25-Day Shipping Reminder – Order #${orderNumber}</strong>
-        </p>
-        <p style="margin:0 0 8px;font-size:15px;">
-        Placed on ${formatEmailDate(orderDate)}
-        </p>
-        <p style="font-size:15px;line-height:1.6;">
-        This is a friendly reminder from the Ingram Micro Surface team that
-        <b>Order #${orderNumber}</b> for <b>${companyName}</b>
-        has been shipped for <b>25 days</b>.
-        </p>
-        <p style="font-size:15px;line-height:1.6;">
-        As the 45-day trial period is progressing, we kindly ask you to review the order status and begin preparing the return process.
-        </p>
-        <p style="font-size:15px;line-height:1.6;">
-        You may obtain a soft copy of the return label by clicking the button below or by contacting us at
-        <a href="mailto:support@ingrammicro-surface.com">support@ingrammicro-surface.com</a>.
-        </p>
-        </td>
-        </tr>
-        <tr>
-        <td style="padding:30px;">
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:15px;">
+    <strong>25-Day Shipping Reminder – Order #${orderNumber}</strong>
+    </p>
+    <p style="margin:0 0 8px; font-size:15px;">
+    Placed on ${formatEmailDate(orderDate)}
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+    This is a friendly reminder from the Ingram Micro Surface team that
+    <b>Order #${orderNumber}</b> for <b>${companyName}</b>
+    has been shipped for <b>25 days</b>.
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+    As the 45-day trial period is progressing, we kindly ask you to review the order status and begin preparing the return process.
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+    You may obtain a soft copy of the return label by clicking the button below or by contacting us at
+    <a href="mailto:support@ingrammicro-surface.com">support@ingrammicro-surface.com</a>.
+    </p>
+    </td>
+    </tr>
+
+    <tr>
+    <td style="padding:30px;">
         <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
-        style="width:100%; max-width:720px;" />
-        </td>
-        </tr>
-        <tr>
-        <td style="text-align:center;margin:30px 0;padding:20px 0;">
-        <a href="${fileLink}" style="
-        background:#1D76BC;
-        color:#ffffff;
-        padding:14px 34px;
-        text-decoration:none;
-        border-radius:6px;
-        font-size:16px;
-        font-weight:600;
-        display:inline-block;
-        ">
-        View Return Label
-        </a>
-        </td>
-        </tr>
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 3" />
+    </td>
+    </tr>
 
-        <!-- PRODUCT TABLE -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr style="background:#f5f5f5;color:#000000;">
-        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Product</th>
-        <th style="padding:10px;border:1px solid #ddd;text-align:center;">Quantity</th>
-        </tr>
-        ${productRows}
-        </table>
-        </td>
-        </tr>
+    <tr>
+    <td style="text-align:center; margin:30px 0; padding:20px 0;">
+    <a href="${fileLink}" style="background:#1D76BC; color:#ffffff; padding:14px 34px; text-decoration:none; border-radius:6px; font-size:16px; font-weight:600; display:inline-block;">
+    View Return Label
+    </a>
+    </td>
+    </tr>
 
-        <!-- ORDER DETAILS -->
-        <tr>
-        <td style="padding:0 30px 30px;">
-        <table width="100%" style="border-collapse:collapse;">
-        <tr>
-        <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
-        Order Details
-        </th>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive</td>
-        <td style="padding:10px;border:1px solid #ddd;">${salesExecutive}</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Sales Executive Email</td>
-        <td style="padding:10px;border:1px solid #ddd;">${salesExecutiveEmail}</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Customer Company Name</td>
-        <td style="padding:10px;border:1px solid #ddd;">${companyName}</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Customer Contact Email</td>
-        <td style="padding:10px;border:1px solid #ddd;">${contactEmail}</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Shipped Date</td>
-        <td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(shippedDate)}</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Days Since Shipped</td>
-        <td style="padding:10px;border:1px solid #ddd;">25</td>
-        </tr>
-        <tr>
-        <td style="padding:10px;border:1px solid #ddd;background:#ffffff;">Returned Tracking</td>
-        <td style="padding:10px;border:1px solid #ddd;">${returnTracking}</td>
-        </tr>
-        </table>
-        </td>
-        </tr>
+    <!-- PRODUCT TABLE -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
+    </tr>
+    ${productRows}
+    </table>
+    </td>
+    </tr>
 
+    <!-- ORDER DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Order Details
+    </th>
+    </tr>
 
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+    </tr>
 
-        </table>
-        </td>
-        </tr>
-        </table>
-        </div>
-        `
-    };
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Customer Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Customer Contact Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Shipped Date</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(shippedDate)}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Days Since Shipped</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">25</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Returned Tracking</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${returnTracking}</td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `
+        };
     },
 
     returnReminderEmail: ({
@@ -2893,7 +2911,6 @@ html:`
         fileLink,
         salesExecutive,
         salesExecutiveEmail,
-
         companyName,
         contactEmail,
         shippedDate,
@@ -2917,161 +2934,159 @@ html:`
         subject: `Return Reminder - Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
         text: `Return Reminder Notification | Ingram Micro Surface
 
-        Return Reminder - Order #${orderNumber} (${companyName}) 
-        Placed On: ${formatEmailDate(orderDate)}
+    Return Reminder - Order #${orderNumber} (${companyName})
+    Placed On: ${formatEmailDate(orderDate)}
 
-        Hello,
+    Hello,
 
-        Thank you for using Ingram Micro Surface SURFACE! We hope your experience was very positive.
+    Thank you for using Ingram Micro Surface SURFACE! We hope your experience was very positive.
 
-        Your order for ${companyName} is now due for return. 
-        You can view your return label using the link below or request it via email at support@ingrammicro-surface.com:
+    Your order for ${companyName} is now due for return.
+    You can view your return label using the link below or request it via email at support@ingrammicro-surface.com:
 
-        View Return Label: ${fileLink}
+    View Return Label: ${fileLink}
 
-        ORDER ITEMS
-        ${productListText}
-        Total Quantity: ${totalQuantity}
+    ORDER ITEMS
+    ${productListText}
+    Total Quantity: ${totalQuantity}
 
-        ORDER DETAILS
-        Sales Executive: ${salesExecutive}
-        Sales Executive Email: ${salesExecutiveEmail}
+    ORDER DETAILS
+    Sales Executive: ${salesExecutive}
+    Sales Executive Email: ${salesExecutiveEmail}
 
-        Customer Company Name: ${companyName}
-        Customer Contact Email: ${contactEmail}
-        Shipped Date: ${shippedDate}
-        Returned Tracking: ${returnTracking}
+    Customer Company Name: ${companyName}
+    Customer Contact Email: ${contactEmail}
+    Shipped Date: ${shippedDate}
+    Returned Tracking: ${returnTracking}
 
-        If you have any questions, please contact us at support@ingrammicro-surface.com.
+    If you have any questions, please contact us at support@ingrammicro-surface.com.
 
-        Best regards,
-        The Ingram Micro Surface Team`,
-        html:`
-                <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-                        <table width="100%" cellpadding="0" cellspacing="0">
-                            <tr>
-                                <td align="center">
+    Best regards,
+    The Ingram Micro Surface Team`,
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                                    <table width="720" cellpadding="0" cellspacing="0"
-                                        style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                                        <!-- HEADER -->
-                                        <tr>
-                                            <td style="background:#f5f5f5; padding:30px; text-align:center;">
-                                                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Micro Surface Logo"
-                                                    style="max-width:400px; width:220px;" />
-                                            </td>
-                                        </tr>
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro Surface Logo" />
+    </td>
+    </tr>
 
-                                        <!-- INTRO -->
-                                        <tr>
-                                            <td style="padding:30px 30px 0 30px; color:#333;">
-                                                <p style="margin:0 0 8px; font-size:15px;"> <strong>Overdue Reminder Order
-                                                        #${orderNumber}  </strong> </p>
-                                                        <p style="margin:0 0 8px; font-size:15px;">Placed On ${orderDate}</p>
-                                                        </td>
-                                                </tr>
-                                                    <tr>
-                                                <td style="padding:30px;">
-                                                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
-                                                style="width:100%; max-width:720px;" />
-                                                </td>
-                                                </tr>
-                                                <tr>
-                                                <td style="padding:30px 30px 0 30px; color:#333;">
-                                                
-                                                <p style="font-size:15px; line-height:1.6;">
-                                                    Thank you for using Ingram Micro Surface! We hope your experience was very positive.
-                                                </p>
-                                                
-                                                
-                                                <p>
-                                                    Your order for ${companyName} is now due for return. You can also
-                                                    obtain a soft copy of the return label by clicking on the below or sending a request
-                                                    at support@ingrammicro-surface.com,
-                                                </p>
-                                            </td>
-                                        </tr>
+    <!-- INTRO -->
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:15px;"><strong>Overdue Reminder Order #${orderNumber}</strong></p>
+    <p style="margin:0 0 8px; font-size:15px;">Placed On ${orderDate}</p>
+    </td>
+    </tr>
 
-                                        <!-- RETURN LABEL BUTTON -->
-                                        <tr>
-                                            <td style="padding:0; color:#333;">
-                                                <div style="text-align:center; margin:30px 0;">
-                                                    <a href=${fileLink} style="
-                                                        background:#1D76BC;
-                                                        color:#ffffff;
-                                                        padding:14px 34px;
-                                                        text-decoration:none;
-                                                        border-radius:6px;
-                                                        font-size:16px;
-                                                        font-weight:600;
-                                                        display:inline-block;
-                                                    ">
-                                                        View Return Label
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
+    <tr>
+    <td style="padding:30px;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 3" />
+    </td>
+    </tr>
 
-                                        <!-- PRODUCTS -->
-                                        <tr>
-                                            <td style="padding:0 30px 30px;">
-                                                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                    <tr style="background:#f5f5f5; color:#000000;">
-                                                        <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000;">Product</th>
-                                                        <th style="padding:10px; border:1px solid #ddd; text-align:center; color:#000000;">Quantity</th>
-                                                    </tr>
-                                                    ${productListHtml}
-                                                </table>
-                                            </td>
-                                        </tr>
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6;">
+        Thank you for using Ingram Micro Surface! We hope your experience was very positive.
+    </p>
+    <p>
+        Your order for ${companyName} is now due for return. You can also
+        obtain a soft copy of the return label by clicking on the below or sending a request
+        at support@ingrammicro-surface.com,
+    </p>
+    </td>
+    </tr>
 
-                                        <!-- ORDER DETAILS -->
-                                        <tr>
-                                            <td style="padding:0 30px 30px;">
-                                                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                                    <tr>
-                                                        <th colspan="2"
-                                                            style="background:#f5f5f5; color:#000000; border:1px solid #ddd; padding:12px; text-align:left;">
-                                                            Order Details
-                                                        </th>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Sales Executive  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Sales Executive Email  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
-                                                    </tr>
-                                                    
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Customer Company Name  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Customer Contact Email  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Shipped Date  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(shippedDate)}</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Returned Tracking  </td>
-                                                        <td style="padding:10px; border:1px solid #ddd;">${returnTracking}</td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
+    <!-- RETURN LABEL BUTTON -->
+    <tr>
+    <td style="padding:0; color:#333;">
+    <div style="text-align:center; margin:30px 0;">
+        <a href="${fileLink}" style="background:#1D76BC; color:#ffffff; padding:14px 34px; text-decoration:none; border-radius:6px; font-size:16px; font-weight:600; display:inline-block;">
+            View Return Label
+        </a>
+    </div>
+    </td>
+    </tr>
 
-                                    </table>
+    <!-- PRODUCTS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000; width:60%;">Product</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; color:#000000; width:40%;">Quantity</th>
+    </tr>
+    ${productListHtml}
+    </table>
+    </td>
+    </tr>
 
-                                </td>
-                            </tr>
-                        </table>
-                    </div>
-                    `,
+    <!-- ORDER DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2"
+    style="background:#f5f5f5; color:#000000; border:1px solid #ddd; padding:12px; text-align:left;">
+    Order Details
+    </th>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Contact Email</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Shipped Date</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(shippedDate)}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Returned Tracking</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${returnTracking}</td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `,
     }),
 
 
@@ -3421,12 +3436,12 @@ html:`
 
     reportWinEmail: ({
         orderNumber,
-        ingramOrderNumber, // NEW: Add this parameter
+        ingramOrderNumber,
         orderDate,
         customerName,
         submittedEmail,
         productName,
-        productDetails, // NEW: For product details display
+        productDetails,
         quantity,
         resellerAccount,
         units,
@@ -3436,12 +3451,12 @@ html:`
         notes,
     }: {
         orderNumber: string | number;
-        ingramOrderNumber?: string; // NEW: Optional parameter
+        ingramOrderNumber?: string;
         orderDate: string;
         customerName: string;
         submittedEmail: string;
         productName: string;
-        productDetails?: string; // NEW: Optional parameter
+        productDetails?: string;
         quantity: number;
         reseller: string;
         resellerAccount: string;
@@ -3450,153 +3465,158 @@ html:`
         dealRev: string;
         notes: string;
     }) => {
-        // Generate product rows HTML for multiple products
         let productDisplayHTML = '';
         let productText = '';
 
         if (productDetails && productDetails.length > 0) {
-            // If we have product details array (for multiple products)
             productDisplayHTML = productDetails;
-            productText = productName; // productName will contain the formatted text
+            productText = productName;
         } else {
-            // Single product or no details
             productDisplayHTML = `
-        <tr>
-            <td style="padding:10px; border:1px solid #ddd;">${productName}</td>
-        </tr>`;
+            <tr>
+                <td style="padding:10px; border:1px solid #ddd;">${productName}</td>
+            </tr>`;
             productText = `Product: ${productName}`;
         }
 
         return {
             subject: `Report a Win | Ingram Micro Surface`,
             text: `Report a Win | Ingram Micro Surface
-            Submitted by: ${submittedEmail}
-            Win Reported Order#: ${orderNumber}
+    Submitted by: ${submittedEmail}
+    Win Reported Order#: ${orderNumber}
 
-            ORDER ITEMS
-            ${productText}
+    ORDER ITEMS
+    ${productText}
 
-            RESELLER & ORDER DETAILS
-            Reseller Account #: ${resellerAccount}
-            Reseller Name: ${reseller}
-            Ingram  Order#: ${ingramOrderNumber || orderNumber}
-            Customer Name: ${customerName}
-            Number of Units: ${units}
-            One-time purchase or roll out?: ${pType}
-            Total Deal Revenue ($): ${dealRev}
-            Date of Purchase: ${orderDate}
+    RESELLER & ORDER DETAILS
+    Reseller Account #: ${resellerAccount}
+    Reseller Name: ${reseller}
+    Ingram Order#: ${ingramOrderNumber || orderNumber}
+    Customer Name: ${customerName}
+    Number of Units: ${units}
+    One-time purchase or roll out?: ${pType}
+    Total Deal Revenue ($): ${dealRev}
+    Date of Purchase: ${orderDate}
 
-            HOW Ingram Micro Surface HELPED CLOSE THE DEAL
-            ${notes}
+    HOW Ingram Micro Surface HELPED CLOSE THE DEAL
+    ${notes}
 
+    If you have any questions, please contact us at support@ingrammicro-surface.com.
 
-            If you have any questions, please contact us at support@ingrammicro-surface.com.
+    Best regards,
+    The Ingram Micro Surface Team`,
 
-            Best regards,
-            The Ingram Micro Surface Team`
-            ,
-            html:`
-        <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td align="center">
+            html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                            <table width="720" cellpadding="0" cellspacing="0"
-                                style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                                <!-- HEADER -->
-                                <tr>
-                                    <td style="background:#f5f5f5; padding:30px; text-align:center;">
-                                    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Logo"
-                                            style="max-width:400px; width:220px;" />
-                                    </td>
-                                </tr>
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Logo" />
+    </td>
+    </tr>
 
-                            
+    <!-- INTRO -->
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:14px;"><strong>Submitted by: </strong>${submittedEmail}</p>
+    </td>
+    </tr>
 
-                                <!-- INTRO -->
-                                <tr>
-                                    <td style="padding:30px 30px 0 30px; color:#333;">
-                                        <p style="margin:0 0 8px; font-size:14px;"><strong>Submitted by:
-                                            </strong>${submittedEmail}</p>
-                                    </td>
-                                </tr>
+    <tr>
+    <td style="padding:30px;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step5.png"
+            width="660"
+            style="display:block; width:100%; max-width:660px; height:auto; border:0; outline:none; text-decoration:none;"
+            alt="Thank you for your order" />
+    </td>
+    </tr>
 
-                                <tr>
-                                    <td style="padding:30px;">
-                                        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step5.png"
-                                            alt="Thank you for your order"
-                                            style="width:100%; max-width:720px; height:auto; display:block;" width="720" />
-                                    </td>
-                                </tr>
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:14px;"><strong>Win Reported Order# ${orderNumber}</strong></p>
+    </td>
+    </tr>
 
-                                <tr>
-                                    <td style="padding:30px 30px 0 30px; color:#333;">
-                                        <p style="margin:0 0 8px; font-size:14px;"><strong>Win Reported Order#
-                                                ${orderNumber}</strong></p>
-                                    </td>
-                                </tr>
+    <!-- PRODUCTS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000;">Product</th>
+    </tr>
+    ${productDisplayHTML}
+    </table>
+    </td>
+    </tr>
 
-                                <!-- PRODUCTS -->
-                                <tr>
-                                    <td style="padding:0 30px 30px;">
-                                        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                            <tr style="background:#f5f5f5;">
-                                                <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000;">Product</th>
-                                            </tr>
-                                            ${productDisplayHTML}
-                                        </table>
-                                    </td>
-                                </tr>
+    <!-- ORDER DETAILS -->
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
 
-                                <tr>
-                                    <td style="padding:0 30px 30px;">
-                                        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Reseller Account # </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${resellerAccount}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Ingram Order# </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${ingramOrderNumber || orderNumber}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Customer Name </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${customerName}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Number of Units </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${units}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Is this be a one-time purchase or roll out? </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${pType}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Total Deal Revenue ($) </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${dealRev}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;"> Date of Purchase </td>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;">${formatEmailDate(orderDate)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;" colspan="2"> How did Ingram Micro Surface help you close this deal? </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding:20px 10px; border:1px solid #ddd;" colspan="2">${notes}</td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Reseller Account #</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${resellerAccount}</td>
+    </tr>
 
-                            </table>
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Ingram Order#</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${ingramOrderNumber || orderNumber}</td>
+    </tr>
 
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            `,
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Name</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${customerName}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Number of Units</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${units}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Is this be a one-time purchase or roll out?</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${pType}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Total Deal Revenue ($)</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${dealRev}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Date of Purchase</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${formatEmailDate(orderDate)}</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd;" colspan="2">How did Ingram Micro Surface help you close this deal?</td>
+    </tr>
+
+    <tr>
+    <td style="padding:20px 10px; border:1px solid #ddd;" colspan="2">${notes}</td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `,
         };
     },
 
@@ -3612,72 +3632,72 @@ html:`
     }) => ({
         subject: `Product Subscribed | Ingram Micro Surface`,
         text: `Product Subscribed | Ingram Micro Surface
-                Dear ${email},
+    Dear ${email},
 
-                You have successfully subscribed to the following product on Ingram Micro Surface.
+    You have successfully subscribed to the following product on Ingram Micro Surface.
 
-                PRODUCT DETAILS
-                Product: ${product}
-                SKU: ${sku}
+    PRODUCT DETAILS
+    Product: ${product}
+    SKU: ${sku}
 
-                You will receive an email notification as soon as this product is back in stock.
+    You will receive an email notification as soon as this product is back in stock.
 
-                Thank you for using Ingram Micro Surface.
+    Thank you for using Ingram Micro Surface.
 
-                If you have any questions, please contact us at support@ingrammicro-surface.com.
+    If you have any questions, please contact us at support@ingrammicro-surface.com.
 
-                Best regards,
-                The Ingram Micro Surface Team`,
-            html:`
-            <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td align="center">
+    Best regards,
+    The Ingram Micro Surface Team`,
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                                <table width="720" cellpadding="0" cellspacing="0"
-                                    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                                    <!-- HEADER -->
-                                    <tr>
-                                        <td style="background:#f5f5f5; padding:30px; text-align:center;">
-                                            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Logo"
-                                                style="max-width:400px; width:220px;" />
-                                        </td>
-                                    </tr>
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Logo" />
+    </td>
+    </tr>
 
-                                
-                                    <!-- INTRO -->
-                                    <tr>
-                                    <td style="padding:30px 30px 0 30px; color:#333;">
-                                        <strong>Product Subscribed</strong>
-                                    </td>
-                                    </tr>
-                                
-                                    <tr>
-                                        <td style="padding:30px 30px 0 30px; color:#333;">
-                                            <p style="margin:0 0 8px; font-size:14px;"><strong>Dear:
-                                                </strong>${email}</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:0 30px; color:#333;">
-                                            <p style="font-size:15px; line-height:1.6;">
-                                                You have subscribed to <b>${product} (${sku})</b> on Ingram Micro Surface. An email
-                                                notification will be sent
-                                                once the product is back in stock.
-                                            </p>
-                                            <p>
-                                                Thank you for using Ingram Micro Surface!
-                                            </p>
-                                        </td>
-                                    </tr>
+    <!-- INTRO -->
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <strong>Product Subscribed</strong>
+    </td>
+    </tr>
 
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                    `,
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:14px;"><strong>Dear: </strong>${email}</p>
+    </td>
+    </tr>
+
+    <tr>
+    <td style="padding:0 30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6;">
+        You have subscribed to <b>${product} (${sku})</b> on Ingram Micro Surface. An email
+        notification will be sent once the product is back in stock.
+    </p>
+    <p>
+        Thank you for using Ingram Micro Surface!
+    </p>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `,
     }),
 
 
@@ -3694,79 +3714,80 @@ html:`
     }) => ({
         subject: `Product Back In Stock | Ingram Micro Surface`,
         text: `Product Back In Stock | Ingram Micro Surface
-            Hello ${email},
+    Hello ${email},
 
-            Your subscribed product is now back in stock.
+    Your subscribed product is now back in stock.
 
-            PRODUCT DETAILS
-            Product: ${product}
-            SKU: ${sku}
+    PRODUCT DETAILS
+    Product: ${product}
+    SKU: ${sku}
 
-            You can now add this product directly to your cart using the link below:
-            ${productUrl}
+    You can now add this product directly to your cart using the link below:
+    ${productUrl}
 
-            Thank you for using Ingram Micro Surface.
+    Thank you for using Ingram Micro Surface.
 
-            If you have any questions, please contact us at support@ingrammicro-surface.com.
+    If you have any questions, please contact us at support@ingrammicro-surface.com.
 
-            Best regards,
-            The Ingram Micro Surface Team`,
-            html:`
-            <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tr>
-                            <td align="center">
+    Best regards,
+    The Ingram Micro Surface Team`,
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                                <table width="720" cellpadding="0" cellspacing="0"
-                                    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                                    <!-- HEADER -->
-                                    <tr>
-                                        <td style="background:#F5F5F5; padding:30px; text-align:center;">
-                                            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Logo"
-                                                style="max-width:400px; width:220px;" />
-                                        </td>
-                                    </tr>
-                                
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Logo" />
+    </td>
+    </tr>
 
-                                    <!-- INTRO -->
-                                    <tr>
-                                    <td style="padding:30px 30px 0 30px; color:#333;">
-                                        <strong>Product back in stock</strong>
-                                    </td>
-                                    </tr>
-                                    <tr>
-                                    
-                                        <td style="padding:30px 30px 0 30px; color:#333;">
-                                            <p style="margin:0 0 8px; font-size:14px;"><strong>Hello
-                                                </strong>${email},</p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:0 30px; color:#333;">
-                                            <p style="font-size:15px; line-height:1.6;">
-                                                Your Subscribed Product <b>${product} (${sku})</b> is now back in stock!
-                                            </p>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td style="padding:0 30px; color:#333;">
-                                            <p style="font-size:15px; line-height:1.6;">
-                                                You can now add this product directly to your cart ${productUrl}
-                                            </p>
-                                            <p>
-                                                Thank you for using Ingram Micro Surface!
-                                            </p>
-                                        </td>
-                                    </tr>
+    <!-- INTRO -->
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <strong>Product back in stock</strong>
+    </td>
+    </tr>
 
-                                </table>
+    <tr>
+    <td style="padding:30px 30px 0 30px; color:#333;">
+    <p style="margin:0 0 8px; font-size:14px;"><strong>Hello </strong>${email},</p>
+    </td>
+    </tr>
 
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-                `,
+    <tr>
+    <td style="padding:0 30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6;">
+        Your Subscribed Product <b>${product} (${sku})</b> is now back in stock!
+    </p>
+    </td>
+    </tr>
+
+    <tr>
+    <td style="padding:0 30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6;">
+        You can now add this product directly to your cart ${productUrl}
+    </p>
+    <p>
+        Thank you for using Ingram Micro Surface!
+    </p>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `,
     }),
 
 
@@ -3774,80 +3795,83 @@ html:`
         subject: `User Approved | Ingram Micro Surface`,
         text: `Hi ${email},
 
-            Thank you for signing up! Your account has been reviewed and approved.
+    Thank you for signing up! Your account has been reviewed and approved.
 
-            You can now log in and start using the Ingramicro surface portal.
+    You can now log in and start using the Ingramicro surface portal.
 
-            Login: ${process.env.NEXT_PUBLIC_APP_URL}/login
+    Login: ${process.env.NEXT_PUBLIC_APP_URL}/login
 
-            If you have any questions or experience issues accessing your account,
-            please contact our support team.
+    If you have any questions or experience issues accessing your account,
+    please contact our support team.
 
-            Best regards,
-            The Ingram Micro Surface Team`,
-            html:`
-        <div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
-                <table width="100%" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td align="center">
-                            <table width="600" cellpadding="0" cellspacing="0"
-                                style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    Best regards,
+    The Ingram Micro Surface Team`,
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                                <!-- HEADER -->
-                                <tr>
-                                    <td style="background:#F5F5F5; padding:30px; text-align:center;">
-                                        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Logo"
-                                            style="max-width:400px; width:220px;" />
-                                    </td>
-                                </tr>
+    <table width="600" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                                <!-- BODY -->
-                                <tr>
-                                    <td style="padding:30px; color:#333;">
-                                        <p style="font-size:15px; line-height:1.6; margin-top:0;">
-                                            Hi <strong>${email}</strong>,
-                                        </p>
-                                        <p style="font-size:15px; line-height:1.6;">
-                                            Thank you for signing up! Your account has been reviewed and approved.
-                                        </p>
-                                        <p style="font-size:15px; line-height:1.6;">
-                                            You can now log in and start using the Ingramicro surface portal.
-                                        </p>
-                                    </td>
-                                </tr>
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Logo" />
+    </td>
+    </tr>
 
-                                <!-- CTA BUTTON -->
-                                <tr>
-                                    <td align="center" style="padding:0px 30px 35px 30px;">
-                                        <table border="0" cellspacing="0" cellpadding="0" align="center">
-                                            <tr>
-                                                <td align="center"
-                                                    style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
-                                                    <a href="${process.env.NEXT_PUBLIC_APP_URL}/login"
-                                                        style="color:#ffffff; text-decoration:none; font-size:18px; font-family:'Inter', sans-serif; display:inline-block;">
-                                                        Login to Portal
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
+    <!-- BODY -->
+    <tr>
+    <td style="padding:30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6; margin-top:0;">
+        Hi <strong>${email}</strong>,
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+        Thank you for signing up! Your account has been reviewed and approved.
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+        You can now log in and start using the Ingramicro surface portal.
+    </p>
+    </td>
+    </tr>
 
-                                <tr>
-                                    <td style="padding:30px; color:#333;">
-                                        <p style="font-size:14px; line-height:1.6; color:#555;">
-                                            If you have any questions or face issues accessing your account,
-                                            feel free to contact our support team.
-                                        </p>
-                                    </td>
-                                </tr>
+    <!-- CTA BUTTON -->
+    <tr>
+    <td align="center" style="padding:0px 30px 35px 30px;">
+    <table border="0" cellspacing="0" cellpadding="0" align="center">
+    <tr>
+    <td align="center"
+    style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
+    <a href="${process.env.NEXT_PUBLIC_APP_URL}/login"
+    style="color:#ffffff; text-decoration:none; font-size:18px; font-family:'Inter', sans-serif; display:inline-block;">
+    Login to Portal
+    </a>
+    </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
 
-                            </table>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-            `,
+    <tr>
+    <td style="padding:30px; color:#333;">
+    <p style="font-size:14px; line-height:1.6; color:#555;">
+        If you have any questions or face issues accessing your account,
+        feel free to contact our support team.
+    </p>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `,
     }),
 
 
@@ -3855,56 +3879,59 @@ html:`
         subject: `User Rejected | Ingram Micro Surface`,
         text: `Hi ${email},
 
-                Thank you for your interest in the Ingramicro surface portal.
+    Thank you for your interest in the Ingramicro surface portal.
 
-                After careful review, we’re unable to approve your account at this time.
-                This decision may be based on internal verification or eligibility requirements.
+    After careful review, we're unable to approve your account at this time.
+    This decision may be based on internal verification or eligibility requirements.
 
-                If you believe this is a mistake or need further clarification,
-                please contact our support team for assistance.
+    If you believe this is a mistake or need further clarification,
+    please contact our support team for assistance.
 
-                Best regards,
-                The Ingram Micro Surface Team`,
-     html:`
-<div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
-        <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-                <td align="center">
-                    <table width="600" cellpadding="0" cellspacing="0"
-                        style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    Best regards,
+    The Ingram Micro Surface Team`,
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
 
-                        <!-- HEADER -->
-                        <tr>
-                            <td style="background:#F5F5F5; padding:30px; text-align:center;">
-                                 <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Micro Surface Logo"
-                                    style="max-width:400px; width:220px;" />
-                            </td>
-                        </tr>
+    <table width="600" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-                        <!-- BODY -->
-                        <tr>
-                            <td style="padding:30px; color:#333;">
-                                <p style="font-size:15px; line-height:1.6; margin-top:0;">
-                                    Hi <strong>${email}</strong>,
-                                </p>
-                                <p style="font-size:15px; line-height:1.6;">
-                                    Thank you for signing up for the Ingramicro surface portal.
-                                </p>
-                                <p style="font-size:15px; line-height:1.6; color:#b02a37;">
-                                    After careful review, we're unable to approve your account at this time.
-                                </p>
-                                <p style="font-size:15px; line-height:1.6; color:#555;">
-                                    This decision may be based on internal verification or eligibility requirements.
-                                </p>
-                            </td>
-                        </tr>
+    <!-- HEADER -->
+    <tr>
+    <td style="background:#f5f5f5; padding:30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro Surface Logo" />
+    </td>
+    </tr>
 
-                    </table>
-                </td>
-            </tr>
-        </table>
+    <!-- BODY -->
+    <tr>
+    <td style="padding:30px; color:#333;">
+    <p style="font-size:15px; line-height:1.6; margin-top:0;">
+        Hi <strong>${email}</strong>,
+    </p>
+    <p style="font-size:15px; line-height:1.6;">
+        Thank you for signing up for the Ingramicro surface portal.
+    </p>
+    <p style="font-size:15px; line-height:1.6; color:#b02a37;">
+        After careful review, we're unable to approve your account at this time.
+    </p>
+    <p style="font-size:15px; line-height:1.6; color:#555;">
+        This decision may be based on internal verification or eligibility requirements.
+    </p>
+    </td>
+    </tr>
+
+    </table>
+    </td>
+    </tr>
+    </table>
     </div>
-        `,
+    `,
     }),
 
     eolSubmissionEmail: ({
@@ -3950,172 +3977,174 @@ html:`
     Best regards,
     The Ingram Micro Surface Team`,
             html: `
-    <div style="font-family:'Inter',sans-serif;background-color:#ffffff;padding:30px 0;">
+    <div style="font-family:'Inter',sans-serif; background-color:#ffffff; padding:30px 0;">
     <table width="100%" cellpadding="0" cellspacing="0">
     <tr><td align="center">
 
     <table width="720" cellpadding="0" cellspacing="0"
-        style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid black;">
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
-        <tr>
-            <td style="background:#f5f5f5;padding:32px 30px;text-align:center;">
-                <h1 style="color:#ffffff;margin:0;font-size:20px;font-weight:500;">
-                    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-                        style="width:220px;" />
-                </h1>
-            </td>
-        </tr>
+    <tr>
+    <td style="background:#f5f5f5; padding:32px 30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
+    </td>
+    </tr>
 
-        <tr>
-            <td style="padding:30px;color:#333;">
-                <h2 style="color:#000000;margin:0 0 16px;font-size:18px;font-weight:500;">
-                    EOL Device Submission
-                </h2>
-                <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
-                    <strong>Submitted By:</strong> ${submittedBy}
-                </p>
-                <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
-                    <strong>Date:</strong> ${submissionDate}
-                </p>
-                <p style="font-size:14px;color:#4a5568;margin:0 0 24px;">
-                    <strong>Note:</strong> ${note || '-'}
-                </p>
-            </td>
-        </tr>
+    <tr>
+    <td style="padding:30px; color:#333;">
+    <h2 style="color:#000000; margin:0 0 16px; font-size:18px; font-weight:500;">
+        EOL Device Submission
+    </h2>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 6px;">
+        <strong>Submitted By:</strong> ${submittedBy}
+    </p>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 6px;">
+        <strong>Date:</strong> ${submissionDate}
+    </p>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 24px;">
+        <strong>Note:</strong> ${note || '-'}
+    </p>
+    </td>
+    </tr>
 
-        <tr>
-            <td style="padding:0 30px 30px;">
-                <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                    <tr style="background:#f5f5f5;color:#000000;">
-                        <th style="padding:10px;border:1px solid #ddd;text-align:center;width:40px;">#</th>
-                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Product Name</th>
-                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">SKU</th>
-                        <th style="padding:10px;border:1px solid #ddd;text-align:center;">Qty</th>
-                        <th style="padding:10px;border:1px solid #ddd;text-align:left;">Address</th>
-                    </tr>
-                    ${itemRows}
-                </table>
-            </td>
-        </tr>
+    <tr>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40px;">#</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">Product Name</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">SKU</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center;">Qty</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">Address</th>
+    </tr>
+    ${itemRows}
+    </table>
+    </td>
+    </tr>
 
     </table>
 
     </td></tr>
     </table>
     </div>
-            `,
+    `,
         };
     },
 
     dispatchSubmissionEmail: ({
-    submittedBy,
-    submissionDate,
-    trackingNumber,
-    shipmentDate,
-    items,
-}: {
-    submittedBy: string;
-    submissionDate: string;
-    trackingNumber: string;
-    shipmentDate: string;
-    items: Array<{
-        product_name: string;
-        product_sku: string;
-        product_quantity: number;
-        inventory_owner: string;
-    }>;
-}) => {
-    const itemRows = items.map((item, index) => `
-        <tr>
-            <td style="padding:10px; border:1px solid #ddd; text-align:center;">${index + 1}</td>
-            <td style="padding:10px; border:1px solid #ddd;">${item.product_name}</td>
-            <td style="padding:10px; border:1px solid #ddd;">${item.product_sku}</td>
-            <td style="padding:10px; border:1px solid #ddd; text-align:center;">${item.product_quantity}</td>
-            <td style="padding:10px; border:1px solid #ddd;">${item.inventory_owner}</td>
-        </tr>
-    `).join('');
+        submittedBy,
+        submissionDate,
+        trackingNumber,
+        shipmentDate,
+        items,
+    }: {
+        submittedBy: string;
+        submissionDate: string;
+        trackingNumber: string;
+        shipmentDate: string;
+        items: Array<{
+            product_name: string;
+            product_sku: string;
+            product_quantity: number;
+            inventory_owner: string;
+        }>;
+    }) => {
+        const itemRows = items.map((item, index) => `
+            <tr>
+                <td style="padding:10px; border:1px solid #ddd; text-align:center;">${index + 1}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.product_name}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.product_sku}</td>
+                <td style="padding:10px; border:1px solid #ddd; text-align:center;">${item.product_quantity}</td>
+                <td style="padding:10px; border:1px solid #ddd;">${item.inventory_owner}</td>
+            </tr>
+        `).join('');
 
-    const itemsText = items.map((item, i) =>
-        `${i + 1}. ${item.product_name} | SKU: ${item.product_sku} | Qty: ${item.product_quantity} | Owner: ${item.inventory_owner}`
-    ).join('\n');
+        const itemsText = items.map((item, i) =>
+            `${i + 1}. ${item.product_name} | SKU: ${item.product_sku} | Qty: ${item.product_quantity} | Owner: ${item.inventory_owner}`
+        ).join('\n');
 
-    return {
-        subject: `New Dispatch Submission | Ingram Micro Surface`,
-        text: `New Dispatch Submission | Ingram Micro Surface
-Submitted By: ${submittedBy}
-Date: ${submissionDate}
-Tracking #: ${trackingNumber || '-'}
-Shipment Date: ${shipmentDate || '-'}
+        return {
+            subject: `New Dispatch Submission | Ingram Micro Surface`,
+            text: `New Dispatch Submission | Ingram Micro Surface
+    Submitted By: ${submittedBy}
+    Date: ${submissionDate}
+    Tracking #: ${trackingNumber || '-'}
+    Shipment Date: ${shipmentDate || '-'}
 
-ITEMS
-${itemsText}
+    ITEMS
+    ${itemsText}
 
-Best regards,
-The Ingram Micro Surface Team`,
-        html: `
-<div style="font-family:'Inter',sans-serif;background-color:#ffffff;padding:30px 0;">
-<table width="100%" cellpadding="0" cellspacing="0">
-<tr><td align="center">
+    Best regards,
+    The Ingram Micro Surface Team`,
+            html: `
+    <div style="font-family:'Inter',sans-serif; background-color:#ffffff; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr><td align="center">
 
-<table width="720" cellpadding="0" cellspacing="0"
-    style="background:#ffffff;border-radius:10px;overflow:hidden;border:1px solid black;">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
     <tr>
-        <td style="background:#f5f5f5;padding:32px 30px;text-align:center;">
-                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-                    style="width:220px;" />
-        </td>
+    <td style="background:#f5f5f5; padding:32px 30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
+    </td>
     </tr>
 
     <tr>
-        <td style="padding:30px;color:#333;">
-            <h2 style="color:#000000;margin:0 0 16px;font-size:18px;font-weight:500;">
-                Dispatched Devices Submission
-            </h2>
-            <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
-                <strong>Submitted By:</strong> ${submittedBy}
-            </p>
-            <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
-                <strong>Date:</strong> ${submissionDate}
-            </p>
-            <p style="font-size:14px;color:#4a5568;margin:0 0 6px;">
-                <strong>Tracking #:</strong> ${trackingNumber || '-'}
-            </p>
-            <p style="font-size:14px;color:#4a5568;margin:0 0 24px;">
-                <strong>Shipment Date:</strong> ${shipmentDate || '-'}
-            </p>
-        </td>
+    <td style="padding:30px; color:#333;">
+    <h2 style="color:#000000; margin:0 0 16px; font-size:18px; font-weight:500;">
+        Dispatched Devices Submission
+    </h2>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 6px;">
+        <strong>Submitted By:</strong> ${submittedBy}
+    </p>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 6px;">
+        <strong>Date:</strong> ${submissionDate}
+    </p>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 6px;">
+        <strong>Tracking #:</strong> ${trackingNumber || '-'}
+    </p>
+    <p style="font-size:14px; color:#4a5568; margin:0 0 24px;">
+        <strong>Shipment Date:</strong> ${shipmentDate || '-'}
+    </p>
+    </td>
     </tr>
 
     <tr>
-        <td style="padding:0 30px 30px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-                <tr style="background:#f5f5f5;color:#000000;">
-                    <th style="padding:10px;border:1px solid #ddd;text-align:center;width:40px;">#</th>
-                    <th style="padding:10px;border:1px solid #ddd;text-align:left;">Product Name</th>
-                    <th style="padding:10px;border:1px solid #ddd;text-align:left;">SKU</th>
-                    <th style="padding:10px;border:1px solid #ddd;text-align:center;">Qty</th>
-                    <th style="padding:10px;border:1px solid #ddd;text-align:left;">Inventory Owner</th>
-                </tr>
-                ${itemRows}
-            </table>
-        </td>
+    <td style="padding:0 30px 30px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40px;">#</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">Product Name</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">SKU</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center;">Qty</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">Inventory Owner</th>
+    </tr>
+    ${itemRows}
+    </table>
+    </td>
     </tr>
 
     <tr>
-        <td style="padding:0 30px 30px;">
-            <p style="font-size:12px;color:#718096;text-align:center;margin:0;">
-                Send devices to: Works360 LABS (Ingrammicro Surface), 15345 Anacapa Rd Unit A, Victorville, CA 92392
-            </p>
-        </td>
+    <td style="padding:0 30px 30px;">
+    <p style="font-size:12px; color:#718096; text-align:center; margin:0;">
+        Send devices to: Works360 LABS (Ingrammicro Surface), 15345 Anacapa Rd Unit A, Victorville, CA 92392
+    </p>
+    </td>
     </tr>
 
-</table>
+    </table>
 
-</td></tr>
-</table>
-</div>
-        `,
-    };
-},
+    </td></tr>
+    </table>
+    </div>
+    `,
+        };
+    },
 };

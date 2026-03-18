@@ -675,7 +675,7 @@ setOrders(uniqueOrders as Order[]);
   const getErrorClass = (fieldName: string) => {
     return editErrors[fieldName]
       ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-      : "border-gray-300 focus:ring-[#1D76BC] focus:border-[#1D76BC]";
+      : "border-gray-300 focus:ring-[#E5E7EB] focus:border-[#E5E7EB]";
   };
 
   // Define columns for orders
@@ -1360,7 +1360,7 @@ try {
           </Button>
           <Button
             onClick={handleExportCSV}
-            className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
+            className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
           >
             <TbFileTypeCsv />
             Export CSV
@@ -1411,7 +1411,7 @@ try {
               onChange={(event) => {
                 setGlobalFilter(event.target.value);
               }}
-              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#1D76BC] transition-all"
+              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#E5E7EB] transition-all"
             />
             {globalFilter && (
               <button
@@ -1429,13 +1429,13 @@ try {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#1D76BC] hover:bg-[#1660a0]"
+                  className="bg-[#E5E7EB] hover:bg-[#9CA3AF]"
                 >
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="text-white font-semibold border-r border-[#1D76BC] last:border-r-0"
+                        className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0"
                       >
                         {header.isPlaceholder
                           ? null
@@ -1671,7 +1671,7 @@ try {
           <div>
             <div className="text-xl font-bold text-gray-800">
               Edit Order #
-              <span className="text-[#1D76BC]">{selectedOrder?.order_no}</span>
+              <span className="text-[#E5E7EB]">{selectedOrder?.order_no}</span>
             </div>
             <div className="text-gray-600 text-sm mt-1">
               Update order information. All fields marked with * are required.
@@ -1696,7 +1696,7 @@ try {
               onClick={handleUpdateOrder}
               loading={isSubmitting}
               icon={<SaveOutlined />}
-              className="!bg-[#1D76BC] !border-[#1D76BC] hover:!bg-[#1660a0]"
+              className="!bg-[#E5E7EB] !border-[#E5E7EB] hover:!bg-[#9CA3AF] !text-black"
             >
               Save Changes
             </AntButton>
@@ -1709,7 +1709,7 @@ try {
             {/* Basic Information Section */}
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Basic Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1752,7 +1752,7 @@ try {
             {/* Team Details Section */}
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Team Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1844,7 +1844,7 @@ try {
         {/* Opportunity Details Section */}
         <div className="space-y-4 pt-4 border-t">
           <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-            <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+            <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
             Opportunity Details
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -1981,7 +1981,7 @@ try {
             {/* Technical Details Section
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Technical Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2150,7 +2150,7 @@ try {
             {/* Shipping Details Section */}
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Shipping Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2398,7 +2398,7 @@ try {
             {/* Tracking & Return Details Section */}
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Tracking & Return Details
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -2506,7 +2506,7 @@ try {
             {/* Additional Information Section */}
             <div className="space-y-4 pt-4 border-t">
               <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                 Additional Information
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

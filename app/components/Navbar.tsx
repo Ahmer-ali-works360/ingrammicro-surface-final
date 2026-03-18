@@ -1046,7 +1046,7 @@ export default function Navbar() {
         placement="right"
         onClose={() => setIsCartDrawerOpen(false)}
         open={isCartDrawerOpen}
-        size={400}
+        size={300}
         className="cart-drawer"
       >
         {cartLoading ? (
@@ -1133,7 +1133,7 @@ export default function Navbar() {
                   onClick={handleCart}
                   className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
                 >
-                  View Cart Details
+                  View Cart 
                 </button>
                 <button
                   onClick={handleCheckout}

@@ -1347,7 +1347,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                             {/* Inventory Type */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-medium mb-2">Inventory Type</label>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Inventory Type<span className="text-red-500">*</span></label>
                                 <select
                                     value={formData.inventoryType}
                                     onChange={(e) => handleInputChange('inventoryType', e.target.value)}
@@ -1362,7 +1362,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                             {/* Total Inventory */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-medium mb-2">Total Inventory</label>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Total Inventory<span className="text-red-500">*</span></label>
                                 <input
                                     type="number"
                                     placeholder="Enter total inventory"
@@ -1374,7 +1374,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                             {/* Stock Quantity */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-medium mb-2">Stock Quantity</label>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Stock Quantity <span className="text-red-500">*</span></label>
                                 <input
                                     type="number"
                                     placeholder="Enter stock quantity"
@@ -1437,7 +1437,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                             {/* Post Status */}
                             <div>
-                                <label className="block text-gray-700 text-sm font-medium mb-2">Post Status</label>
+                                <label className="block text-gray-700 text-sm font-medium mb-2">Post Status<span className="text-red-500">*</span></label>
                                 <div className="flex gap-4">
                                     {postStatusOptions.map((option) => (
                                         <label key={option} className="flex items-center space-x-2 cursor-pointer">
