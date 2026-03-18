@@ -314,110 +314,114 @@ export const emailTemplates = {
 
     // Registration Email to User (Waiting for Approval)
     registrationUserWaiting: (userData: {
-                name: string;
-                email: string;
-                reseller: string;
-                registrationDate: string;
-    }) => ({
-                subject: `Your Registration is Under Review | Ingram Micro Surface`,
-                text: `Dear ${userData.name},\n\nThank you for registering with Ingram Micro Surface. Your registration has been received and is currently under review by our Program Management team.\n\nWe will review your application and notify you once your account has been approved. This process typically takes 1-2 business days.\n\nRegistration Details:\n- Name: ${userData.name}\n- Email: ${userData.email}\n- Reseller: ${userData.reseller}\n- Registration Date: ${userData.registrationDate}\n\nIf you have any questions, please contact our support team.\n\nBest regards,\nIngram Micro Surface Team`,
-                html: `
-                <table style="font-family: 'Inter', sans-serif; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dddddd;"
-                border="0" width="600" cellspacing="0" cellpadding="0" align="center">
-                <tr>
-                    <td align="center">
+                    name: string;
+                    email: string;
+                    reseller: string;
+                    registrationDate: string;
+        }) => ({
+                    subject: `Your Registration is Under Review | Ingram Micro Surface`,
+                    text: `Dear ${userData.name},\n\nThank you for registering with Ingram Micro Surface. Your registration has been received and is currently under review by our Program Management team.\n\nWe will review your application and notify you once your account has been approved. This process typically takes 1-2 business days.\n\nRegistration Details:\n- Name: ${userData.name}\n- Email: ${userData.email}\n- Reseller: ${userData.reseller}\n- Registration Date: ${userData.registrationDate}\n\nIf you have any questions, please contact our support team.\n\nBest regards,\nIngram Micro Surface Team`,
+                    html: `
+                    <table style="font-family: 'Inter', sans-serif; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dddddd;"
+                    border="0" width="600" cellspacing="0" cellpadding="0" align="center">
+                    <tr>
+                        <td align="center">
 
-                        <table width="720" cellpadding="0" cellspacing="0"
-                            style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+                            <table width="720" cellpadding="0" cellspacing="0"
+                                style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
 
-                            <!-- HEADER -->
-                            <tr>
-                                <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
-                                    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" alt="Ingram Micro Surface"
-                                        style="max-width:400px; width:220px;">
-                                </td>
-                            </tr>
+                                <!-- HEADER -->
+                                <tr>
+                                    <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
+                                        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
+                                        alt="Ingram Micro Surface"
+                                        width="220"
+                                        height="auto"
+                                        border="0"
+                                        style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
+                                    </td>
+                                </tr>
 
-                        
-                            <!-- Content -->
-                            <tr>
-                                <td style="padding:30px; color:#333;">
-                                    <h2 style="color: #000000; margin: 0 0 24px; font-size: 20px; font-weight: 500;">Dear
-                                        ${userData.name},
-                                    </h2>
+                            
+                                <!-- Content -->
+                                <tr>
+                                    <td style="padding:30px; color:#333;">
+                                        <h2 style="color: #000000; margin: 0 0 24px; font-size: 20px; font-weight: 500;">Dear
+                                            ${userData.name},
+                                        </h2>
 
-                                    <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 8px;">
-                                        Thank you for registering with <strong>Ingram Micro Surface</strong>. Your registration has been received and is currently under review by our Program Manager.
-                                    </p>
-                                    <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 32px;">
-                                        We will notify you once your account has been approved.
-                                    </p>
-                                </td>
-                            </tr>
-
-                            <tr>
-                                <td style="padding:20px; color:#333;">
-
-                                    <!-- Registration Details -->
-                                    <div
-                                        style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
-                                        <h3
-                                            style="color: #000000; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-                                            REGISTRATION DETAILS</h3>
-
-                                        <table style="width: 100%; border-collapse: collapse;">
-                                            <tr>
-                                                <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">
-                                                    Name:</td>
-                                                <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
-                                                    ${userData.name}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    Email:</td>
-                                                <td
-                                                    style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    ${userData.email}</td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    Reseller:</td>
-                                                <td
-                                                    style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    ${userData.reseller}</td>
-                                            </tr>
-                                            <tr>
-                                                <td
-                                                    style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    Registered:</td>
-                                                <td
-                                                    style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                    ${userData.registrationDate}</td>
-                                            </tr>
-                                        </table>
-                                    </div>
-
-                                    <!-- Note -->
-                                    <div style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px;">
-                                        <p style="margin: 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
-                                            <span style="font-weight: 600;">Note:</span> You will receive another email once your account has been approved. For questions or updates, please contact our support team.
+                                        <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 8px;">
+                                            Thank you for registering with <strong>Ingram Micro Surface</strong>. Your registration has been received and is currently under review by our Program Manager.
                                         </p>
-                                    </div>
+                                        <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 32px;">
+                                            We will notify you once your account has been approved.
+                                        </p>
+                                    </td>
+                                </tr>
 
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td style="padding:20px; color:#333;">
 
-                        </table>
-                    </td>
-                </tr>
-            </table>
-                `,
-    }),
+                                        <!-- Registration Details -->
+                                        <div
+                                            style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
+                                            <h3
+                                                style="color: #000000; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                                                REGISTRATION DETAILS</h3>
 
+                                            <table style="width: 100%; border-collapse: collapse;">
+                                                <tr>
+                                                    <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">
+                                                        Name:</td>
+                                                    <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
+                                                        ${userData.name}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td
+                                                        style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        Email:</td>
+                                                    <td
+                                                        style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        ${userData.email}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td
+                                                        style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        Reseller:</td>
+                                                    <td
+                                                        style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        ${userData.reseller}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td
+                                                        style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        Registered:</td>
+                                                    <td
+                                                        style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                        ${userData.registrationDate}</td>
+                                                </tr>
+                                            </table>
+                                        </div>
 
+                                        <!-- Note -->
+                                        <div style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px;">
+                                            <p style="margin: 0; color: #4a5568; font-size: 14px; line-height: 1.6;">
+                                                <span style="font-weight: 600;">Note:</span> You will receive another email once your account has been approved. For questions or updates, please contact our support team.
+                                            </p>
+                                        </div>
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                    `,
+        }),
+
+ // Password Reset Email
     passwordReset: (data: {
         name: string;
         email: string;
