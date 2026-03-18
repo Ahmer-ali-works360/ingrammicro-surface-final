@@ -363,38 +363,60 @@ const renderAllProducts = () => {
     }
 
     return (
-        <>
-            {order.products_array.map((product, index) => (
+   <>
+        {order.products_array.map((product, index) => {
+            const isEditing = editingField === "product_id" && editingRowId === `product_${index}`;
+            return (
                 <TableRow key={product.id}>
                     <TableCell className="w-[85%]">
-                        <div className="flex items-center justify-between group">
+                        {isEditing ? (
                             <div className="flex items-center gap-2">
-                                <span>{product.product_name}</span>
-                                {product.sku && (
-                                    <span className="text-xs text-gray-500">(SKU: {product.sku})</span>
+                                <Select value={editedValue} onValueChange={setEditedValue}>
+                                    <SelectTrigger className="flex-1">
+                                        <SelectValue placeholder="Select product" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {allProducts.map(p => (
+                                            <SelectItem key={p.id} value={p.id}>
+                                                {p.product_name} ({p.sku})
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                <Button size="sm" onClick={() => handleProductSelect(editedValue)} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">Save</Button>
+                                <Button size="sm" variant="outline" onClick={handleCancelEdit} className="cursor-pointer">Cancel</Button>
+                            </div>
+                        ) : (
+                            <div className="flex items-center justify-between group">
+                                <div className="flex items-center gap-2">
+                                    <span>{product.product_name}</span>
+                                    {product.sku && (
+                                        <span className="text-xs text-gray-500">(SKU: {product.sku})</span>
+                                    )}
+                                </div>
+                                {(isAdmin || isSMRole) && (
+                                    <Button
+                                        size="sm"
+                                        variant="ghost"
+                                        className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 cursor-pointer"
+                                        onClick={() => {
+                                            setEditingField("product_id");
+                                            setEditedValue(product.id || "");
+                                            setEditingRowId(`product_${index}`);
+                                        }}>
+                                        <Pencil className="h-3 w-3" />
+                                    </Button>
                                 )}
                             </div>
-                            {(isAdmin || isSMRole) && (
-                                <Button
-                                    size="sm"
-                                    variant="ghost"
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 p-0 cursor-pointer"
-                                    onClick={() => {
-                                        setEditingField("product_id");
-                                        setEditedValue(product.id || "");
-                                        setEditingRowId(`product_${index}`);
-                                    }}>
-                                    <Pencil className="h-3 w-3" />
-                                </Button>
-                            )}
-                        </div>
+                        )}
                     </TableCell>
                     <TableCell className="w-[15%] border-l text-center">
                         {order.quantities_array?.[index] || 0}
                     </TableCell>
                 </TableRow>
-            ))}
-        </>
+            );
+        })}
+    </>
     );
 };
 
@@ -1022,7 +1044,7 @@ const renderAllProducts = () => {
                         <TableHeader>
                             <TableRow>
                                 <TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>
-                                    Return Label {isReturnLabelMissing && <span className="ml-2 text-xs bg-red-500 text-white px-2 py-0.5 rounded">Required</span>}
+                                    Return Label 
                                 </TableHead>
                             </TableRow>
                         </TableHeader>

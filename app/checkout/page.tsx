@@ -1146,8 +1146,9 @@ addon_sim: has5GAddon,
                         type="text"
                         value={formData.sales_executive}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('sales_executive')}`}
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 bg-gray-100 cursor-not-allowed ${getErrorClass('sales_executive')}`}
                         required
+                         disabled
                       />
                       {errors.sales_executive && (
                         <p className="mt-1 text-sm text-red-600">
@@ -1165,8 +1166,9 @@ addon_sim: has5GAddon,
                         type="email"
                         value={formData.se_email}
                         onChange={handleInputChange}
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 ${getErrorClass('se_email')}`}
+                         className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-1 bg-gray-100 cursor-not-allowed ${getErrorClass('se_email')}`}
                         required
+                         disabled
                       />
                       {errors.se_email && (
                         <p className="mt-1 text-sm text-red-600">

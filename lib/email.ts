@@ -417,6 +417,98 @@ export const emailTemplates = {
                 `,
     }),
 
+
+    passwordReset: (data: {
+        name: string;
+        email: string;
+        resetLink: string;
+        expiryTime: string;
+    }) => ({
+        subject: `Password Reset Request | Ingram Micro Surface`,
+        text: `Dear ${data.name},\n\nWe received a request to reset your password.\nClick the link below to reset your password:\n\n${data.resetLink}\n\nThis link will expire at ${data.expiryTime}.\n\nIf you did not request this, please ignore this email.\n\nBest regards,\nIngram Micro Surface Team`,
+        html: `
+        <table style="font-family: 'Inter', sans-serif; background-color: #ffffff; border-radius: 8px; overflow: hidden; border: 1px solid #dddddd;"
+        border="0" width="600" cellspacing="0" cellpadding="0" align="center">
+            <tr>
+                <td align="center">
+                    <table width="720" cellpadding="0" cellspacing="0"
+                        style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+
+                        <!-- HEADER -->
+                        <tr>
+                            <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
+                                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
+                                    alt="Ingram Micro Surface"
+                                    style="max-width:400px; width:220px;">
+                            </td>
+                        </tr>
+
+                        <!-- Content -->
+                        <tr>
+                            <td style="padding:30px; color:#333;">
+                                <h2 style="color: #000000; margin: 0 0 24px; font-size: 20px; font-weight: 500;">
+                                    Dear ${data.name},
+                                </h2>
+                                <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 8px;">
+                                    We received a request to reset your password on <strong>Ingram Micro Surface Portal</strong>.
+                                </p>
+                                <p style="font-size: 15px; line-height: 1.6; color: #333333; margin: 0 0 32px;">
+                                    Click the button below to reset your password. This link will expire in <strong>1 hour</strong>.
+                                </p>
+                            </td>
+                        </tr>
+
+                        <!-- Link -->
+                            <tr>
+                                <td style="padding:0px 30px;">
+                                    <p style="font-size: 14px; color: #4a5568; margin: 0 0 8px;">
+                                        Click the link below to reset your password:
+                                    </p>
+                                    <a href="${data.resetLink}"
+                                        style="color:#1D76BC; font-size:14px; text-decoration:underline;">
+                                        Reset Password
+                                    </a>
+                                </td>
+                            </tr>
+
+                        <!-- Details -->
+                        <tr>
+                            <td style="padding:30px; color:#333;">
+                                <div style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
+                                    <h3 style="color: #1D76BC; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                                        REQUEST DETAILS
+                                    </h3>
+                                    <table style="width: 100%; border-collapse: collapse;">
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">Email:</td>
+                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
+                                                ${data.email}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                Expires At:
+                                            </td>
+                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
+                                                ${data.expiryTime}
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <p style="font-size: 13px; color: #718096; margin: 0;">
+                                    If you did not request a password reset, please ignore this email. Your password will remain unchanged.
+                                </p>
+                            </td>
+                        </tr>
+
+                    </table>
+                </td>
+            </tr>
+        </table>
+        `,
+    }),
+
   checkoutEmail: ({
         orderNumber,
         orderDate,

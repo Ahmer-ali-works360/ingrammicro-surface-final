@@ -945,14 +945,14 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-                                    <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}>
+                                    <div className="flex items-center justify-center sm:my-10 my-5">
                                         <div className="text-3xl font-semibold">
                                             <span className="capitalize">
-                                                {slug === "notebooks" ? "Notebooks" : slug === "2in1s" ? "2in1s" : "Devices"}
+                                                {slug === "notebooks" ? "Laptops" : slug === "2in1s" ? "2in1" : "Devices"}
                                             </span>
                                         </div>
 
-                                        {(admin === profile?.role || shopManager === profile?.role) && (
+                                        {/* {(admin === profile?.role || shopManager === profile?.role) && (
                                             <div className="">
                                                 <div className="flex justify-center md:justify-start">
                                                     <Link
@@ -964,7 +964,7 @@ export default function Page() {
                                                     </Link>
                                                 </div>
                                             </div>
-                                        )}
+                                        )} */}
                                     </div>
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
@@ -1030,19 +1030,21 @@ export default function Page() {
                                                                 {product.stock_quantity != 0 && product.post_status === "Publish" ? (
                                                                     <>
                                                                         {isProductInCart ? (
-                                                                            <div className="flex flex-col items-center space-y-2">
-                                                                                <button
-                                                                                    onClick={(e) => {
-                                                                                        e.preventDefault()
-                                                                                        e.stopPropagation()
-                                                                                        handleRemoveFromCart(product.id)
-                                                                                    }}
-                                                                                    disabled={isUpdating}
-                                                                                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm text-red-600 hover:text-white border border-red-600 rounded-sm cursor-pointer hover:bg-red-500 hover:border-red-700 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
-                                                                                >
-                                                                                    Remove
-                                                                                </button>
-                                                                            </div>
+    <div className="flex flex-col items-center space-y-2">
+        <button
+            onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setShowCartDrawer(true)
+            }}
+            className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1d76bc] hover:text-white transition-colors flex items-center justify-center gap-2"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Add to Cart
+        </button>
+    </div>
                                                                         ) : (
                                                                             <button
                                                                                 onClick={(e) => {

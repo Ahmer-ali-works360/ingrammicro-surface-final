@@ -165,7 +165,7 @@ export async function GET(request: NextRequest) {
                     shippedDate: emailData.shippedDate
                 });
 
-                const mergedEmails = [order.users.email, ...OverDueReminderEmail];
+                const mergedEmails = [...OverDueReminderEmail];
 
                 const emailResult = await sendCronEmail({
                     to: mergedEmails,

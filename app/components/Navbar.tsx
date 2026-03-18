@@ -40,7 +40,7 @@ const menuItems = [
 ]
 
 const authMenuItems = [
-  { name: 'Orders', href: '/order-details' },
+  { name: 'My Orders', href: '/order-details' },
   { name: 'Password reset', href: '/password-reset' },
   { name: 'Logout', href: 'logout' },
 ]
@@ -351,7 +351,7 @@ export default function Navbar() {
       ...(profile?.role !== shopManager ? [{ name: 'Report a Win', href: '/wins' }] : []),
       ...(profile?.role === shopManager ? [
         { name: 'Orders', href: '/order-details' },
-        { name: 'Live Inventory', href: '/live+inventory' }
+        { name: 'Live Inventory', href: '/liveinventory' }
       ] : []),
       ...((profile?.role === admin || profile?.role === superSubscriber)
         ? [{ name: '360Dashboard', href: '/360dashboard' }]

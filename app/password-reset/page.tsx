@@ -26,71 +26,52 @@ export default function Page() {
         return () => subscription.unsubscribe()
     }, [])
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setSubmitted(true);
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
 
-        if (!email.trim()) {
-            setError("Email address is required");
+    if (!email.trim()) {
+        setError("Email address is required");
+        return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        setError("Please enter a valid email address");
+        return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+        const response = await fetch("/api/password-reset", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: email.trim().toLowerCase() }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+            toast.error(data.error || "Failed to send reset email", {
+                style: { background: "black", color: "white" },
+            });
             return;
         }
 
-        const { data: existingUsers, error: selectError } = await supabase
-            .from("users")
-            .select("userId")
-            .eq("email", email);
+        toast.success("Password reset link sent to your email", {
+            style: { background: "black", color: "white" },
+        });
 
-        if (existingUsers?.length == 0) {
-            toast.error("User not exists with this email", {
-                style: { background: "black", color: "white" }
-            });
-            setLoading(false);
-            return;
-        }
-
-        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            setError("Please enter a valid email address");
-            return;
-        }
-
-        setLoading(true);
-        setError("");
-
-        try {
-
-            const isDev = process.env.NEXT_PUBLIC_APP_ENV === "development";
-
-            const redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}update-password`;
-
-            // const redirectUrl = isDev
-            //     ? `${APPCONSTANTS.LocalUrl}/update-password`
-            //     : `${APPCONSTANTS.WebUrl}/update-password`;
-
-            const { error } = await supabase.auth.resetPasswordForEmail(email, {
-                redirectTo: redirectUrl,
-            });
-
-            if (error) throw error;
-
-            toast.success("Password reset link sent to your email", {
-                style: {
-                    background: "black",
-                    color: "white",
-                },
-            });
-
-            setEmail("");
-        } catch (err: any) {
-            toast.error(err.message || "Failed to send reset email", {
-                style: {
-                    background: "black",
-                    color: "white",
-                },
-            });
-        } finally {
-            setLoading(false);
-        }
-    };
+        setEmail("");
+    } catch (err: any) {
+        toast.error("Something went wrong. Please try again.", {
+            style: { background: "black", color: "white" },
+        });
+    } finally {
+        setLoading(false);
+    }
+};
 
 
     return (
