@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 5. Build reset link
-        const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}update-password?token=${token}`;
+        const resetLink = `${process.env.NEXT_PUBLIC_APP_URL}/update-password?token=${token}`;
 
         // 6. Format expiry time
         const expiryTime = expiresAt.toLocaleString("en-US", {
@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         });
 
         // 8. Send email via your SMTP API
-        const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}api/send-email`, {
+        const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

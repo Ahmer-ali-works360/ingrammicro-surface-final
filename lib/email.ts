@@ -362,7 +362,7 @@ export const emailTemplates = {
                                     <div
                                         style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
                                         <h3
-                                            style="color: #1D76BC; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
+                                            style="color: #000000; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
                                             REGISTRATION DETAILS</h3>
 
                                         <table style="width: 100%; border-collapse: collapse;">
@@ -437,9 +437,12 @@ export const emailTemplates = {
                         <!-- HEADER -->
                         <tr>
                             <td style="background:#F5F5F5; padding:32px 30px; text-align:center;">
-                                <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
-                                    alt="Ingram Micro Surface"
-                                    style="max-width:400px; width:220px;">
+                              <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
+                                  alt="Ingram Micro Surface"
+                                  width="220"
+                                  height="auto"
+                                  border="0"
+                                  style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
                             </td>
                         </tr>
 
@@ -474,28 +477,6 @@ export const emailTemplates = {
                         <!-- Details -->
                         <tr>
                             <td style="padding:30px; color:#333;">
-                                <div style="background: #f8fafb; border: 1px solid #e2e8f0; border-radius: 8px; margin: 32px 0; padding: 24px;">
-                                    <h3 style="color: #1D76BC; margin: 0 0 20px; font-size: 16px; font-weight: 600; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px;">
-                                        REQUEST DETAILS
-                                    </h3>
-                                    <table style="width: 100%; border-collapse: collapse;">
-                                        <tr>
-                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px;">Email:</td>
-                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px;">
-                                                ${data.email}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 10px 0; color: #4a5568; width: 120px; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                Expires At:
-                                            </td>
-                                            <td style="padding: 10px 0; color: #1a202c; font-weight: 500; font-size: 14px; border-top: 1px solid #edf2f7;">
-                                                ${data.expiryTime}
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </div>
-
                                 <p style="font-size: 13px; color: #718096; margin: 0;">
                                     If you did not request a password reset, please ignore this email. Your password will remain unchanged.
                                 </p>
