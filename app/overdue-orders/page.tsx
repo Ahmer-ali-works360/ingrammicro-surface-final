@@ -469,7 +469,7 @@ export default function Page() {
                 <div className="flex justify-center">
                     <button onClick={handleSelectAll} className="cursor-pointer">
                         {Object.keys(selectedRows).length === orders.length && orders.length > 0 && Object.values(selectedRows).every(Boolean)
-                            ? <CheckSquare className="h-5 w-5 text-[#1D76BC]" />
+                            ? <CheckSquare className="h-5 w-5 text-[#E5E7EB]" />
                             : <Square className="h-5 w-5 text-gray-400" />}
                     </button>
                 </div>
@@ -479,7 +479,7 @@ export default function Page() {
                 return (
                     <div className="flex justify-center">
                         <input type="checkbox" checked={!!selectedRows[order.id]} onChange={() => handleSelectRow(order.id)}
-                            className="h-4 w-4 rounded border-gray-300 text-[#1D76BC] focus:ring-[#1D76BC] cursor-pointer" />
+                            className="h-4 w-4 rounded border-gray-300 text-[#E5E7EB] focus:ring-[#E5E7EB] cursor-pointer" />
                     </div>
                 );
             },
@@ -768,7 +768,7 @@ export default function Page() {
                     <Button variant="outline" onClick={fetchOrders} disabled={isLoading} className="cursor-pointer">
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -786,7 +786,7 @@ export default function Page() {
                             <button
                                 onClick={handleSendReminders}
                                 disabled={isSendingReminders}
-                                className="flex items-center gap-2 bg-blue-900 hover:bg-blue-700 text-white px-4 py-2 rounded-md disabled:opacity-50"
+                                className="flex items-center gap-2 bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black px-4 py-2 rounded-md disabled:opacity-50"
                             >
                                 {isSendingReminders ? "Sending..." : "Send Reminders"}
                             </button>
@@ -826,9 +826,9 @@ export default function Page() {
                     <Table className="border">
                         <TableHeader>
                             {table.getHeaderGroups().map(headerGroup => (
-                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
                                     {headerGroup.headers.map(header => (
-                                        <TableHead key={header.id} className="text-white font-semibold border-r border-[#1660a0] last:border-r-0">
+                                        <TableHead key={header.id} className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0">
                                             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
                                     ))}

@@ -1067,7 +1067,7 @@ export default function Page() {
           </Button>
           <Button
             onClick={handleExportCSV}
-            className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
+            className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
           >
             <TbFileTypeCsv />
             Export CSV
@@ -1075,7 +1075,7 @@ export default function Page() {
           {isActionAuthorized && (
             <Button
               onClick={handleAddProduct}
-              className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
+              className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
             >
               <PlusOutlined />
               Add Product
@@ -1141,7 +1141,7 @@ export default function Page() {
                   },
                 });
               }}
-              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#1D76BC] transition-all"
+              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#E5E7EB] transition-all"
             />
             {globalFilter && (
               <button
@@ -1159,13 +1159,13 @@ export default function Page() {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#1D76BC] hover:bg-[#1660a0]"
+                  className="bg-[#E5E7EB] hover:bg-[#9CA3AF]"
                 >
                   {headerGroup.headers.map((header) => {
                     return (
                       <TableHead
                         key={header.id}
-                        className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                        className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0"
                       >
                         {header.isPlaceholder
                           ? null
@@ -1539,7 +1539,7 @@ export default function Page() {
             </Button>
             <Button
               onClick={handleSaveEdit}
-              className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer"
+              className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
             >
               Save changes
             </Button>

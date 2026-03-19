@@ -278,7 +278,7 @@ export default function WinDetailsPage() {
                 <Table className="border">
                     <TableHeader>
                         <TableRow>
-                            <TableHead style={{ backgroundColor: '#1D76BC', color: 'white' }} colSpan={2}>
+                            <TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>
                                 Win Form Details
                             </TableHead>
                         </TableRow>
@@ -386,7 +386,7 @@ export default function WinDetailsPage() {
                         {/* How Demo Helped */}
                         <TableRow>
                             <TableCell className="w-[65%] font-semibold align-top">
-                                How did TD Synnex Surface help you close this deal?
+                                How did Ingram micro Surface help you close this deal?
                             </TableCell>
                             <TableCell className="w-[35%] border-l">
                                 <div className="whitespace-pre-wrap">{getNotes()}</div>

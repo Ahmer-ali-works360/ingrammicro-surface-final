@@ -691,7 +691,7 @@ export default function DispatchPage() {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv className="mr-2" />
                         Export CSV
                     </Button>
@@ -746,11 +746,11 @@ export default function DispatchPage() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
                                     {headerGroup.headers.map((header) => (
                                         <TableHead
                                             key={header.id}
-                                            className="text-white font-semibold border-r border-[#2d5f60] last:border-r-0"
+                                            className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0"
                                         >
                                             {header.isPlaceholder
                                                 ? null
@@ -892,7 +892,7 @@ export default function DispatchPage() {
                         {/* Items Section */}
                         <div>
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2 mb-4">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Dispatched Items ({selectedSubmission.item_count})
                             </h3>
 

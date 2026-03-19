@@ -161,13 +161,13 @@
 }
 
 .send-reminders-button button {
-  background-color: #1D76BC !important;
+  background-color: #E5E7EB !important;
   cursor: pointer;
   /* bg-blue-900 */
 }
 
 .send-reminders-button button:hover {
-  background-color: #1D76BC !important;
+  background-color: #9CA3AF !important;
   /* bg-blue-700 */
 }
 

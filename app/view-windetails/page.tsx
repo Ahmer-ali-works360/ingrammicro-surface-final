@@ -739,7 +739,7 @@ export default function Page() {
                     <Button variant="outline" onClick={handleRefresh} disabled={isLoading} className="cursor-pointer">
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#1D76BC] hover:bg-[#1660a0] cursor-pointer">
+                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
@@ -789,9 +789,9 @@ export default function Page() {
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
                                     {headerGroup.headers.map((header) => (
-                                        <TableHead key={header.id} className="text-white font-semibold border-r border-[#1660a0] last:border-r-0">
+                                        <TableHead key={header.id} className="text-black font-semibold border-r border-[#E5E7EB] last:border-r-0">
                                             {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                                         </TableHead>
                                     ))}
@@ -857,7 +857,7 @@ export default function Page() {
                             <X className="mr-2 h-4 w-4" />
                             Cancel
                         </Button>
-                        <Button onClick={handleUpdateWin} disabled={isSubmitting} className="flex items-center bg-[#1D76BC] hover:bg-[#1660a0]">
+                        <Button onClick={handleUpdateWin} disabled={isSubmitting} className="flex items-center bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black">
                             <Save className="mr-2 h-4 w-4" />
                             {isSubmitting ? "Saving..." : "Save Changes"}
                         </Button>
@@ -869,7 +869,7 @@ export default function Page() {
                         {/* Basic Information Section */}
                         <div className="space-y-4">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Basic Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -914,7 +914,7 @@ export default function Page() {
                         {/* Device Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Device Information
                             </h3>
                             <div className="space-y-4">
@@ -949,7 +949,7 @@ export default function Page() {
                         {/* Deal Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Deal Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -985,7 +985,7 @@ export default function Page() {
                         {/* Purchase Information Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Purchase Information
                             </h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -1020,7 +1020,7 @@ export default function Page() {
                         {/* Notes Section */}
                         <div className="space-y-4 pt-4 border-t">
                             <h3 className="text-lg font-semibold text-gray-800 flex items-center gap-2">
-                                <div className="h-6 w-1 bg-[#1D76BC] rounded-full"></div>
+                                <div className="h-6 w-1 bg-[#9CA3AF] rounded-full"></div>
                                 Additional Information
                             </h3>
                             <div className="space-y-2">
