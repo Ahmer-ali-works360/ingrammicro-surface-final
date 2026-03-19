@@ -1186,35 +1186,37 @@ export default function Page() {
 
                             {product?.stock_quantity != 0 ? (
                                 <div className="space-y-4">
-<div className="flex items-center gap-3">
-    <select
-        value={quantity}
-        onChange={(e) => {
-            const selected = Number(e.target.value);
-            if (selected > 1) {
-                toast.error("You cannot add more than 1 of this product.", {
-                    style: { background: "black", color: "white" },
-                });
-            } else {
-                setQuantity(selected);
-            }
-        }}
-        className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
-    >
-        {[1, 2, 3].map((num) => (
-            <option key={num} value={num}>{num}</option>
-        ))}
-    </select>
-    {renderMainActionButton()}
-</div>
-                                   
+                                    <div className="flex items-center gap-3">
+                                        <select
+                                            value={quantity}
+                                            onChange={(e) => {
+                                                const selected = Number(e.target.value);
+                                                if (selected > 1) {
+                                                    toast.error("You cannot add more than 1 of this product.", {
+                                                        style: { background: "black", color: "white" },
+                                                    });
+                                                } else {
+                                                    setQuantity(selected);
+                                                }
+                                            }}
+                                            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
+                                        >
+                                            {[1, 2, 3].map((num) => (
+                                                <option key={num} value={num}>{num}</option>
+                                            ))}
+                                        </select>
+                                        {renderMainActionButton()}
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    <div className="border border-gray-200 rounded-lg p-6 bg-gray-50">
-                                        <h2 className="text-xl font-semibold text-gray-900 mb-4">
-                                            Get an alert when the product is in stock
+                                    <div className="border border-gray-200 rounded-lg p-6 bg-white">
+                                        <h2 className="text-xl font-semibold text-gray-900 mb-1">
+                                            Notify me when available
                                         </h2>
+                                        <p className="text-sm text-gray-500 mb-4">
+                                            Enter your email to be notified when this item is back in stock.
+                                        </p>
 
                                         {!profile?.email ? (
                                             <div className="space-y-4">
@@ -1228,38 +1230,32 @@ export default function Page() {
                                                 </Link>
                                             </div>
                                         ) : (
-                                            <div className="space-y-4">
-                                                <div className="border border-gray-300 rounded-md p-4 bg-white">
-                                                    <div className="flex items-center justify-between">
-                                                        <div>
-                                                            <p className="font-medium text-gray-900">Your Email</p>
-                                                            <p className="text-sm text-gray-500 mt-1">{profile.email}</p>
-                                                        </div>
-                                                        <div className="text-sm text-gray-500">
-                                                            {profile.email ? "✓ Verified" : "Unverified"}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <button
-                                                    onClick={handleAddToWaitlist}
-                                                    disabled={isAddingToWaitlist}
-                                                    className="w-full px-6 py-3 bg-[#1D76BC] cursor-pointer text-white rounded-md hover:bg-[#1660A0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center justify-center gap-2"
-                                                >
-                                                    {isAddingToWaitlist ? (
-                                                        <>
-                                                            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
-                                                            <span>Adding to Waitlist...</span>
-                                                        </>
-                                                    ) : (
-                                                        <>
-                                                            <FaBell className="h-4 w-4" />
+                                            <div className="space-y-3">
+                                                <label className="text-sm text-gray-700 font-medium">Your Email</label>
+                                                <div className="flex items-center gap-2">
+                                                    <input
+                                                        type="email"
+                                                        value={profile.email}
+                                                        readOnly
+                                                        className="flex-1 border border-gray-300 rounded-md px-3 py-2 text-sm text-gray-500 bg-gray-50 cursor-not-allowed focus:outline-none"
+                                                        placeholder="support@works360.com"
+                                                    />
+                                                    <button
+                                                        onClick={handleAddToWaitlist}
+                                                        disabled={isAddingToWaitlist}
+                                                        className="px-4 py-2 bg-[#1D76BC] cursor-pointer text-white text-sm rounded-md hover:bg-[#1660A0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 whitespace-nowrap"
+                                                    >
+                                                        {isAddingToWaitlist ? (
+                                                            <>
+                                                                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-white"></div>
+                                                                <span>Adding...</span>
+                                                            </>
+                                                        ) : (
                                                             <span>Add to Waitlist</span>
-                                                        </>
-                                                    )}
-                                                </button>
-
-                                                <p className="text-xs text-gray-500 text-center mt-2">
+                                                        )}
+                                                    </button>
+                                                </div>
+                                                <p className="text-xs text-gray-400">
                                                     You'll receive an email notification when this product is back in stock.
                                                 </p>
                                             </div>
