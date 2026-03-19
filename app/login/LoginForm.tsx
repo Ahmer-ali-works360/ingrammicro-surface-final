@@ -232,7 +232,7 @@ return (
 
         {/* Right Form */}
         <div className="flex items-center justify-center p-6 lg:p-12">
-          <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-24 p-8">
+          <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-10 p-6">
             <h2 className="text-center text-2xl font-medium text-gray-800 mb-8">
               Login
             </h2>
