@@ -498,7 +498,7 @@ export const emailTemplates = {
         `,
     }),
 
-  checkoutEmail: ({
+    checkoutEmail: ({
         orderNumber,
         orderDate,
         customerName,
@@ -565,17 +565,17 @@ export const emailTemplates = {
         wants5gSim: string;
     }) => {
 
-    const productRows = products.map(product => `
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-    <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
-    </tr>
-    `).join('');
+        const productRows = products.map(product => `
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
+        </tr>
+        `).join('');
 
-    return {
-    subject: `New Order #${orderNumber} | Ingram Micro Surface SURFACE`,
+        return {
+        subject: `New Order #${orderNumber} | Ingram Micro Surface SURFACE`,
 
-    text: `New Ingram Micro Surface Order (#${orderNumber})
+        text: `New Ingram Micro Surface Order (#${orderNumber})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello ${customerName},
@@ -623,264 +623,214 @@ export const emailTemplates = {
     Best regards,
     The Ingram Micro Surface Team`,
 
-    html: `
-            <div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
-            <table width="100%" cellpadding="0" cellspacing="0">
-            <tr>
-            <td align="center">
-            <table width="720" cellpadding="0" cellspacing="0"
-            style="background:#ffffff; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.04); border: 1px solid black;">
+        html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#f4f6f8; padding:30px 0;">
+    <table width="100%" cellpadding="0" cellspacing="0">
+    <tr>
+    <td align="center">
+    <table width="720" cellpadding="0" cellspacing="0"
+    style="background:#ffffff; border-radius:8px; box-shadow:0 4px 16px rgba(0,0,0,0.04); border:1px solid black;">
 
-            <tr>
-            <td style="background:#f5f5f5; padding:32px 30px; text-align:center;">
-            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png" 
-              alt="Ingram Micro Surface"
-              width="220"
-              height="auto"
-              border="0"
-              style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
-            </td>
-            </tr>
+    <tr>
+    <td style="background:#f5f5f5; padding:32px 30px; text-align:center;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            alt="Ingram Micro Surface"
+            width="220"
+            height="auto"
+            border="0"
+            style="display:block; width:220px; max-width:220px; height:auto; margin:0 auto;">
+    </td>
+    </tr>
 
+    <tr>
+    <td style="padding:32px 30px; color:#1e293b;">
+    <p style="margin:0 0 4px; font-size:16px;"><strong>New Order (#${orderNumber})</strong></p>
+    <p style="color:#475569; margin:0 0 24px; font-size:14px;">Placed On ${formatEmailDate(orderDate)}</p>
 
-            <tr>
-            <td style="padding:32px 30px; color:#1e293b;">
-            <p style="margin:0 0 4px; font-size:16px;"><strong>New Order (#${orderNumber})</strong></p>
-            <p style="color:#475569; margin:0 0 24px; font-size:14px;">Placed On
-            ${formatEmailDate(orderDate)}</p>
+    <p style="font-size:15px; line-height:1.6; color:#334155; margin:0;">
+    Hello <strong style="color:#1D76BC;">${customerName}</strong>,<br>
+    Thank you for your order from <strong>ingrammicro-surface.com</strong>.
+    Once your order is approved, you will receive a confirmation email after which
+    it will be shipped to your customer.
+    </p>
+    </td>
+    </tr>
 
-            <p style="font-size:15px; line-height:1.6; color:#334155; margin:0;">
-            Hello <strong style="color:#1D76BC;">${customerName}</strong>,<br>
-            Thank you for your order from <strong>ingrammicro-surface.com</strong>.
-            Once your order is approved, you will receive a confirmation email after which
-            it will be shipped to your customer.
-            </p>
-            </td>
-            </tr>
+    <!-- PRODUCTS -->
+    <tr>
+    <td style="padding:0 30px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr style="background:#f5f5f5; color:#000000;">
+    <td style="padding:10px 16px; border:1px solid #e2e8f0;">Product</td>
+    <td style="padding:10px 16px; border:1px solid #e2e8f0; text-align:center;">Quantity</td>
+    </tr>
+    ${productRows}
+    </table>
+    </td>
+    </tr>
 
-            <tr>
-            <td style="padding:0 30px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <!-- TEAM DETAILS -->
+    <tr>
+    <td style="padding:0 30px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Team Details
+    </th>
+    </tr>
 
-            <tr style="background: #F5F5F5; color:#000000;">
-            <td style="padding:10px 16px; border:1px solid #e2e8f0;   ">Product</td>
-            <td style="padding:10px 16px; border:1px solid #e2e8f0; text-align:center;">Quantity</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
+    </tr>
 
-            ${productRows}
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
+    </tr>
 
-            </table>
-            </td>
-            </tr>
+    </table>
+    </td>
+    </tr>
 
-            <tr>
-            <td style="padding:0 30px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-            <tr>
-            <td colspan="2"
-            style="background:#F5F5F5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
-            Team Details
-            </td>
-            </tr>
+    <!-- SHIPPING DETAILS -->
+    <tr>
+    <td style="padding:0 30px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Shipping Details
+    </th>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff; width:260px;   ">
-            Sales Executive</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${salesExecutive}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Sales Executive Email</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${salesExecutiveEmail}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Contact Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactName}</td>
+    </tr>
 
-            </table>
-            </td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Email Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:0 30px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Shipping Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td>
+    </tr>
 
-            <tr>
-            <td colspan="2"
-            style="background:#F5F5F5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
-            Shipping Details
-            </td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">City</td>
+    <td style="padding:10px; border:1px solid #ddd;">${city}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Company Name</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${companyName}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">State</td>
+    <td style="padding:10px; border:1px solid #ddd;">${state}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Contact Name</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${contactName}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Zip</td>
+    <td style="padding:10px; border:1px solid #ddd;">${zip}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Email Address</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${contactEmail}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Desired Demo Delivery Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Shipping Address</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${shippingAddress}</td>
-            </tr>
+    </table>
+    </td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            City</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${city}</td>
-            </tr>
+    <!-- OPPORTUNITY DETAILS -->
+    <tr>
+    <td style="padding:0 30px 24px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Opportunity Details
+    </th>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            State</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${state}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Device Opportunity Size (Units)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Zip</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${zip}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Budget Per Device ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Desired Demo Delivery Date</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${formatEmailDate(deliveryDate)}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Revenue Opportunity Size ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${revenue}</td>
+    </tr>
 
-            </table>
-            </td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">INGRAM Account #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:0 30px 24px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Quote #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td>
+    </tr>
 
-            <tr>
-            <td colspan="2"
-            style="background:#F5F5F5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
-            Opportunity Details
-            </td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Competitive Opportunity</td>
+    <td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Device Opportunity Size (Units)</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${deviceUnits}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Estimated Close Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Budget Per Device ($)</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${budgetPerDevice}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">5G SIM Required</td>
+    <td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Revenue Opportunity Size ($)</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${revenue}</td>
-            </tr>
+    <tr>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Segment</td>
+    <td style="padding:10px; border:1px solid #ddd;">${segment}</td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            INGRAM Account #</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${ingramAccount}</td>
-            </tr>
+    </table>
+    </td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Quote #</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${quoteNumber}
-            </td>
-            </tr>
+    <!-- NOTE -->
+    <tr>
+    <td style="padding:0 30px 32px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+    <tr>
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
+    Note
+    </th>
+    </tr>
+    <tr>
+    <td style="padding:16px; border:1px solid #e2e8f0; color:#475569; background:#ffffff;">
+    ${note}
+    </td>
+    </tr>
+    </table>
+    </td>
+    </tr>
 
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Competitive Opportunity</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${competitiveOpportunity}
-            </td>
-            </tr>
-
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Estimated Close Date</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${formatEmailDate(estimatedCloseDate)}
-            </td>
-            </tr>
-
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            5G SIM Required</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${wants5gSim || "No"}
-            </td>
-            </tr>
-
-            <tr>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-            Segment</td>
-            <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-            ${segment}
-            </td>
-            </tr>
-
-            </table>
-            </td>
-            </tr>
-
-            <tr>
-            <td style="padding:0 30px 32px;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-            <tr>
-            <td style="background:#F5F5F5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
-            Note
-            </td>
-            </tr>
-
-            <tr>
-            <td style="padding:16px; border:1px solid #e2e8f0; color:#475569; background:#ffffff;">
-            ${note}
-            </td>
-            </tr>
-
-            </table>
-            </td>
-            </tr>
-
-            </table>
-            </td>
-            </tr>
-            </table>
-            </div>
-      `
-    }
+    </table>
+    </td>
+    </tr>
+    </table>
+    </div>
+    `
+        }
     },
 
     newOrderEmail: ({
@@ -958,7 +908,7 @@ export const emailTemplates = {
         const productRows = products.map(product => `
             <tr>
                 <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-                <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
+                <td style="padding:10px; border:1px solid #ddd; text-align:center; width:100px;">${product.quantity}</td>
             </tr>
         `).join('');
 
@@ -1012,8 +962,8 @@ export const emailTemplates = {
     Best regards,
     The Ingram Micro Surface Team`,
 
-               html: `
-    <div style="font-family: 'Inter', sans-serif;  background-color:#ffffff; padding:30px 0; ">
+            html: `
+    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
     <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
     <td align="center">
@@ -1023,42 +973,47 @@ export const emailTemplates = {
 
     <tr>
     <td style="background:#f5f5f5; padding:30px; text-align:center;">
-     <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-    style="max-width:400px; width:220px;" />
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
     </td>
     </tr>
 
-  
     <tr>
     <td style="padding:30px; color:#333;">
-    <p style="margin:0 0 8px;"><strong>New Ingram Micro Surface Order (#${orderNumber})  </p>
+    <p style="margin:0 0 8px;"><strong>New Ingram Micro Surface Order (#${orderNumber})</strong></p>
     <p style="color:#666; margin:0 0 20px;">Placed On ${formatEmailDate(orderDate)}</p>
 
     <p style="line-height:1.6;">
-    <strong>Hello Ingram Micro Surface Team,  <br />
-    You have received a new order from <strong>ingrammicro-surface.com  .
+    <strong>Hello Ingram Micro Surface Team,</strong><br />
+    You have received a new order from <strong>ingrammicro-surface.com</strong>.
     Please click on the link below to Review and Approve/Reject.
     </p>
     </td>
     </tr>
 
     <tr>
-    <td style="padding: 30px;">
-    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-1.png"
-    style="width:100%; max-width:720px;" width="720" />
+    <td style="padding:30px;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-1.png"
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 1" />
     </td>
     </tr>
 
     <tr>
-    <td style="padding:0 30px 30px;">
-    <div style="text-align:center; margin:30px 0;">
+    <td style="padding:0 30px 30px; text-align:center;">
+    <p style="margin:0;">
     <a href="https://ingrammicro-surface-final.vercel.app/order-details/${orderNumber}"
-    style="background:#1D76BC;color:#ffffff;padding:14px 34px;text-decoration:none;border-radius:6px;font-size:16px;  display:inline-block;">
+    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
     View Order
     </a>
-    </div>
+    </p>
     </td>
     </tr>
+
+
 
     <tr>
     <td style="padding:0 30px 30px;">
@@ -1071,174 +1026,156 @@ export const emailTemplates = {
     </table>
     </td>
     </tr>
+
+    <!-- TEAM DETAILS -->
     <tr>
     <td style="padding:0 30px 24px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <td colspan="2"
-    style="background:#f5f5f5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Team Details
-    </td>
+    </th>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #ffffff; background:#ffffff; width:260px;   ">
-    Sales Executive</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${salesExecutive}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Sales Executive Email</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${salesExecutiveEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
     </td>
     </tr>
 
+    <!-- SHIPPING DETAILS -->
     <tr>
     <td style="padding:0 30px 24px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-
     <tr>
-    <td colspan="2"
-    style="background:#f5f5f5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Shipping Details
-    </td>
+    </th>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Company Name</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${companyName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Contact Name</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${contactName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Contact Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactName}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Email Address</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${contactEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Email Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Shipping Address</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${shippingAddress}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Shipping Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    City</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${city}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">City</td>
+    <td style="padding:10px; border:1px solid #ddd;">${city}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    State</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${state}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">State</td>
+    <td style="padding:10px; border:1px solid #ddd;">${state}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Zip</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${zip}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Zip</td>
+    <td style="padding:10px; border:1px solid #ddd;">${zip}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Desired Demo Delivery Date</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${formatEmailDate(deliveryDate)}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Desired Demo Delivery Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td>
     </tr>
 
     </table>
     </td>
     </tr>
 
+    <!-- OPPORTUNITY DETAILS -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <th colspan="2" style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Opportunity Details
     </th>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Device Opportunity Size (Units)  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${deviceUnits}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Device Opportunity Size (Units)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Budget Per Device ($)  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${budgetPerDevice}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Budget Per Device ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Revenue Opportunity Size ($)  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${revenue}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Revenue Opportunity Size ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${revenue}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  INGRAM Account #  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${ingramAccount}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">INGRAM Account #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Quote #  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${quoteNumber}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Quote #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Competitive Opportunity  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${competitiveOpportunity}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Competitive Opportunity</td>
+    <td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Estimated Close Date  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Estimated Close Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  5G SIM Required  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${wants5gSim || "No"}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">5G SIM Required</td>
+    <td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px;border:1px solid #ddd;width:220px;background:#ffffff;">  Segment  </td>
-    <td style="padding:10px;border:1px solid #ddd;">${segment}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Segment</td>
+    <td style="padding:10px; border:1px solid #ddd;">${segment}</td>
     </tr>
 
     </table>
     </td>
     </tr>
 
+    <!-- NOTE -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <th style="background:#f5f5f5;color:#000000;padding:12px;text-align:left;">
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Note
     </th>
     </tr>
 
     <tr>
-    <td style="padding:12px;border:1px solid #ddd;color:#555;">
+    <td style="padding:12px; border:1px solid #ddd; color:#555;">
     ${note}
     </td>
     </tr>
@@ -1253,8 +1190,9 @@ export const emailTemplates = {
     </table>
     </div>
     `
-    };
+        };
     },
+
 
     approvedOrderEmail: ({
         orderNumber,
@@ -1329,20 +1267,20 @@ export const emailTemplates = {
 
     }) => {
 
-    const productRows = products.map(product => `
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
-    <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
-    </tr>
-    `).join('');
+        const productRows = products.map(product => `
+        <tr>
+            <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
+        </tr>
+        `).join('');
 
-    const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
+        const productListText = products.map(p => `- ${p.name} (Quantity: ${p.quantity})`).join('\n');
 
-    return {
+        return {
 
-    subject: `Order Approved #${orderNumber} | Ingram Micro Surface SURFACE`,
+        subject: `Order Approved #${orderNumber} | Ingram Micro Surface SURFACE`,
 
-    text: `Approved Ingram Micro Surface Order (#${orderNumber})
+        text: `Approved Ingram Micro Surface Order (#${orderNumber})
     Placed On ${formatEmailDate(orderDate)}
 
     Hello,
@@ -1390,20 +1328,22 @@ export const emailTemplates = {
     Best regards,
     The Ingram Micro Surface Team`,
 
-    html: `
+        html: `
     <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
     <table width="100%" cellpadding="0" cellspacing="0">
     <tr>
     <td align="center">
 
     <table width="720" cellpadding="0" cellspacing="0"
-    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
     <!-- HEADER WITH LOGO -->
     <tr>
     <td style="background:#f5f5f5; padding:30px; text-align:center;">
-    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-    style="max-width:400px; width:220px;" />
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+            width="220"
+            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+            alt="Ingram Micro" />
     </td>
     </tr>
 
@@ -1425,12 +1365,15 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding: 30px;">
-    <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-2.png"
-    style="width:100%; max-width:720px;" width="720" />
+    <td style="padding:30px;">
+        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-2.png"
+            width="660"
+            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+            alt="Step 2" />
     </td>
     </tr>
 
+    <!-- PRODUCTS -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -1448,24 +1391,19 @@ export const emailTemplates = {
     <td style="padding:0 30px 24px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <td colspan="2"
-    style="background:#f5f5f5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Team Details
-    </td>
+    </th>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff; width:260px;   ">
-    Sales Executive</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${salesExecutive}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Sales Executive Email</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">
-    ${salesExecutiveEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
@@ -1477,58 +1415,49 @@ export const emailTemplates = {
     <td style="padding:0 30px 24px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <td colspan="2"
-    style="background:#f5f5f5; color:#000000; padding:12px 16px; font-size:15px; font-weight:500;">
+    <th colspan="2" style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
     Shipping Details
-    </td>
+    </th>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Company Name</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${companyName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Contact Name</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${contactName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Contact Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactName}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Email Address</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${contactEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Email Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Shipping Address</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${shippingAddress}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Shipping Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    City</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${city}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">City</td>
+    <td style="padding:10px; border:1px solid #ddd;">${city}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    State</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${state}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">State</td>
+    <td style="padding:10px; border:1px solid #ddd;">${state}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Zip</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${zip}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Zip</td>
+    <td style="padding:10px; border:1px solid #ddd;">${zip}</td>
     </tr>
 
     <tr>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0; background:#ffffff;   ">
-    Desired Demo Delivery Date</td>
-    <td style="padding:12px 16px; border:1px solid #e2e8f0;">${formatEmailDate(deliveryDate)}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Desired Demo Delivery Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td>
     </tr>
 
     </table>
@@ -1546,47 +1475,47 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Device Opportunity Size (Units)  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Device Opportunity Size (Units)</td>
     <td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Budget Per Device ($)  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Budget Per Device ($)</td>
     <td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Revenue Opportunity Size ($)  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Revenue Opportunity Size ($)</td>
     <td style="padding:10px; border:1px solid #ddd;">${revenue}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  INGRAM Account #  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">INGRAM Account #</td>
     <td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Quote #  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Quote #</td>
     <td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Competitive Opportunity  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Competitive Opportunity</td>
     <td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Estimated Close Date  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Estimated Close Date</td>
     <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  5G SIM Required  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">5G SIM Required</td>
     <td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">  Segment  </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Segment</td>
     <td style="padding:10px; border:1px solid #ddd;">${segment}</td>
     </tr>
 
@@ -1603,7 +1532,6 @@ export const emailTemplates = {
     Note
     </th>
     </tr>
-
     <tr>
     <td style="padding:12px; border:1px solid #ddd; color:#555;">
     ${note}
@@ -1619,7 +1547,7 @@ export const emailTemplates = {
     </table>
     </div>
     `
-    };
+        };
     },
 
     rejectedOrderEmail: ({
@@ -1697,8 +1625,8 @@ export const emailTemplates = {
 
         const productRows = products.map(product => `
         <tr>
-            <td style="padding:10px; border:1px solid #ddd; width:60%;">${product.name}</td>
-            <td style="padding:10px; border:1px solid #ddd; width:40%; text-align:center;">${product.quantity}</td>
+            <td style="padding:10px; border:1px solid #ddd;">${product.name}</td>
+            <td style="padding:10px; border:1px solid #ddd; text-align:center;">${product.quantity}</td>
         </tr>
         `).join('');
 
@@ -1760,7 +1688,7 @@ export const emailTemplates = {
     <td align="center">
 
     <table width="720" cellpadding="0" cellspacing="0"
-    style="background:#ffffff; border-radius:10px; overflow:hidden; border: 1px solid black;">
+    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
 
     <!-- HEADER WITH LOGO -->
     <tr>
@@ -1779,12 +1707,13 @@ export const emailTemplates = {
     </td>
     </tr>
 
+    <!-- PRODUCTS -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr style="background:#f5f5f5; color:#000000;">
-    <th style="padding:10px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
-    <th style="padding:10px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:left;">Product</th>
+    <th style="padding:10px; border:1px solid #ddd; text-align:center;">Quantity</th>
     </tr>
     ${productRows}
     </table>
@@ -1802,21 +1731,13 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Sales Executive
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">
-    ${salesExecutive}
-    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Sales Executive Email
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">
-    ${salesExecutiveEmail}
-    </td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
@@ -1834,59 +1755,43 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Company Name
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Company Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${companyName}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Contact Name
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Contact Name</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactName}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Email Address
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Email Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Shipping Address
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Shipping Address</td>
+    <td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    City
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">City</td>
+    <td style="padding:10px; border:1px solid #ddd;">${city}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    State
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">State</td>
+    <td style="padding:10px; border:1px solid #ddd;">${state}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Zip
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Zip</td>
+    <td style="padding:10px; border:1px solid #ddd;">${zip}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">
-    Desired Demo Delivery Date
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Desired Demo Delivery Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td>
     </tr>
 
     </table>
@@ -1904,48 +1809,48 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Device Opportunity Size (Units)</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Device Opportunity Size (Units)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Budget Per Device ($)</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Budget Per Device ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Revenue Opportunity Size ($)</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Revenue Opportunity Size ($)</td>
+    <td style="padding:10px; border:1px solid #ddd;">${revenue}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">INGRAM Account #</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">INGRAM Account #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Quote #</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Quote #</td>
+    <td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Competitive Opportunity</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Competitive Opportunity</td>
+    <td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Estimated Close Date</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Estimated Close Date</td>
+    <td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">5G SIM Required</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">5G SIM Required</td>
+    <td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Segment</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td>
+    <td style="padding:10px; border:1px solid #ddd; width:220px; background:#ffffff;">Segment</td>
+    <td style="padding:10px; border:1px solid #ddd;">${segment}</td>
     </tr>
 
     </table>
@@ -1961,13 +1866,11 @@ export const emailTemplates = {
     Note
     </th>
     </tr>
-
     <tr>
     <td style="padding:12px; border:1px solid #ddd; color:#555;">
     ${note}
     </td>
     </tr>
-
     </table>
     </td>
     </tr>
@@ -2073,10 +1976,10 @@ export const emailTemplates = {
 
             return `
             <tr>
-                <td style="padding:12px; border:1px solid #ddd; font-size:14px; width:60%;">
+                <td style="padding:12px; border:1px solid #ddd; font-size:14px; width:220px;">
                     ${product.name}
                 </td>
-                <td style="padding:12px; border:1px solid #ddd; width:40%;">
+                <td style="padding:12px; border:1px solid #ddd;">
                     <table width="100%">
                     <tr>
                     <td style="font-size:13px; text-align:center;">
@@ -2186,12 +2089,13 @@ export const emailTemplates = {
     </td>
     </tr>
 
+    <!-- PRODUCTS -->
     <tr>
     <td style="padding:20px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; border:1px solid #ddd;">
     <tr style="background:#f5f5f5; color:#000000;">
-    <th style="padding:12px; border:1px solid #ddd; text-align:left; width:60%;">Product</th>
-    <th style="padding:12px; border:1px solid #ddd; text-align:center; width:40%;">Quantity</th>
+    <th style="padding:12px; border:1px solid #ddd; text-align:left;">Product</th>
+    <th style="padding:12px; border:1px solid #ddd; text-align:center;">Quantity</th>
     </tr>
     ${productRows}
     </table>
@@ -2209,13 +2113,13 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive Email</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
@@ -2232,14 +2136,14 @@ export const emailTemplates = {
     </th>
     </tr>
 
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Company Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Contact Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Email Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">City</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">State</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Zip</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Company Name</td><td style="padding:10px; border:1px solid #ddd;">${companyName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Contact Name</td><td style="padding:10px; border:1px solid #ddd;">${contactName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Email Address</td><td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">City</td><td style="padding:10px; border:1px solid #ddd;">${city}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">State</td><td style="padding:10px; border:1px solid #ddd;">${state}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Zip</td><td style="padding:10px; border:1px solid #ddd;">${zip}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td></tr>
 
     </table>
     </td>
@@ -2255,15 +2159,15 @@ export const emailTemplates = {
     </th>
     </tr>
 
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">INGRAM Account #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Quote #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Segment</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd;">${revenue}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">INGRAM Account #</td><td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Quote #</td><td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Segment</td><td style="padding:10px; border:1px solid #ddd;">${segment}</td></tr>
 
     </table>
     </td>
@@ -2475,7 +2379,7 @@ export const emailTemplates = {
     </td>
     </tr>
 
-    <!-- TRACKING INFO -->
+    <!-- TRACKING INFO — same rakha -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -2486,45 +2390,39 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
-    Order Tracking #
-    </td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Order Tracking #</td>
     <td style="padding:10px; border:1px solid #ddd; width:40%;">
     <a href="${orderTrackingLink}">${orderTracking}</a>
     </td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
-    Return Tracking #
-    </td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Return Tracking #</td>
     <td style="padding:10px; border:1px solid #ddd; width:40%;">
     <a href="${returnTrackingLink}">${returnTracking}</a>
     </td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">
-    Case Type
-    </td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">
-    ${caseType}
-    </td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Case Type</td>
+    <td style="padding:10px; border:1px solid #ddd; width:40%;">${caseType}</td>
     </tr>
 
     </table>
     </td>
     </tr>
 
+    <!-- VIEW RETURN LABEL — simple link text -->
     <tr>
-    <td style="text-align:center; padding:10px 30px 30px;">
-    <a href="${fileLink}" style="background:#1D76BC; color:#fff; padding:14px 34px; border-radius:6px; text-decoration:none; font-weight:600;">
+    <td style="padding:10px 30px 30px; text-align:center;">
+    <a href="${fileLink}"
+    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
     View Return Label
     </a>
     </td>
     </tr>
 
-    <!-- PRODUCT TABLE -->
+    <!-- PRODUCT TABLE — same rakha -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -2537,7 +2435,7 @@ export const emailTemplates = {
     </td>
     </tr>
 
-    <!-- TEAM DETAILS -->
+    <!-- TEAM DETAILS — 220px -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -2548,20 +2446,20 @@ export const emailTemplates = {
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Sales Executive</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutive}</td>
     </tr>
 
     <tr>
-    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Sales Executive Email</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+    <td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Sales Executive Email</td>
+    <td style="padding:10px; border:1px solid #ddd;">${salesExecutiveEmail}</td>
     </tr>
 
     </table>
     </td>
     </tr>
 
-    <!-- SHIPPING DETAILS -->
+    <!-- SHIPPING DETAILS — 220px -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -2571,20 +2469,20 @@ export const emailTemplates = {
     </th>
     </tr>
 
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Company Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Contact Name</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactName}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Email Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${shippingAddress}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">City</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${city}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">State</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${state}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Zip</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${zip}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(deliveryDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Company Name</td><td style="padding:10px; border:1px solid #ddd;">${companyName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Contact Name</td><td style="padding:10px; border:1px solid #ddd;">${contactName}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Email Address</td><td style="padding:10px; border:1px solid #ddd;">${contactEmail}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Shipping Address</td><td style="padding:10px; border:1px solid #ddd;">${shippingAddress}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">City</td><td style="padding:10px; border:1px solid #ddd;">${city}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">State</td><td style="padding:10px; border:1px solid #ddd;">${state}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Zip</td><td style="padding:10px; border:1px solid #ddd;">${zip}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Desired Demo Delivery Date</td><td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(deliveryDate)}</td></tr>
 
     </table>
     </td>
     </tr>
 
-    <!-- OPPORTUNITY DETAILS -->
+    <!-- OPPORTUNITY DETAILS — 220px -->
     <tr>
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
@@ -2594,15 +2492,15 @@ export const emailTemplates = {
     </th>
     </tr>
 
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${deviceUnits}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${budgetPerDevice}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${revenue}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">INGRAM Account</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${ingramAccount}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Quote #</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${quoteNumber}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${competitiveOpportunity}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(estimatedCloseDate)}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${wants5gSim || "No"}</td></tr>
-    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:60%;">Segment</td><td style="padding:10px; border:1px solid #ddd; width:40%;">${segment}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Device Opportunity Size</td><td style="padding:10px; border:1px solid #ddd;">${deviceUnits}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Budget Per Device</td><td style="padding:10px; border:1px solid #ddd;">${budgetPerDevice}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Revenue Opportunity Size</td><td style="padding:10px; border:1px solid #ddd;">${revenue}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">INGRAM Account</td><td style="padding:10px; border:1px solid #ddd;">${ingramAccount}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Quote #</td><td style="padding:10px; border:1px solid #ddd;">${quoteNumber}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Competitive Opportunity</td><td style="padding:10px; border:1px solid #ddd;">${competitiveOpportunity}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Estimated Close Date</td><td style="padding:10px; border:1px solid #ddd;">${formatEmailDate(estimatedCloseDate)}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">5G SIM Required</td><td style="padding:10px; border:1px solid #ddd;">${wants5gSim || "No"}</td></tr>
+    <tr><td style="padding:10px; border:1px solid #ddd; background:#ffffff; width:220px;">Segment</td><td style="padding:10px; border:1px solid #ddd;">${segment}</td></tr>
 
     </table>
     </td>
@@ -2613,14 +2511,10 @@ export const emailTemplates = {
     <td style="padding:0 30px 30px;">
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
     <tr>
-    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">
-    Note
-    </th>
+    <th style="background:#f5f5f5; color:#000000; padding:12px; text-align:left;">Note</th>
     </tr>
     <tr>
-    <td style="padding:12px; border:1px solid #ddd;">
-    ${note}
-    </td>
+    <td style="padding:12px; border:1px solid #ddd;">${note}</td>
     </tr>
     </table>
     </td>
@@ -2819,13 +2713,15 @@ export const emailTemplates = {
     </td>
     </tr>
 
-    <tr>
-    <td style="text-align:center; margin:30px 0; padding:20px 0;">
-    <a href="${fileLink}" style="background:#1D76BC; color:#ffffff; padding:14px 34px; text-decoration:none; border-radius:6px; font-size:16px; font-weight:600; display:inline-block;">
-    View Return Label
-    </a>
-    </td>
-    </tr>
+ <!-- VIEW RETURN LABEL — simple link text -->
+<tr>
+<td style="padding:10px 30px 30px; text-align:center;">
+<a href="${fileLink}"
+style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+View Return Label
+</a>
+</td>
+</tr>
 
     <!-- PRODUCT TABLE -->
     <tr>
@@ -2899,195 +2795,194 @@ export const emailTemplates = {
     },
 
     returnReminderEmail: ({
-        orderNumber,
-        orderDate,
-        customerName,
-        customerEmail,
-        productName,
-        productListText,
-        productListHtml,
-        totalQuantity,
-        returnTracking,
-        fileLink,
-        salesExecutive,
-        salesExecutiveEmail,
-        companyName,
-        contactEmail,
-        shippedDate,
-    }: {
-        orderNumber: string | number;
-        orderDate: string;
-        customerName: string;
-        customerEmail: string;
-        productName: string;
-        productListText: string;
-        productListHtml: string;
-        totalQuantity: number;
-        returnTracking: string;
-        fileLink: string;
-        salesExecutive: string;
-        salesExecutiveEmail: string;
-        companyName: string;
-        contactEmail: string;
-        shippedDate: string;
-    }) => ({
-        subject: `Return Reminder - Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
-        text: `Return Reminder Notification | Ingram Micro Surface
+            orderNumber,
+            orderDate,
+            customerName,
+            customerEmail,
+            productName,
+            productListText,
+            productListHtml,
+            totalQuantity,
+            returnTracking,
+            fileLink,
+            salesExecutive,
+            salesExecutiveEmail,
+            companyName,
+            contactEmail,
+            shippedDate,
+        }: {
+            orderNumber: string | number;
+            orderDate: string;
+            customerName: string;
+            customerEmail: string;
+            productName: string;
+            productListText: string;
+            productListHtml: string;
+            totalQuantity: number;
+            returnTracking: string;
+            fileLink: string;
+            salesExecutive: string;
+            salesExecutiveEmail: string;
+            companyName: string;
+            contactEmail: string;
+            shippedDate: string;
+        }) => ({
+            subject: `Return Reminder - Order #${orderNumber} (${companyName}) | Ingram Micro Surface`,
+            text: `Return Reminder Notification | Ingram Micro Surface
 
-    Return Reminder - Order #${orderNumber} (${companyName})
-    Placed On: ${formatEmailDate(orderDate)}
+        Return Reminder - Order #${orderNumber} (${companyName})
+        Placed On: ${formatEmailDate(orderDate)}
 
-    Hello,
+        Hello,
 
-    Thank you for using Ingram Micro Surface SURFACE! We hope your experience was very positive.
+        Thank you for using Ingram Micro Surface SURFACE! We hope your experience was very positive.
 
-    Your order for ${companyName} is now due for return.
-    You can view your return label using the link below or request it via email at support@ingrammicro-surface.com:
+        Your order for ${companyName} is now due for return.
+        You can view your return label using the link below or request it via email at support@ingrammicro-surface.com:
 
-    View Return Label: ${fileLink}
+        View Return Label: ${fileLink}
 
-    ORDER ITEMS
-    ${productListText}
-    Total Quantity: ${totalQuantity}
+        ORDER ITEMS
+        ${productListText}
+        Total Quantity: ${totalQuantity}
 
-    ORDER DETAILS
-    Sales Executive: ${salesExecutive}
-    Sales Executive Email: ${salesExecutiveEmail}
+        ORDER DETAILS
+        Sales Executive: ${salesExecutive}
+        Sales Executive Email: ${salesExecutiveEmail}
 
-    Customer Company Name: ${companyName}
-    Customer Contact Email: ${contactEmail}
-    Shipped Date: ${shippedDate}
-    Returned Tracking: ${returnTracking}
+        Customer Company Name: ${companyName}
+        Customer Contact Email: ${contactEmail}
+        Shipped Date: ${shippedDate}
+        Returned Tracking: ${returnTracking}
 
-    If you have any questions, please contact us at support@ingrammicro-surface.com.
+        If you have any questions, please contact us at support@ingrammicro-surface.com.
 
-    Best regards,
-    The Ingram Micro Surface Team`,
-        html: `
-    <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
-    <table width="100%" cellpadding="0" cellspacing="0">
+        Best regards,
+        The Ingram Micro Surface Team`,
+            html: `
+        <div style="font-family: 'Inter', sans-serif; background-color:#ffffff; padding:30px 0;">
+        <table width="100%" cellpadding="0" cellspacing="0">
+        <tr>
+        <td align="center">
+
+        <table width="720" cellpadding="0" cellspacing="0"
+        style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
+
+        <!-- HEADER -->
+        <tr>
+        <td style="background:#f5f5f5; padding:30px; text-align:center;">
+            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
+                width="220"
+                style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
+                alt="Ingram Micro Surface Logo" />
+        </td>
+        </tr>
+
+        <!-- INTRO -->
+        <tr>
+        <td style="padding:30px 30px 0 30px; color:#333;">
+        <p style="margin:0 0 8px; font-size:15px;"><strong>Overdue Reminder Order #${orderNumber}</strong></p>
+        <p style="margin:0 0 8px; font-size:15px;">Placed On ${orderDate}</p>
+        </td>
+        </tr>
+
+        <tr>
+        <td style="padding:30px;">
+            <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
+                width="660"
+                style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
+                alt="Step 3" />
+        </td>
+        </tr>
+
+        <tr>
+        <td style="padding:30px 30px 0 30px; color:#333;">
+        <p style="font-size:15px; line-height:1.6;">
+            Thank you for using Ingram Micro Surface! We hope your experience was very positive.
+        </p>
+        <p>
+            Your order for ${companyName} is now due for return. You can also
+            obtain a soft copy of the return label by clicking on the below or sending a request
+            at support@ingrammicro-surface.com,
+        </p>
+        </td>
+        </tr>
+
+    <!-- VIEW RETURN LABEL — simple link text -->
     <tr>
-    <td align="center">
-
-    <table width="720" cellpadding="0" cellspacing="0"
-    style="background:#ffffff; border-radius:10px; overflow:hidden; border:1px solid black;">
-
-    <!-- HEADER -->
-    <tr>
-    <td style="background:#f5f5f5; padding:30px; text-align:center;">
-        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/Ingram_micro_logo.png"
-            width="220"
-            style="display:block; margin:0 auto; max-width:220px; width:220px; border:0; outline:none; text-decoration:none;"
-            alt="Ingram Micro Surface Logo" />
+    <td style="padding:10px 30px 30px; text-align:center;">
+    <a href="${fileLink}"
+    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+    View Return Label
+    </a>
     </td>
     </tr>
 
-    <!-- INTRO -->
-    <tr>
-    <td style="padding:30px 30px 0 30px; color:#333;">
-    <p style="margin:0 0 8px; font-size:15px;"><strong>Overdue Reminder Order #${orderNumber}</strong></p>
-    <p style="margin:0 0 8px; font-size:15px;">Placed On ${orderDate}</p>
-    </td>
-    </tr>
+        <!-- PRODUCTS -->
+        <tr>
+        <td style="padding:0 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr style="background:#f5f5f5; color:#000000;">
+        <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000; width:60%;">Product</th>
+        <th style="padding:10px; border:1px solid #ddd; text-align:center; color:#000000; width:40%;">Quantity</th>
+        </tr>
+        ${productListHtml}
+        </table>
+        </td>
+        </tr>
 
-    <tr>
-    <td style="padding:30px;">
-        <img src="https://kfidhqvdmjzzqssngsnb.supabase.co/storage/v1/object/public/EMAIL/step-3.png"
-            width="660"
-            style="display:block; width:100%; max-width:660px; border:0; outline:none; text-decoration:none;"
-            alt="Step 3" />
-    </td>
-    </tr>
+        <!-- ORDER DETAILS -->
+        <tr>
+        <td style="padding:0 30px 30px;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+        <tr>
+        <th colspan="2"
+        style="background:#f5f5f5; color:#000000; border:1px solid #ddd; padding:12px; text-align:left;">
+        Order Details
+        </th>
+        </tr>
 
-    <tr>
-    <td style="padding:30px 30px 0 30px; color:#333;">
-    <p style="font-size:15px; line-height:1.6;">
-        Thank you for using Ingram Micro Surface! We hope your experience was very positive.
-    </p>
-    <p>
-        Your order for ${companyName} is now due for return. You can also
-        obtain a soft copy of the return label by clicking on the below or sending a request
-        at support@ingrammicro-surface.com,
-    </p>
-    </td>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
+        </tr>
 
-    <!-- RETURN LABEL BUTTON -->
-    <tr>
-    <td style="padding:0; color:#333;">
-    <div style="text-align:center; margin:30px 0;">
-        <a href="${fileLink}" style="background:#1D76BC; color:#ffffff; padding:14px 34px; text-decoration:none; border-radius:6px; font-size:16px; font-weight:600; display:inline-block;">
-            View Return Label
-        </a>
-    </div>
-    </td>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive Email</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
+        </tr>
 
-    <!-- PRODUCTS -->
-    <tr>
-    <td style="padding:0 30px 30px;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-    <tr style="background:#f5f5f5; color:#000000;">
-    <th style="padding:10px; border:1px solid #ddd; text-align:left; color:#000000; width:60%;">Product</th>
-    <th style="padding:10px; border:1px solid #ddd; text-align:center; color:#000000; width:40%;">Quantity</th>
-    </tr>
-    ${productListHtml}
-    </table>
-    </td>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Company Name</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
+        </tr>
 
-    <!-- ORDER DETAILS -->
-    <tr>
-    <td style="padding:0 30px 30px;">
-    <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
-    <tr>
-    <th colspan="2"
-    style="background:#f5f5f5; color:#000000; border:1px solid #ddd; padding:12px; text-align:left;">
-    Order Details
-    </th>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Contact Email</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
+        </tr>
 
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutive}</td>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Shipped Date</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(shippedDate)}</td>
+        </tr>
 
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Sales Executive Email</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${salesExecutiveEmail}</td>
-    </tr>
+        <tr>
+        <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Returned Tracking</td>
+        <td style="padding:10px; border:1px solid #ddd; width:40%;">${returnTracking}</td>
+        </tr>
 
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Company Name</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${companyName}</td>
-    </tr>
+        </table>
+        </td>
+        </tr>
 
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Contact Email</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${contactEmail}</td>
-    </tr>
-
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Shipped Date</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${formatEmailDate(shippedDate)}</td>
-    </tr>
-
-    <tr>
-    <td style="padding:10px; border:1px solid #ddd; width:60%; background:#ffffff;">Returned Tracking</td>
-    <td style="padding:10px; border:1px solid #ddd; width:40%;">${returnTracking}</td>
-    </tr>
-
-    </table>
-    </td>
-    </tr>
-
-    </table>
-    </td>
-    </tr>
-    </table>
-    </div>
-    `,
-    }),
+        </table>
+        </td>
+        </tr>
+        </table>
+        </div>
+        `,
+        }),
 
 
  returnReminderCronEmail: ({
@@ -3489,7 +3384,7 @@ export const emailTemplates = {
     ${productText}
 
     RESELLER & ORDER DETAILS
-    Reseller Account #: ${resellerAccount}
+    Account #: ${resellerAccount}
     Reseller Name: ${reseller}
     Ingram Order#: ${ingramOrderNumber || orderNumber}
     Customer Name: ${customerName}
@@ -3565,38 +3460,38 @@ export const emailTemplates = {
     <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Reseller Account #</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${resellerAccount}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Account #</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${resellerAccount}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Ingram Order#</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${ingramOrderNumber || orderNumber}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Ingram Order#</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${ingramOrderNumber || orderNumber}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Customer Name</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${customerName}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Customer Name</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${customerName}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Number of Units</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${units}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Number of Units</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${units}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Is this be a one-time purchase or roll out?</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${pType}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Is this be a one-time purchase or roll out?</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${pType}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Total Deal Revenue ($)</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${dealRev}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Total Deal Revenue ($)</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${dealRev}</td>
     </tr>
 
     <tr>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:60%; background:#ffffff;">Date of Purchase</td>
-    <td style="padding:20px 10px; border:1px solid #ddd; width:40%;">${formatEmailDate(orderDate)}</td>
+    <td style="padding:20px 10px; border:1px solid #ddd; width:220px; background:#ffffff;">Date of Purchase</td>
+    <td style="padding:20px 10px; border:1px solid #ddd;">${formatEmailDate(orderDate)}</td>
     </tr>
 
     <tr>
@@ -3791,7 +3686,7 @@ export const emailTemplates = {
     }),
 
 
-    approvedUserEmail: (email: string) => ({
+   approvedUserEmail: (email: string) => ({
         subject: `User Approved | Ingram Micro Surface`,
         text: `Hi ${email},
 
@@ -3840,22 +3735,15 @@ export const emailTemplates = {
     </td>
     </tr>
 
-    <!-- CTA BUTTON -->
-    <tr>
-    <td align="center" style="padding:0px 30px 35px 30px;">
-    <table border="0" cellspacing="0" cellpadding="0" align="center">
-    <tr>
-    <td align="center"
-    style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
-    <a href="${process.env.NEXT_PUBLIC_APP_URL}/login"
-    style="color:#ffffff; text-decoration:none; font-size:18px; font-family:'Inter', sans-serif; display:inline-block;">
-    Login to Portal
-    </a>
-    </td>
-    </tr>
-    </table>
-    </td>
-    </tr>
+    <!-- CTA LINK -->
+<tr>
+<td style="padding:0px 30px 35px 30px; text-align:center;">
+<a href="${process.env.NEXT_PUBLIC_APP_URL}/login"
+style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+Login to Portal
+</a>
+</td>
+</tr>
 
     <tr>
     <td style="padding:30px; color:#333;">
