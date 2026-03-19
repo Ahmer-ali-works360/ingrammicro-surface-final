@@ -1021,131 +1021,132 @@ export default function Navbar() {
 
       {/* ===== CART DRAWER ===== */}
       <Drawer
-        title={
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
-              <span className="text-lg font-semibold">Your Cart</span>
-              {cartCount > 0 && (
-                <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
-                  {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                </span>
-              )}
-            </div>
-            {cartItems.length > 0 && (
-              <button
-                onClick={handleClearCart}
-                disabled={cartUpdating}
-                className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                {cartUpdating ? 'Clearing...' : 'Clear All'}
-              </button>
-            )}
-          </div>
-        }
-        placement="right"
-        onClose={() => setIsCartDrawerOpen(false)}
-        open={isCartDrawerOpen}
-        size={300}
-        className="cart-drawer"
-      >
-        {cartLoading ? (
-          <div className="flex flex-col items-center justify-center h-full py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC]"></div>
-            <p className="mt-4 text-gray-500">Loading cart...</p>
-          </div>
-        ) : cartItems.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full py-12">
-            <PiShoppingCartThin className="text-gray-300 mb-4" size={64} />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
-            <p className="text-gray-500 text-center mb-6">
-              Looks like you haven't added any products to your cart yet.
-            </p>
-            <button
-              onClick={handleContinueShopping}
-              className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
-            >
-              Continue
-            </button>
-          </div>
-        ) : (
-          <div className="flex flex-col h-full">
-            <div className="flex-1 overflow-y-auto pr-2">
-              {cartItems.map((item) => {
-                const stockQuantity = getItemStockQuantity(item);
-                const productName = item.product?.product_name || 'Unknown Product';
-                const sku = item.product?.sku || 'N/A';
-                const thumbnail = item.product?.thumbnail;
-                const price = item.product?.price || 0;
-                const productSlug = item.product?.slug || '';
-
-                return (
-                  <div key={item.id} className="border-b border-gray-200 py-4">
-                    <div className="flex items-start space-x-3">
-                      <div
-                        className="w-15 h-15 bg-gray-100 rounded-md flex items-center justify-center shrink-0 cursor-pointer hover:bg-gray-200 transition-colors"
-                        onClick={() => productSlug && router.push(`/product/${productSlug}`)}
-                      >
-                        {thumbnail ? (
-                          <img
-                            src={thumbnail}
-                            alt={productName}
-                            className="w-full h-full object-contain p-1"
-                          />
-                        ) : (
-                          <PiShoppingCartThin className="text-gray-400" size={24} />
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <h4
-                          className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
-                          onClick={() => productSlug && router.push(`/product/${productSlug}`)}
-                        >
-                          {productName}
-                        </h4>
-                        <p className="text-xs text-gray-500">SKU: {sku}</p>
-                      </div>
-
-                      <div className="flex flex-col items-end space-y-2">
-                        <button
-                          onClick={() => handleRemoveFromCart(item.product_id)}
-                          disabled={cartUpdating}
-                          className="text-gray-400 hover:text-red-500 p-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-                        >
-                          <Trash2 size={16} />
-                        </button>
-                        {price > 0 && (
-                          <p className="text-sm font-medium text-gray-900">
-                            ${(price * item.quantity).toFixed(2)}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="border-t border-gray-200 pt-4 mt-4">
-              <div className="space-y-3">
-                <button
-                  onClick={handleCart}
-                  className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
-                >
-                  View Cart 
-                </button>
-                <button
-                  onClick={handleCheckout}
-                  disabled={cartUpdating}
-                  className="w-full py-3 cursor-pointer bg-[#1D76BC] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
-                </button>
+          title={
+              <div className="flex items-center space-x-2">
+                  <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+                  <span className="text-lg font-semibold">Your Cart</span>
+                  {cartCount > 0 && (
+                      <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+                          {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                      </span>
+                  )}
               </div>
-            </div>
-          </div>
-        )}
+          }
+          placement="right"
+          onClose={() => setIsCartDrawerOpen(false)}
+          open={isCartDrawerOpen}
+          size={320}
+          className="cart-drawer"
+      >
+          {cartLoading ? (
+              <div className="flex flex-col items-center justify-center h-full py-12">
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC]"></div>
+                  <p className="mt-4 text-gray-500">Loading cart...</p>
+              </div>
+          ) : cartItems.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full py-12">
+                  <PiShoppingCartThin className="text-gray-300 mb-4" size={64} />
+                  <h3 className="text-lg font-medium text-gray-900 mb-2">Your cart is empty</h3>
+                  <p className="text-gray-500 text-center mb-6">
+                      Looks like you haven't added any products to your cart yet.
+                  </p>
+                  <button
+                      onClick={handleContinueShopping}
+                      className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
+                  >
+                      Continue
+                  </button>
+              </div>
+          ) : (
+              <div className="flex flex-col h-full">
+                  <div className="flex-1 overflow-y-auto pr-2">
+                      {cartItems.map((item) => {
+                          const stockQuantity = getItemStockQuantity(item);
+                          const productName = item.product?.product_name || 'Unknown Product';
+                          const sku = item.product?.sku || 'N/A';
+                          const thumbnail = item.product?.thumbnail;
+                          const price = item.product?.price || 0;
+                          const productSlug = item.product?.slug || '';
+
+                          return (
+                              <div key={item.id} className="border-b border-gray-200 py-4">
+                                  <div className="flex items-start space-x-3">
+                                      <div
+                                          className="w-15 h-15 bg-gray-100 rounded-md flex items-center justify-center shrink-0 cursor-pointer hover:bg-gray-200 transition-colors"
+                                          onClick={() => productSlug && router.push(`/product/${productSlug}`)}
+                                      >
+                                          {thumbnail ? (
+                                              <img
+                                                  src={thumbnail}
+                                                  alt={productName}
+                                                  className="w-full h-full object-contain p-1"
+                                              />
+                                          ) : (
+                                              <PiShoppingCartThin className="text-gray-400" size={24} />
+                                          )}
+                                      </div>
+
+                                      <div className="flex-1 min-w-0">
+                                          <h4
+                                              className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
+                                              onClick={() => productSlug && router.push(`/product/${productSlug}`)}
+                                          >
+                                              {productName}
+                                          </h4>
+                                          <p className="text-xs text-gray-500">SKU: {sku}</p>
+                                      </div>
+
+                                      <div className="flex flex-col items-end space-y-2">
+                                          <button
+                                              onClick={() => handleRemoveFromCart(item.product_id)}
+                                              disabled={cartUpdating}
+                                              className="text-gray-400 hover:text-red-500 p-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                          >
+                                              <Trash2 size={16} />
+                                          </button>
+                                          {price > 0 && (
+                                              <p className="text-sm font-medium text-gray-900">
+                                                  ${(price * item.quantity).toFixed(2)}
+                                              </p>
+                                          )}
+                                      </div>
+                                  </div>
+                              </div>
+                          );
+                      })}
+                  </div>
+
+                  <div className="border-t border-gray-200 pt-4 mt-4">
+                      <div className="space-y-3">
+                          {/* Clear All */}
+                          {cartItems.length > 0 && (
+                              <div className="flex justify-end">
+                                  <button
+                                      onClick={handleClearCart}
+                                      disabled={cartUpdating}
+                                      className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                  >
+                                      {cartUpdating ? 'Clearing...' : 'Clear All'}
+                                  </button>
+                              </div>
+                          )}
+                          <button
+                              onClick={handleCart}
+                              className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
+                          >
+                              View Cart
+                          </button>
+                          <button
+                              onClick={handleCheckout}
+                              disabled={cartUpdating}
+                              className="w-full py-3 cursor-pointer bg-[#1D76BC] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                              {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
+                          </button>
+                      </div>
+                  </div>
+              </div>
+          )}
       </Drawer>
 
       {/* ===== MOBILE SEARCH DRAWER ===== */}

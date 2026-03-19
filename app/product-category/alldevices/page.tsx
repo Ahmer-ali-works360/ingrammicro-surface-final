@@ -986,7 +986,7 @@ export default function Page() {
                 placement="right"
                 onClose={() => setShowFilters(false)}
                 open={showFilters}
-                size={300}
+                size={320}
                 className="filter-drawer"
             >
                 <div className="space-y-6">
@@ -1003,35 +1003,24 @@ export default function Page() {
                 </div>
             </Drawer>
 
-            {/* Cart Drawer - isLoggedIn check ke saath */}
+            {/* Cart Drawer */}
             {isLoggedIn && (
                 <Drawer
                     title={
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                                <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
-                                <span className="text-lg font-semibold">Your Cart</span>
-                                {cartCount > 0 && (
-                                    <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
-                                        {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                                    </span>
-                                )}
-                            </div>
-                            {cartItems.length > 0 && (
-                                <button
-                                    onClick={handleClearCart}
-                                    disabled={cartUpdating}
-                                    className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                                >
-                                    {cartUpdating ? 'Clearing...' : 'Clear All'}
-                                </button>
+                        <div className="flex items-center space-x-2">
+                            <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+                            <span className="text-lg font-semibold">Your Cart</span>
+                            {cartCount > 0 && (
+                                <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+                                    {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                                </span>
                             )}
                         </div>
                     }
                     placement="right"
-                    onClose={() => setShowCartDrawer(false)}  // <-- onClose mein showCartDrawer false karein
-                    open={showCartDrawer}  // <-- open ko showCartDrawer se control karein
-                    size={300}
+                    onClose={() => setShowCartDrawer(false)}
+                    open={showCartDrawer}
+                    size={320}
                     className="cart-drawer"
                 >
                     {cartLoading ? (
@@ -1093,7 +1082,6 @@ export default function Page() {
                                                         {productName}
                                                     </h4>
                                                     <p className="text-xs text-gray-500">SKU: {sku}</p>
-
                                                 </div>
 
                                                 {/* Price and Remove Button */}
@@ -1101,8 +1089,7 @@ export default function Page() {
                                                     <button
                                                         onClick={() => handleRemoveFromCart(item.product_id)}
                                                         disabled={cartUpdating}
-                                                        className="text-gray-400 hover:text-red-500 p-1 transition-colors 
-                                          disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                                        className="text-gray-400 hover:text-red-500 p-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                                     >
                                                         <Trash2 size={16} />
                                                     </button>
@@ -1120,8 +1107,19 @@ export default function Page() {
 
                             {/* Cart Summary */}
                             <div className="border-t border-gray-200 pt-4 mt-4">
-
                                 <div className="space-y-3">
+                                    {/* Clear All */}
+                                    {cartItems.length > 0 && (
+                                        <div className="flex justify-end">
+                                            <button
+                                                onClick={handleClearCart}
+                                                disabled={cartUpdating}
+                                                className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            >
+                                                {cartUpdating ? 'Clearing...' : 'Clear All'}
+                                            </button>
+                                        </div>
+                                    )}
                                     <button
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"

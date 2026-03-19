@@ -1139,7 +1139,7 @@ export default function Page() {
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}
                     open={showCartDrawer}
-                    size={300}
+                    size={320}
                     className="cart-drawer"
                 >
                     {cartLoading ? (
@@ -1163,6 +1163,7 @@ export default function Page() {
                         </div>
                     ) : (
                         <div className="flex flex-col h-full">
+                            {/* Cart Items List */}
                             <div className="flex-1 overflow-y-auto pr-2">
                                 {cartItems.map((item) => {
                                     const productName = item.product?.product_name || 'Unknown Product';
@@ -1174,6 +1175,7 @@ export default function Page() {
                                     return (
                                         <div key={item.id} className="border-b border-gray-200 py-4">
                                             <div className="flex items-start space-x-3">
+                                                {/* Product Image */}
                                                 <div
                                                     className="w-15 h-15 bg-gray-100 rounded-md flex items-center justify-center shrink-0 cursor-pointer hover:bg-gray-200 transition-colors"
                                                     onClick={() => productSlug && router.push(`/product/${productSlug}`)}
@@ -1189,6 +1191,7 @@ export default function Page() {
                                                     )}
                                                 </div>
 
+                                                {/* Product Details */}
                                                 <div className="flex-1 min-w-0">
                                                     <h4
                                                         className="text-sm font-medium text-gray-900 truncate hover:text-[#1d76bc] cursor-pointer transition-colors"
@@ -1199,12 +1202,12 @@ export default function Page() {
                                                     <p className="text-xs text-gray-500">SKU: {sku}</p>
                                                 </div>
 
+                                                {/* Price and Remove Button */}
                                                 <div className="flex flex-col items-end space-y-2">
                                                     <button
                                                         onClick={() => handleRemoveFromCart(item.product_id)}
                                                         disabled={cartUpdating}
-                                                        className="text-gray-400 hover:text-red-500 p-1 transition-colors 
-                                                      disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                                                        className="text-gray-400 hover:text-red-500 p-1 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
                                                     >
                                                         <Trash2 size={16} />
                                                     </button>
@@ -1220,8 +1223,21 @@ export default function Page() {
                                 })}
                             </div>
 
+                            {/* Cart Summary */}
                             <div className="border-t border-gray-200 pt-4 mt-4">
                                 <div className="space-y-3">
+                                    {/* Clear All */}
+                                    {cartItems.length > 0 && (
+                                        <div className="flex justify-end">
+                                            <button
+                                                onClick={handleClearCart}
+                                                disabled={cartUpdating}
+                                                className="text-sm text-red-500 hover:text-red-700 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                                            >
+                                                {cartUpdating ? 'Clearing...' : 'Clear All'}
+                                            </button>
+                                        </div>
+                                    )}
                                     <button
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1d76bc] text-[#1d76bc] font-medium hover:bg-gray-50 transition-colors rounded-md"
