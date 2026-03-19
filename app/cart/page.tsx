@@ -319,14 +319,15 @@ export default function Page() {
                                     >
                                         {/* Product Image */}
                                         <div className="sm:w-1/4 flex justify-center">
-                                            <div className="w-38 h-38 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
+                                            <div // ✅ Fix:
+className="w-40 h-40 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden">
                                                 {item.product?.thumbnail ? (
                                                     <Image
                                                         src={item.product.thumbnail}
                                                         alt={item.product.product_name || 'Product image'}
                                                         width={70}
                                                         height={70}
-                                                        className="object-cover w-full h-full"
+                                                        className="object-contain w-full h-full p-2"
                                                     />
                                                 ) : (
                                                     <span className="text-gray-400">No Image</span>
