@@ -51,8 +51,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
                     userId: authUser?.id,
                     password: null
                 })
-                .eq('email', authUser.email)
-                
+                .eq('email', authUser.email);
         }
 
         const { data, error } = await supabase
@@ -74,14 +73,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const loadUser = async () => {
             setLoading(true);
+
             const { data } = await supabase.auth.getSession();
             const authUser = data.session?.user ?? null;
             setUser(authUser);
 
-
-
             if (authUser) {
-                setIsLoggedIn(true);
                 await fetchProfile(authUser);
             } else {
                 setIsLoggedIn(false);
@@ -93,13 +90,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         loadUser();
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
             const authUser = session?.user ?? null;
             setUser(authUser);
 
             if (authUser) {
-                setIsLoggedIn(true);
-                fetchProfile(authUser); // async but don't await
+                await fetchProfile(authUser);
             } else {
                 setIsLoggedIn(false);
                 setProfile(null);
