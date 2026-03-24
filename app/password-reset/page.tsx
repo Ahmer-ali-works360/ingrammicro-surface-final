@@ -2,106 +2,137 @@
 
 import { supabase } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
-import APPCONSTANTS from "@/lib/constants/constant";
 import { toast } from "sonner";
+import { IoCheckmarkSharp, IoPersonAdd } from "react-icons/io5";
+import { LuLogIn } from "react-icons/lu";
 
 export default function Page() {
     const [email, setEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [submitted, setSubmitted] = useState(false);
     const [error, setError] = useState("");
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
 
     useEffect(() => {
         supabase.auth.getSession().then(({ data }) => {
-            setIsLoggedIn(!!data.session)
-        })
+            setIsLoggedIn(!!data.session);
+        });
 
         const {
             data: { subscription },
         } = supabase.auth.onAuthStateChange((_event, session) => {
-            setIsLoggedIn(!!session)
-        })
-
-        return () => subscription.unsubscribe()
-    }, [])
-
-const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setSubmitted(true);
-
-    if (!email.trim()) {
-        setError("Email address is required");
-        return;
-    }
-
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        setError("Please enter a valid email address");
-        return;
-    }
-
-    setLoading(true);
-    setError("");
-
-    try {
-        const response = await fetch("/api/password-reset", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email: email.trim().toLowerCase() }),
+            setIsLoggedIn(!!session);
         });
 
-        const data = await response.json();
+        return () => subscription.unsubscribe();
+    }, []);
 
-        if (!response.ok || !data.success) {
-            toast.error(data.error || "Failed to send reset email", {
-                style: { background: "black", color: "white" },
-            });
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setSubmitted(true);
+
+        if (!email.trim()) {
+            setError("Email address is required");
             return;
         }
 
-        toast.success("Password reset link sent to your email", {
-            style: { background: "black", color: "white" },
-        });
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            setError("Please enter a valid email address");
+            return;
+        }
 
-        setEmail("");
-    } catch (err: any) {
-        toast.error("Something went wrong. Please try again.", {
-            style: { background: "black", color: "white" },
-        });
-    } finally {
-        setLoading(false);
-    }
-};
+        setLoading(true);
+        setError("");
 
+        try {
+            const response = await fetch("/api/password-reset", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ email: email.trim().toLowerCase() }),
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                toast.error(data.error || "Failed to send reset email", {
+                    style: { background: "black", color: "white" },
+                });
+                return;
+            }
+
+            toast.success("Password reset link sent to your email", {
+                style: { background: "black", color: "white" },
+            });
+
+            setEmail("");
+        } catch (err: any) {
+            toast.error("Something went wrong. Please try again.", {
+                style: { background: "black", color: "white" },
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
-        <div className="relative min-h-screen">
-            {/* Background image */}
-            <div
-                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-                style={{
-                    backgroundImage: "url('/computer-mouse-object-background.jpg')",
-                }}
-            />
+        <div className="min-h-screen flex">
 
-            {/* White overlay for entire content area */}
-            <div className="absolute inset-0 top-0 bg-white/92"></div>
+            {/* ── LEFT PANEL ── */}
+   <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-6 lg:p-8 flex flex-col justify-center overflow-hidden">
+        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold mb-3 max-w-xl">
+          Welcome to Ingram Micro and Microsoft Surface
+        </h2>
+        <p className="text-sm lg:text-base text-white/90 mb-6 max-w-md">
+          Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
+        </p>
 
-            {/* Content */}
-            <div className="relative flex items-center justify-center min-h-screen px-3 py-22 lg:px-8">
-                <div className="relative z-10 w-full max-w-md rounded-2xl border-8 border-gray-100 bg-white sm:px-10 px-6 py-14">
-                    <div className="text-center">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">
-                            Password Reset
+        <div className="space-y-4 text-sm">
+          <div>
+            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoPersonAdd /> Register</div>
+            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Fill out a quick registration form if not registered yet.</div>
+          </div>
+          <div>
+            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoCheckmarkSharp /> Approval</div>
+            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-md">Your registration will be approved by the Program Manager.</div>
+          </div>
+          <div>
+            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><LuLogIn /> Login</div>
+            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Sign in to your account once it's approved.</div>
+          </div>
+        </div>
+      </div>
+
+            {/* ── RIGHT PANEL ── */}
+<div className="bg-white flex flex-1 items-center justify-center overflow-hidden p-8">
+
+    <div className="w-full max-w-lg border-2 rounded-lg p-8 lg:p-12">
+
+                    {/* Icon */}
+                    <div className="flex justify-center mb-6">
+                        <img
+                            src="/reset-pass.png"
+                            alt="Reset Password"
+                            className="w-10 h-10 object-contain"
+                        />
+                    </div>
+
+                    {/* Heading */}
+                    <div className="text-center mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                            Reset Password
                         </h1>
-                        <p className="text-gray-600 mb-8">
-                            To reset your password, please enter your email address or username below.
+                        <p className="text-gray-500 text-sm">
+                            Enter your email to receive a password reset link
                         </p>
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-6">
+                    {/* Form */}
+                    <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label htmlFor="email" className="block font-semibold text-gray-700 text-sm mb-2">
+                            <label
+                                htmlFor="email"
+                                className="block font-semibold text-gray-700 text-sm mb-1.5"
+                            >
                                 Email Address
                             </label>
                             <input
@@ -111,41 +142,49 @@ const handleSubmit = async (e: React.FormEvent) => {
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
-                                    setError(""); // Clear error when user starts typing
+                                    setError("");
                                 }}
-                                className={`w-full rounded-md border px-4 py-3 text-black focus:outline-none focus:ring-2 focus:ring-gray-200 focus:border-gray ring-gray-200 transition ${submitted && error ? "border-red-500" : "border-gray-300"
-                                    }`}
+                                className={`w-full rounded-lg border px-4 py-3 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 transition ${
+                                    submitted && error
+                                        ? "border-red-400 focus:ring-red-100"
+                                        : "border-gray-300 focus:ring-blue-100 focus:border-blue-400"
+                                }`}
                             />
                             {submitted && error && (
-                                <div className="bg-[#c74a4a] text-white px-3 py-2 text-sm rounded mt-2">
+                                <div className="bg-red-500 text-white px-3 py-2 text-xs rounded-md mt-2">
                                     {error}
                                 </div>
                             )}
                         </div>
 
-                        <div className="flex justify-center pt-2">
-                            <button
-                                type="submit"
-                                disabled={loading}
-                                className="w-full rounded-md bg-[#1570EF] px-6 py-3 cursor-pointer font-semibold text-white transition-colors hover:bg-[#1660a0] disabled:opacity-50 disabled:cursor-not-allowed"
-                            >
-                                {loading ? "Sending..." : "Reset Password"}
-                            </button>
-                        </div>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full rounded-lg px-6 py-3 font-semibold text-sm text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+                            style={{ backgroundColor: "#1570EF" }}
+                            onMouseEnter={(e) =>
+                                !loading && ((e.target as HTMLElement).style.backgroundColor = "#1660a0")
+                            }
+                            onMouseLeave={(e) =>
+                                ((e.target as HTMLElement).style.backgroundColor = "#1570EF")
+                            }
+                        >
+                            {loading ? "Sending..." : "Reset Password"}
+                        </button>
+
                         {!isLoggedIn && (
-                            <>
-                                <div className="text-center pt-4">
-                                    <p className="text-gray-600 text-sm">
-                                        Remember your password?{" "}
-                                        <a
-                                            href="/login"
-                                            className="font-semibold text-[#1D76BC] hover:text-[#1660a0] transition-colors"
-                                        >
-                                            Back to Login
-                                        </a>
-                                    </p>
-                                </div>
-                            </>
+                            <div className="text-center pt-2">
+                                <p className="text-gray-500 text-sm">
+                                    Remember your password?{" "}
+                                    <a
+                                        href="/login"
+                                        className="font-semibold transition-colors"
+                                        style={{ color: "#1570EF" }}
+                                    >
+                                        Back to Login
+                                    </a>
+                                </p>
+                            </div>
                         )}
                     </form>
                 </div>

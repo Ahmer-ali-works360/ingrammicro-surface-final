@@ -1021,17 +1021,17 @@ export default function Navbar() {
 
       {/* ===== CART DRAWER ===== */}
       <Drawer
-          title={
-              <div className="flex items-center space-x-2">
-                  <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
-                  <span className="text-lg font-semibold">Your Cart</span>
-                  {cartCount > 0 && (
-                      <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
-                          {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                      </span>
-                  )}
-              </div>
-          }
+          // title={
+          //     <div className="flex items-center space-x-2">
+          //         <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+          //         <span className="text-lg font-semibold">Your Cart</span>
+          //         {cartCount > 0 && (
+          //             <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+          //                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
+          //             </span>
+          //         )}
+          //     </div>
+          // }
           placement="right"
           onClose={() => setIsCartDrawerOpen(false)}
           open={isCartDrawerOpen}
@@ -1050,12 +1050,12 @@ export default function Navbar() {
                   <p className="text-gray-500 text-center mb-6">
                       Looks like you haven't added any products to your cart yet.
                   </p>
-                  <button
+                  {/* <button
                       onClick={handleContinueShopping}
                       className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                   >
                       Continue
-                  </button>
+                  </button> */}
               </div>
           ) : (
               <div className="flex flex-col h-full">
@@ -1118,7 +1118,7 @@ export default function Navbar() {
 
                   <div className="border-t border-gray-200 pt-4 mt-4">
                       <div className="space-y-3">
-                          {/* Clear All */}
+                          {/* Clear All
                           {cartItems.length > 0 && (
                               <div className="flex justify-end">
                                   <button
@@ -1129,7 +1129,7 @@ export default function Navbar() {
                                       {cartUpdating ? 'Clearing...' : 'Clear All'}
                                   </button>
                               </div>
-                          )}
+                          )} */}
                           <button
                               onClick={handleCart}
                               className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"

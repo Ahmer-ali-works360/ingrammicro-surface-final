@@ -994,7 +994,7 @@ export default function Page() {
                                                         )}
 
                                                         {product.post_status !== "Publish" && (
-                                                            <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#41abd6]">
+                                                            <div className="absolute sm:top-30 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#41abd6]">
                                                                 Private
                                                             </div>
                                                         )}
@@ -1123,19 +1123,19 @@ export default function Page() {
             {/* Cart Drawer */}
             {isLoggedIn && (
                 <Drawer
-                    title={
-                        <div className="flex items-center justify-between">
-                            <div className="flex items-center space-x-2">
-                                <PiShoppingCartThin className="text-[#1d76bc]" size={20} />
-                                <span className="text-lg font-semibold">Your Cart</span>
-                                {cartCount > 0 && (
-                                    <span className="bg-[#1d76bc] text-white text-xs px-2 py-1 rounded-full">
-                                        {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                                    </span>
-                                )}
-                            </div>
-                        </div>
-                    }
+                    // title={
+                    //     <div className="flex items-center justify-between">
+                    //         <div className="flex items-center space-x-2">
+                    //             <PiShoppingCartThin className="text-[#1d76bc]" size={20} />
+                    //             <span className="text-lg font-semibold">Your Cart</span>
+                    //             {cartCount > 0 && (
+                    //                 <span className="bg-[#1d76bc] text-white text-xs px-2 py-1 rounded-full">
+                    //                     {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                    //                 </span>
+                    //             )}
+                    //         </div>
+                    //     </div>
+                    // }
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}
                     open={showCartDrawer}
@@ -1154,12 +1154,12 @@ export default function Page() {
                             <p className="text-gray-500 text-center mb-6">
                                 Looks like you haven't added any products to your cart yet.
                             </p>
-                            <button
+                            {/* <button
                                 onClick={handleContinueShopping}
                                 className="px-6 py-2 bg-[#1d76bc] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                             >
                                 Continue
-                            </button>
+                            </button> */}
                         </div>
                     ) : (
                         <div className="flex flex-col h-full">
@@ -1226,7 +1226,7 @@ export default function Page() {
                             {/* Cart Summary */}
                             <div className="border-t border-gray-200 pt-4 mt-4">
                                 <div className="space-y-3">
-                                    {/* Clear All */}
+                                    {/* Clear All
                                     {cartItems.length > 0 && (
                                         <div className="flex justify-end">
                                             <button
@@ -1238,7 +1238,8 @@ export default function Page() {
                                             </button>
                                         </div>
                                     )}
-                                    <button
+                                     */}
+                                     <button
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1d76bc] text-[#1d76bc] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
