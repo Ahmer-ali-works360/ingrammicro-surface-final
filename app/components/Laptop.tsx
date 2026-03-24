@@ -140,7 +140,7 @@ export default function Laptop() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 <div className="text-center mb-12">
-                    <h2 className="text-3xl font-semibold text-gray-900 mb-4">
+                    <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4">
                         Meet The Family
                     </h2>
                     <p className="text-gray-600 max-w-2xl mx-auto text-xl">
@@ -164,7 +164,7 @@ export default function Laptop() {
                             />
                         </div>
                         <div className="text-center">
-                            <h2 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl">
+                            <h2 className="mb-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
                                 Surface 2-in-1 PCs
                             </h2>
                             <p className="mb-6 text-gray-600">
@@ -203,7 +203,7 @@ export default function Laptop() {
                                 />
                             </div>
                             <div className="text-center">
-                                <h2 className="mb-3 text-2xl font-bold text-gray-900 sm:text-3xl">
+                                <h2 className="mb-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
                                     Surface Laptops
                                 </h2>
                                 <p className="mb-6 text-gray-600">

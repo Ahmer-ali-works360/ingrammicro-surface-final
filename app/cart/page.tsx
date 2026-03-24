@@ -253,8 +253,8 @@ export default function Page() {
     // Loading state
     if (isLoading) {
         return (
-            <div className="min-h-screen bg-gray-50 py-8 px-4">
-                <div className="max-w-6xl mx-auto">
+            <div className="min-h-screen bg-gray-50 py-8 px-2 sm:px-6 lg:px-15 2xl:px-[70px]">
+                <div className="w-full">
                     <div className="bg-white rounded-lg shadow-md p-12 text-center">
                         <div className="animate-pulse">
                             <div className="h-8 bg-gray-200 rounded w-1/3 mx-auto mb-4"></div>
@@ -281,8 +281,8 @@ export default function Page() {
             status: 'completed'
         });
         return (
-            <div className="h-[83vh] px-4 flex items-center justify-center">
-                <div className="max-w-6xl w-full">
+            <div className="h-[83vh] px-2 sm:px-6 lg:px-15 2xl:px-[70px] flex items-center justify-center">
+                <div className="w-full">
                     <div className="bg-white rounded-lg p-12 text-center">
                         <div className="text-6xl mb-6 flex justify-center">
                             <AiOutlineShoppingCart />
@@ -302,14 +302,14 @@ export default function Page() {
     }
 
     return (
-        <div className="min-h-screen py-8 px-4">
-            <div className="max-w-6xl mx-auto">
+            <div className="min-h-screen py-8 px-2 sm:px-6 lg:px-15 2xl:px-[70px]">
+                <div className="w-full">
                 {/* <h1 className="text-3xl font-bold text-gray-900 mb-8">Your Cart</h1> */}
                 <div className="flex flex-col lg:flex-row gap-8">
 
                     {/* Cart Items Section */}
                     <div className="lg:w-2/3">
-                        <div className="px-3 mb-6 pt-4">
+                        <div className=" mb-6 pt-4">
                             {cartItems.map((item) => {
                                 const isRemovingThisItem = removingItemId === item.product_id;
                                 return (

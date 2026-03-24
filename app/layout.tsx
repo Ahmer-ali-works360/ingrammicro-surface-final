@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Outfit, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
@@ -19,6 +19,13 @@ const outfit = Outfit({
   display: "swap",
 });
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["600"],
+  variable: "--font-poppins",
+  display: "swap",
+});
+
 
 export const metadata: Metadata = {
   title: "Ingram Micro Surface",
@@ -35,7 +42,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${inter.className} ${outfit.variable} antialiased`}
+        className={`${inter.className} ${outfit.variable} ${poppins.variable}antialiased`}
       >
         <ToasterClient />
 

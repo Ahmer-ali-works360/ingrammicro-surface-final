@@ -458,7 +458,7 @@ export default function Navbar() {
       <Disclosure as="nav" className="sticky top-0 z-50 bg-white border-b border-gray-300">
         {({ open }) => (
           <>
-            <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div className="mx-auto px-2 sm:px-6 lg:px-15 2xl:px-[70px]">
               <div className="relative flex h-16 items-center justify-between">
 
                 {/* ===== LOGO ===== */}

@@ -92,7 +92,7 @@
 //                     md:bg-cover
 //                     md:bg-no-repeat
 //                     md:bg-right
-                    
+
 //                 "
 //                 style={{
 //                     backgroundImage: "url('/Ingram-Banner-2-1.png')",
@@ -189,19 +189,19 @@ export default function Banner() {
       />
 
       {/* ── Foreground content ── */}
-      <div className="relative z-10 flex items-center w-full min-h-[200px] sm:min-h-[260px] md:min-h-[300px] lg:min-h-[340px] xl:min-h-[380px]">
+      <div className="relative z-10 flex items-center w-full min-h-[200px] sm:min-h-[300px] md:min-h-[380px] lg:min-h-[440px] xl:min-h-[480px]">
 
         {/* Left column — mobile: center aligned | sm+: left aligned */}
-        <div className="w-[90%] sm:w-[55%] md:w-[50%] lg:w-[46%] xl:w-[44%] px-5 sm:px-8 md:px-10 lg:px-14 xl:px-16 py-8 sm:py-10 md:py-12 lg:py-14 mx-auto sm:mx-0 text-center sm:text-left flex flex-col items-center sm:items-start">
+        <div className="w-[90%] sm:w-[55%] md:w-[50%] lg:w-[56%] xl:w-[58%] px-5 sm:px-8 md:px-10 lg:px-14 xl:px-16 py-8 sm:py-10 md:py-12 lg:py-14 mx-auto sm:mx-0 text-center sm:text-left flex flex-col items-center sm:items-start">
 
           {/* ── Heading ── */}
           <h1
             style={{
-              fontFamily: "'Segoe UI', 'Arial', sans-serif",
-              fontSize: "clamp(18px, 2.4vw, 60px)",
-              fontWeight: "700",
-              lineHeight: "1.28",
-              letterSpacing: "-0.3px",
+              fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+              fontSize: "clamp(28px, 3.5vw, 60px)",
+              fontWeight: "600",
+              lineHeight: "1.325",
+              letterSpacing: "0",
               color: "#3d3d3d",
               marginBottom: "14px",
             }}
@@ -214,14 +214,14 @@ export default function Banner() {
           {/* ── Body paragraph ── */}
           <p
             style={{
-              fontFamily: "'Segoe UI', 'Arial', sans-serif",
-              fontSize: "clamp(10px, 0.95vw, 15px)",
+              fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+              fontSize: "clamp(14px, 1.8vw, 18px)",
               fontWeight: "400",
-              lineHeight: "1.65",
-              letterSpacing: "0.01px",
+              lineHeight: "1.35",
+              letterSpacing: "0.5",
               color: "#3d3d3d",
               marginBottom: "18px",
-              maxWidth: "380px",
+              maxWidth: "590px",
             }}
           >
             Your Ingram Micro and Microsoft Surface team has created an
@@ -235,7 +235,7 @@ export default function Banner() {
             <Image
               src="/Logos-ingram.png"
               alt="Microsoft Surface and Ingram Micro Logos"
-              width={300}
+              width={350}
               height={45}
               className="h-auto w-[180px] sm:w-[210px] md:w-[240px] lg:w-[270px] xl:w-[300px]"
               priority
@@ -257,7 +257,7 @@ export default function Banner() {
               letterSpacing: "0.2px",
               lineHeight: "1",
               padding: "16px 35px",
-              borderRadius: "2px",
+              borderRadius: "10px",
               textDecoration: "none",
               transition: "background-color 0.2s ease",
               whiteSpace: "nowrap",

@@ -1030,21 +1030,21 @@ export default function Page() {
                                                                 {product.stock_quantity != 0 && product.post_status === "Publish" ? (
                                                                     <>
                                                                         {isProductInCart ? (
-    <div className="flex flex-col items-center space-y-2">
-        <button
-            onClick={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-                setShowCartDrawer(true)
-            }}
-            className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1d76bc] hover:text-white transition-colors flex items-center justify-center gap-2"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            Add to Cart
-        </button>
-    </div>
+                                                                            <div className="flex flex-col items-center space-y-2">
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.preventDefault()
+                                                                                        e.stopPropagation()
+                                                                                        setShowCartDrawer(true)
+                                                                                    }}
+                                                                                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb] transition-colors flex items-center justify-center gap-2"
+                                                                                >
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                                    </svg>
+                                                                                    Add to Cart
+                                                                                </button>
+                                                                            </div>
                                                                         ) : (
                                                                             <button
                                                                                 onClick={(e) => {
@@ -1053,7 +1053,7 @@ export default function Page() {
                                                                                     handleAddToCart(product.id)
                                                                                 }}
                                                                                 disabled={isUpdating && addingProductId === product.id}
-                                                                                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
+                                                                                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb] transition-colors disabled:opacity-50"
                                                                             >
                                                                                 {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                                                                             </button>

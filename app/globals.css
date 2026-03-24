@@ -175,3 +175,8 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+/* Cart Drawer - Close button right side */
+.cart-drawer .ant-drawer-header-title {
+    flex-direction: row-reverse;
+}
