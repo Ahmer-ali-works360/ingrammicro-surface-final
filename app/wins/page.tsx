@@ -44,6 +44,7 @@ export default function Page() {
 // Auth + fetch orders
 useEffect(() => {
     if (loading) return;
+    if (loading) return;
     if (!isLoggedIn || !profile?.isVerified) {
         logAuth('access_denied', 'Unauthorized access to wins page', profile?.id, {}, 'failed', source);
         router.replace('/login/?redirect_to=wins');
@@ -89,6 +90,7 @@ useEffect(() => {
             const { data, error } = await query;
 
             if (error) {
+                    setIsLoading(false); 
                 logError('db', 'orders_fetch_failed', `Failed to fetch orders: ${error.message}`, error, profile?.id, source);
                 return;
             }
@@ -460,16 +462,21 @@ useEffect(() => {
         }
     };
 
-    if (loading || isLoading) {
-        return (
-            <div className="min-h-screen bg-gray-50 py-6 px-4 sm:px-6 lg:px-8 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC] mx-auto"></div>
-                    <p className="mt-4 text-gray-600">Loading...</p>
-                </div>
-            </div>
-        );
-    }
+   if (loading) {
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            Loading auth...
+        </div>
+    );
+}
+
+if (isLoading) {
+    return (
+        <div className="min-h-screen flex items-center justify-center">
+            Loading data...
+        </div>
+    );
+}
 
     const inputClass = (field: string) =>
         `w-full rounded-lg border px-4 py-3 text-gray-900 focus:outline-none transition text-sm ${errors[field]
