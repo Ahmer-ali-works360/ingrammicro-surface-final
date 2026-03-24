@@ -142,7 +142,7 @@ export default function Laptop() {
                 <div className="text-center mb-12">
                    <h2
   style={{
-    fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+    fontFamily: "var(--font-inter), 'Inter', sans-serif",
     fontWeight: "500",
     fontSize: "clamp(20px, 4vw, 46px)",
     lineHeight: "1",

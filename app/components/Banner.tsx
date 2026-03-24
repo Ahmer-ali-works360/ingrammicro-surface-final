@@ -197,7 +197,7 @@ export default function Banner() {
           {/* ── Heading ── */}
           <h1
             style={{
-              fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+              fontFamily: "var(--font-inter), 'Inter', sans-serif",
               fontSize: "clamp(28px, 3.5vw, 60px)",
               fontWeight: "600",
               lineHeight: "1.325",
@@ -214,7 +214,7 @@ export default function Banner() {
           {/* ── Body paragraph ── */}
           <p
             style={{
-              fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+              fontFamily: "var(--font-inter), 'Inter', sans-serif", 
               fontSize: "clamp(14px, 1.8vw, 18px)",
               fontWeight: "400",
               lineHeight: "1.35",
@@ -251,7 +251,7 @@ export default function Banner() {
               justifyContent: "center",
               backgroundColor: "#1570EF",
               color: "#ffffff",
-              fontFamily: "'Segoe UI', 'Arial', sans-serif",
+              fontFamily: "var(--font-inter), 'Inter', sans-serif",
               fontSize: "18px",
               fontWeight: "600",
               letterSpacing: "0.2px",
