@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, useRef } from "react";
 import { supabase } from "@/lib/supabase/client";
 import type { User } from "@supabase/supabase-js";
 
@@ -30,58 +30,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [profile, setProfile] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+    const currentUserId = useRef<string | null>(null); // ✅ Track current user ID
 
-const fetchProfile = async (authUser: User | null) => {
-    if (!authUser) {
-        setProfile(null);
-        setIsLoggedIn(false);
-        return;
-    }
+    const fetchProfile = async (authUser: User | null) => {
+        if (!authUser) {
+            setProfile(null);
+            setIsLoggedIn(false);
+            currentUserId.current = null;
+            return;
+        }
 
-    // Pehle userId se try karo (normal users ke liye fast)
-    const { data, error } = await supabase
-        .from("users")
-        .select("*")
-        .eq("userId", authUser.id)
-        .eq("isVerified", true)
-        .single();
+        // ✅ Same user hai toh dobara fetch mat karo
+        if (currentUserId.current === authUser.id) {
+            return;
+        }
 
-    if (!error && data) {
-        setProfile(data);
-        setIsLoggedIn(true);
-        return;
-    }
+        // Pehle userId se try karo (normal users ke liye fast)
+        const { data, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("userId", authUser.id)
+            .eq("isVerified", true)
+            .single();
 
-    // Agar nahi mila toh migrate user ho sakta hai - email se try karo
-    const { data: existingUser } = await supabase
-        .from("users")
-        .select("*")
-        .eq("email", authUser.email)
-        .single();
+        if (!error && data) {
+            setProfile(data);
+            setIsLoggedIn(true);
+            currentUserId.current = authUser.id; // ✅ Save current user ID
+            return;
+        }
 
-    if (existingUser?.userId == null) {
-        await supabase
-            .from('users')
-            .update({ userId: authUser?.id, password: null })
-            .eq('email', authUser.email);
-    }
+        // Agar nahi mila toh migrate user ho sakta hai - email se try karo
+        const { data: existingUser } = await supabase
+            .from("users")
+            .select("*")
+            .eq("email", authUser.email)
+            .single();
 
-    // Update ke baad dobara fetch
-    const { data: updatedUser, error: updatedError } = await supabase
-        .from("users")
-        .select("*")
-        .eq("userId", authUser.id)
-        .eq("isVerified", true)
-        .single();
+        if (existingUser?.userId == null) {
+            await supabase
+                .from('users')
+                .update({ userId: authUser?.id, password: null })
+                .eq('email', authUser.email);
+        }
 
-    if (!updatedError && updatedUser) {
-        setProfile(updatedUser);
-        setIsLoggedIn(true);
-    } else {
-        setProfile(null);
-        setIsLoggedIn(false);
-    }
-};
+        // Update ke baad dobara fetch
+        const { data: updatedUser, error: updatedError } = await supabase
+            .from("users")
+            .select("*")
+            .eq("userId", authUser.id)
+            .eq("isVerified", true)
+            .single();
+
+        if (!updatedError && updatedUser) {
+            setProfile(updatedUser);
+            setIsLoggedIn(true);
+            currentUserId.current = authUser.id; // ✅ Save current user ID
+        } else {
+            setProfile(null);
+            setIsLoggedIn(false);
+            currentUserId.current = null;
+        }
+    };
 
     useEffect(() => {
         const loadUser = async () => {
@@ -104,6 +114,8 @@ const fetchProfile = async (authUser: User | null) => {
         loadUser();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
+            setLoading(true); // ✅ Tab switch par loading true karo
+
             const authUser = session?.user ?? null;
             setUser(authUser);
 
