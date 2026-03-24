@@ -137,7 +137,7 @@ const mainProduct = mainProductItem?.product;
 
     setAuthInitialized(true);
 
-    if (!isLoggedIn || (profile?.isVerified === false && !profile)) {
+   if (!isLoggedIn || !profile?.isVerified) {
       logActivity({
         type: 'auth',
         level: 'warning',
@@ -177,25 +177,24 @@ const mainProduct = mainProductItem?.product;
   }, [authChecked, authInitialized]);
 
 useEffect(() => {
+  if (cartLoading) return;      // pehle yeh check
+  if (!authChecked) return;     // phir yeh check
   if (cartCount < 1) {
-    if (!cartLoading) {
-      logActivity({
-        type: 'cart',
-        level: 'warning',
-        action: 'invalid_cart_count',
-        message: `User attempted checkout with empty cart`,
-        userId: profile?.id || null,
-        details: {
-          cartCount,
-          cartItems: cartItems.length
-        },
-        status: 'failed'
-      });
-
-      router.replace('/cart');
-    }
+    logActivity({
+      type: 'cart',
+      level: 'warning',
+      action: 'invalid_cart_count',
+      message: `User attempted checkout with empty cart`,
+      userId: profile?.id || null,
+      details: {
+        cartCount,
+        cartItems: cartItems.length
+      },
+      status: 'failed'
+    });
+    router.replace('/cart');
   }
-}, [cartCount, cartLoading, cartItems]);
+}, [cartCount, cartLoading, cartItems, authChecked]);
 
   // Handle input changes
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {

@@ -36,20 +36,20 @@ export default function Page() {
         );
     }
 
-    return (
-        <div className="min-h-screen bg-gray-50">
-            <div className="w-full" style={{ height: 'calc(100vh - 64px)' }}>
-                <iframe
-                    src="https://lookerstudio.google.com/embed/reporting/e91840aa-eb1a-455d-a8f3-e01ec7f6c938/page/QnVsF"
-                    className="w-full h-full"
-                    frameBorder={0}
-                    style={{ border: 0 }}
-                    allowFullScreen
-                    sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
-                    loading="lazy"
-                    title="360 Dashboard"
-                />
-            </div>
+return (
+    <div className="h-screen overflow-hidden bg-gray-50">
+        <div className="w-full" style={{ height: 'calc(100vh - 64px)' }}>
+            <iframe
+                src="https://lookerstudio.google.com/embed/reporting/e91840aa-eb1a-455d-a8f3-e01ec7f6c938/page/QnVsF"
+                className="w-full h-full"
+                frameBorder={0}
+                style={{ border: 0, display: 'block' }}
+                allowFullScreen
+                sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
+                loading="lazy"
+                title="360 Dashboard"
+            />
         </div>
-    );
+    </div>
+);
 }

@@ -60,7 +60,7 @@ export default function Page() {
         setAuthInitialized(true);
 
         // Now check authentication status
-        if (!isLoggedIn || profile?.isVerified === false && !profile) {
+        if (!isLoggedIn || !profile?.isVerified) {
             logActivity({
                 type: 'auth',
                 level: 'warning',

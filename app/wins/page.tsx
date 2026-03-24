@@ -41,19 +41,22 @@ export default function Page() {
 
     const source = `${process.env.NEXT_PUBLIC_APP_URL || (typeof window !== 'undefined' ? window.location.origin : '')}/wins`;
 
-    // Handle auth check
-    useEffect(() => {
-        if (loading) return;
-        if (!isLoggedIn || !profile?.isVerified) {
-            router.replace(`/login/?redirect_to=wins`);
-            return;
-        }
-        if (isShopManager) {
-            toast.error("Access denied. Admin privileges required.");
-            router.replace('/product-category/alldevices');
-            return;
-        }
-    }, [loading, isLoggedIn, profile, router, isShopManager]);
+// Auth + fetch orders
+useEffect(() => {
+    if (loading) return;
+    if (!isLoggedIn || !profile?.isVerified) {
+        logAuth('access_denied', 'Unauthorized access to wins page', profile?.id, {}, 'failed', source);
+        router.replace('/login/?redirect_to=wins');
+        return;
+    }
+    if (isShopManager) {
+        toast.error("Access denied. Admin privileges required.");
+        router.replace('/product-category/alldevices');
+        return;
+    }
+    logAuth('page_access', `User accessed wins reporting page`, profile.id, { role: profile.role }, 'completed', source);
+    fetchOrders();
+}, [loading, isLoggedIn, profile, router, isShopManager]);
 
     const fetchOrders = async () => {
         const startTime = Date.now();
@@ -231,16 +234,16 @@ export default function Page() {
     }, [formData.orderNumber, orders]);
 
     // Auth + fetch orders
-    useEffect(() => {
-        if (loading) return;
-        if (!isLoggedIn || !profile?.isVerified) {
-            logAuth('access_denied', 'Unauthorized access to wins page', profile?.id, {}, 'failed', source);
-            router.replace('/login/?redirect_to=wins');
-            return;
-        }
-        logAuth('page_access', `User accessed wins reporting page`, profile.id, { role: profile.role }, 'completed', source);
-        fetchOrders();
-    }, [loading, isLoggedIn, profile, router]);
+    // useEffect(() => {
+    //     if (loading) return;
+    //     if (!isLoggedIn || !profile?.isVerified) {
+    //         logAuth('access_denied', 'Unauthorized access to wins page', profile?.id, {}, 'failed', source);
+    //         router.replace('/login/?redirect_to=wins');
+    //         return;
+    //     }
+    //     logAuth('page_access', `User accessed wins reporting page`, profile.id, { role: profile.role }, 'completed', source);
+    //     fetchOrders();
+    // }, [loading, isLoggedIn, profile, router]);
 
     const validateField = (name: string, value: any) => {
         let error = "";

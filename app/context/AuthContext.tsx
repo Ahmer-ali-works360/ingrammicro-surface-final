@@ -31,44 +31,57 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-    const fetchProfile = async (authUser: User | null) => {
-        if (!authUser) {
-            setProfile(null);
-            setIsLoggedIn(false);
-            return;
-        }
+const fetchProfile = async (authUser: User | null) => {
+    if (!authUser) {
+        setProfile(null);
+        setIsLoggedIn(false);
+        return;
+    }
 
-        const { data: existingUser, error: fetchErr } = await supabase
-            .from("users")
-            .select("*")
-            .eq("email", authUser.email)
-            .single();
+    // Pehle userId se try karo (normal users ke liye fast)
+    const { data, error } = await supabase
+        .from("users")
+        .select("*")
+        .eq("userId", authUser.id)
+        .eq("isVerified", true)
+        .single();
 
-        if (existingUser?.userId == null) {
-            const { error: uErr } = await supabase
-                .from('users')
-                .update({
-                    userId: authUser?.id,
-                    password: null
-                })
-                .eq('email', authUser.email);
-        }
+    if (!error && data) {
+        setProfile(data);
+        setIsLoggedIn(true);
+        return;
+    }
 
-        const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("userId", authUser.id)
-            .eq("isVerified", true)
-            .single();
+    // Agar nahi mila toh migrate user ho sakta hai - email se try karo
+    const { data: existingUser } = await supabase
+        .from("users")
+        .select("*")
+        .eq("email", authUser.email)
+        .single();
 
-        if (error) {
-            setProfile(null);
-            setIsLoggedIn(false);
-        } else {
-            setProfile(data);
-            setIsLoggedIn(true);
-        }
-    };
+    if (existingUser?.userId == null) {
+        await supabase
+            .from('users')
+            .update({ userId: authUser?.id, password: null })
+            .eq('email', authUser.email);
+    }
+
+    // Update ke baad dobara fetch
+    const { data: updatedUser, error: updatedError } = await supabase
+        .from("users")
+        .select("*")
+        .eq("userId", authUser.id)
+        .eq("isVerified", true)
+        .single();
+
+    if (!updatedError && updatedUser) {
+        setProfile(updatedUser);
+        setIsLoggedIn(true);
+    } else {
+        setProfile(null);
+        setIsLoggedIn(false);
+    }
+};
 
     useEffect(() => {
         const loadUser = async () => {

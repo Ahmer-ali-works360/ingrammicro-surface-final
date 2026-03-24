@@ -131,19 +131,21 @@ export default function Page() {
 
     }, [loading, isLoggedIn, profile, router, isAuthorized]);
 
-    useEffect(() => {
-        if (smRole == profile?.role) {
-            router.replace('/product-category/alldevices');
-            return;
-        }
-    }, [isAuthorized, router, subscriberRole, smRole, profile]);
+useEffect(() => {
+    if (loading) return;
+    if (smRole == profile?.role) {
+        router.replace('/product-category/alldevices');
+        return;
+    }
+}, [loading, isAuthorized, router, subscriberRole, smRole, profile]);
 
-    useEffect(() => {
-        if (subscriberRole == profile?.role) {
-            router.replace('/product-category/alldevices');
-            return;
-        }
-    }, [isAuthorized, router, subscriberRole, smRole, profile]);
+useEffect(() => {
+    if (loading) return;
+    if (subscriberRole == profile?.role) {
+        router.replace('/product-category/alldevices');
+        return;
+    }
+}, [loading, isAuthorized, router, subscriberRole, smRole, profile]);
 
     // Format date to dd-MMM-yyyy
     const formatDateToCustomFormat = (dateString: string | null) => {

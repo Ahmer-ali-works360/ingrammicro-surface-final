@@ -300,7 +300,7 @@ export default function Page() {
         setAuthInitialized(true);
 
         // Now check authentication status
-        if (!isLoggedIn || profile?.isVerified === false && !profile) {
+        if (!isLoggedIn || !profile?.isVerified) {
             router.replace('/login/?redirect_to=product-category/alldevices');
         } else {
             setAuthChecked(true);
@@ -342,9 +342,9 @@ export default function Page() {
         if (!authChecked) return;
 
         console.log("=== FETCH STARTED ===");
-    console.log("authChecked:", authChecked);
-    console.log("isLoggedIn:", isLoggedIn);
-    console.log("profile:", profile);
+        console.log("authChecked:", authChecked);
+        console.log("isLoggedIn:", isLoggedIn);
+        console.log("profile:", profile);
 
         await logActivity({
             type: 'product',
@@ -371,9 +371,9 @@ export default function Page() {
                     .select("*")
                     .order("date", { ascending: false });
 
-                               console.log("Products data:", productsData);
-            console.log("Products error:", productsError);
-            console.log("Products count:", productsData?.length);
+                console.log("Products data:", productsData);
+                console.log("Products error:", productsError);
+                console.log("Products count:", productsData?.length);
 
                 if (productsError) {
                     await logActivity({
@@ -531,13 +531,13 @@ export default function Page() {
         if (aHasStock && !bHasStock) return -1;
         if (!aHasStock && bHasStock) return 1;
 
-       // Priority 3: Publish Date (agar ho) ya phir Date
-        const dateA = a.publish_date 
-            ? new Date(a.publish_date).getTime() 
+        // Priority 3: Publish Date (agar ho) ya phir Date
+        const dateA = a.publish_date
+            ? new Date(a.publish_date).getTime()
             : a.date ? new Date(a.date).getTime() : 0;
 
-        const dateB = b.publish_date 
-            ? new Date(b.publish_date).getTime() 
+        const dateB = b.publish_date
+            ? new Date(b.publish_date).getTime()
             : b.date ? new Date(b.date).getTime() : 0;
 
         return dateB - dateA;
@@ -803,11 +803,11 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-<div className="sm:my-5 my-5 text-center">
-    <h2 className="text-2xl font-bold text-gray-900">All Devices</h2>
-</div>
+                                    <div className="sm:my-5 my-5 text-center">
+                                        <h2 className="text-2xl font-bold text-gray-900">All Devices</h2>
+                                    </div>
                                     {/* <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}> */}
-                                        {/* {(admin === profile?.role || shopManager === profile?.role) ? (
+                                    {/* {(admin === profile?.role || shopManager === profile?.role) ? (
                                             <>
                                                 <div className="text-3xl font-semibold">Devices</div>
                                                 <div className="">
@@ -825,7 +825,7 @@ export default function Page() {
                                         ) : (
                                             <div className="text-3xl font-semibold">Devices</div>
                                         )} */}
-                                    
+
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
                                             // If product is not published, only show to admin/shop_manager
@@ -839,7 +839,7 @@ export default function Page() {
 
                                             return (
                                                 <Link href={`/product/${product.slug}`} key={product.id}>
-                                                    <div className="bg-white border border-gray-300 sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col"
+                                                    <div className="bg-white border border-gray-300 sm:py-3 p-2 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col"
                                                     >
                                                         {product.stock_quantity == 0 && (
                                                             <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
@@ -853,7 +853,7 @@ export default function Page() {
                                                                 <img
                                                                     src="/5g-logo.png"
                                                                     alt="5G Enabled"
-                                                                    className="w-10 h-10 object-contain"
+                                                                    className="w-8 h-8 object-contain"
                                                                 />
                                                             </div>
                                                         )}
@@ -866,7 +866,7 @@ export default function Page() {
                                                         )}
 
                                                         {/* Image Container - Fixed Height */}
-                                                        <div className="flex items-center justify-center transition-colors h-48 min-h-[12rem] sm:mt-0 -mt-12 relative">
+                                                        <div className="flex items-center justify-center transition-colors h-32 min-h-[8rem] sm:mt-0 -mt-5 relative">
                                                             {product.thumbnail ? (
                                                                 <img
                                                                     src={product.thumbnail}
@@ -883,7 +883,7 @@ export default function Page() {
                                                         </div>
 
                                                         {/* Product Info Container - Flexible but with constraints */}
-                                                        <div className="flex flex-col flex-grow space-y-2 text-center sm:mt-4 -mt-7">
+                                                        <div className="flex flex-col flex-grow space-y-2 text-center sm:mt-2 -mt-2">
                                                             {/* Title with fixed lines */}
                                                             <h3 className="text-gray-800 sm:text-md text-sm line-clamp-1 min-h-14 flex items-center justify-center">
                                                                 {product.product_name}
@@ -902,22 +902,22 @@ export default function Page() {
                                                                 {product.stock_quantity != 0 && product.post_status === "Publish" ? (
                                                                     <>
                                                                         {isProductInCart ? (
-    // Added to cart state - green button with checkmark
-    <div className="flex flex-col items-center space-y-2">
-        <button
-            onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                setShowCartDrawer(true);
-            }}
-            className="sm:px-4 px-3 sm:py-2.5 py-1.5 text-sm text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb]  transition-colors flex items-center justify-center gap-2"
-        >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-            </svg>
-            Added to Cart
-        </button>
-    </div>
+                                                                            // Added to cart state - green button with checkmark
+                                                                            <div className="flex flex-col items-center space-y-2">
+                                                                                <button
+                                                                                    onClick={(e) => {
+                                                                                        e.preventDefault();
+                                                                                        e.stopPropagation();
+                                                                                        setShowCartDrawer(true);
+                                                                                    }}
+                                                                                    className="sm:px-4 px-3 sm:py-2.5 py-1.5 text-sm text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#eaebeb]  transition-colors flex items-center justify-center gap-2"
+                                                                                >
+                                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                                                                    </svg>
+                                                                                    Added to Cart
+                                                                                </button>
+                                                                            </div>
                                                                         ) : (
                                                                             // Add to cart button
                                                                             <button

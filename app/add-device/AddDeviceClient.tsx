@@ -173,12 +173,12 @@ export default function AddDeviceClient() {
     // Check if current user is authorized
     const isAuthorized = profile?.role && allowedRoles.includes(profile.role);
 
-    useEffect(() => {
-        if (!isAuthorized) {
-            router.replace('/product-category/alldevices');
-            return;
-        }
-    }, [isAuthorized, router]);
+ useEffect(() => {
+    if (!loading && !isAuthorized) {
+        router.replace('/product-category/alldevices');
+        return;
+    }
+}, [loading, isAuthorized, router]);
 
     // Handle auth check
     useEffect(() => {
