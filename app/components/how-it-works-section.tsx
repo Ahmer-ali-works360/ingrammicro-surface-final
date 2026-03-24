@@ -74,9 +74,19 @@ export default function HowItWorks() {
   return (
     <section className="relative bg-white overflow-hidden lg:py-10">
       <div className="mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8">
-        <h2 className="text-xl sm:text-xl md:text-4xl lg:text-4xl font-semibold text-center text-gray-900 mb-20">
-          How it Works
-        </h2>
+       <h2
+  style={{
+    fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+    fontWeight: "500",
+    fontSize: "clamp(20px, 4vw, 46px)",
+    lineHeight: "1",
+    letterSpacing: "0",
+    color: "#111827",
+  }}
+  className="text-center mb-20"
+>
+  How it Works
+</h2>
 
         {/* Centered container with proper max-width */}
         <div className="flex justify-center">

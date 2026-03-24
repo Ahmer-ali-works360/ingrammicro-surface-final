@@ -140,9 +140,19 @@ export default function Laptop() {
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
                 <div className="text-center mb-12">
-                    <h2 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-4">
-                        Meet The Family
-                    </h2>
+                   <h2
+  style={{
+    fontFamily: "var(--font-poppins), 'Poppins', sans-serif",
+    fontWeight: "500",
+    fontSize: "clamp(20px, 4vw, 46px)",
+    lineHeight: "1",
+    letterSpacing: "0",
+    color: "#111827",
+  }}
+  className="text-center mb-4"
+>
+  Meet The Family
+</h2>
                     <p className="text-gray-600 max-w-2xl mx-auto text-xl">
                         Incredible speed and battery life come together with game-changing AI experiences and signature Surface design.
                     </p>

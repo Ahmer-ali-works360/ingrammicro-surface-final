@@ -21,7 +21,7 @@ const outfit = Outfit({
 
 const poppins = Poppins({
   subsets: ["latin"],
-  weight: ["600"],
+  weight: ["500","600"],
   variable: "--font-poppins",
   display: "swap",
 });
@@ -42,7 +42,7 @@ export default function RootLayout({
     <html lang="en">
       <body
         suppressHydrationWarning
-        className={`${inter.className} ${outfit.variable} ${poppins.variable}antialiased`}
+        className={`${inter.variable} ${outfit.variable} ${poppins.variable}antialiased`}
       >
         <ToasterClient />
 
