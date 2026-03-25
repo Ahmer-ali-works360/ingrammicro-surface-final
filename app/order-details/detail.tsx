@@ -699,7 +699,7 @@ setOrders(uniqueOrders as Order[]);
           <Link
             href={`/order-details/${row.getValue("order_no")}`}
             target="_blank"
-            className="text-[#1D76BC] underline"
+            className="text-[#1570EF] underline"
           >
             {row.getValue("order_no")}
           </Link>

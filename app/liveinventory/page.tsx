@@ -1520,7 +1520,7 @@ export default function Page() {
                     ))}
                     <SelectItem
                       value="__custom__"
-                      className="text-[#1D76BC] font-medium"
+                      className="text-[#1570EF] font-medium"
                     >
                       + Add Custom
                     </SelectItem>

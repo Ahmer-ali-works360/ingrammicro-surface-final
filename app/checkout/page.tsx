@@ -995,7 +995,7 @@ addon_sim: has5GAddon,
   const getErrorClass = (fieldName: string) => {
     return errors[fieldName]
       ? "border-red-500 focus:ring-red-500 focus:border-red-500"
-      : "border-gray-300 focus:ring-[#1D76BC] focus:border-[#1D76BC]";
+      : "border-gray-300 focus:ring-[#1570EF] focus:border-[#1570EF]";
   };
 
   return (
@@ -1081,7 +1081,7 @@ addon_sim: has5GAddon,
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/cart"
-                  className="px-8 py-3 bg-[#1D76BC] text-white font-semibold rounded-lg hover:bg-[#1660a0] transition-colors duration-200 flex items-center justify-center gap-2"
+                  className="px-8 py-3 bg-[#1570EF] text-white font-semibold rounded-lg hover:bg-[#1660a0] transition-colors duration-200 flex items-center justify-center gap-2"
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -1131,8 +1131,8 @@ addon_sim: has5GAddon,
 
               {/* Team Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#1D76BC]">
-                  <h2 className="text-xl text-white font-bold py-2 px-4">Team Details</h2>
+                <div className="bg-[#E5E7EB]">
+                  <h2 className="text-md font-bold py-2 px-4">Team Details</h2>
                 </div>
                 <div className="px-7 py-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 my-4">
@@ -1245,8 +1245,8 @@ addon_sim: has5GAddon,
 
               {/* Opportunity Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#1D76BC]">
-                  <h2 className="text-xl text-white font-bold py-2 px-4">Opportunity Details</h2>
+                <div className="bg-[#E5E7EB]">
+                  <h2 className="text-md font-bold py-2 px-4">Opportunity Details</h2>
                 </div>
                 <div className="px-7 py-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -1698,8 +1698,8 @@ addon_sim: has5GAddon,
 
               {/* Shipping Details Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#1D76BC]">
-                  <h2 className="text-xl text-white font-bold py-2 px-4">Shipping Details</h2>
+                <div className="bg-[#E5E7EB]">
+                  <h2 className="text-md font-bold py-2 px-4">Shipping Details</h2>
                 </div>
 
                 <div className="px-7 py-8">
@@ -1951,7 +1951,7 @@ addon_sim: has5GAddon,
                         rows={3}
                         value={formData.notes}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-[#1570EF]"
                       />
                     </div>
                   </div>
@@ -1963,7 +1963,7 @@ addon_sim: has5GAddon,
                       id="terms"
                       checked={formData.isTerms}
                       onChange={handleInputChange}
-                      className={`h-4 w-4 ${errors.isTerms ? 'text-red-500 focus:ring-red-500' : 'text-[#1D76BC] focus:ring-[#1D76BC]'} border-gray-300 rounded`}
+                      className={`h-4 w-4 ${errors.isTerms ? 'text-red-500 focus:ring-red-500' : 'text-[#1570EF] focus:ring-[#1570EF]'} border-gray-300 rounded`}
                       required
                     />
                     <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
@@ -1971,7 +1971,7 @@ addon_sim: has5GAddon,
                       <Link
                         href="/Terms-and-conditions.pdf"
                         target="_blank"
-                        className="text-[#1D76BC] hover:text-[#1660a0] hover:underline font-medium underline"
+                        className="text-[#1570EF] hover:text-[#1660a0] hover:underline font-medium underline"
                         onClick={(e) => e.stopPropagation()}
                       >
                         Terms & Conditions
@@ -1990,8 +1990,8 @@ addon_sim: has5GAddon,
 
               {/* Product Order Section */}
               <div className="bg-white mb-5 border">
-                <div className="bg-[#1D76BC]">
-                  <h2 className="text-xl text-white font-bold py-2 px-4">Your Order ({cartItems.length} items)</h2>
+                <div className="bg-[#E5E7EB]">
+                  <h2 className="text-md font-bold py-2 px-4">Your Order ({cartItems.length} items)</h2>
                 </div>
 
                 <div className="px-7 py-8">
@@ -2013,7 +2013,7 @@ addon_sim: has5GAddon,
                 <button
                   onClick={handleSubmit}
                   disabled={isSubmitting || cartLoading}
-                  className="px-12 py-3 bg-[#1D76BC] text-white cursor-pointer font-semibold rounded-md hover:bg-[#1660a0] focus:outline-none focus:ring-1 focus:ring-[#1D76BC] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-16 py-4 bg-[#1570EF] text-white cursor-pointer font-semibold rounded-md hover:bg-[#1660a0] focus:outline-none focus:ring-1 focus:ring-[#1570EF] focus:ring-offset-2 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? 'Placing Order...' : 'Place Order'}
                 </button>

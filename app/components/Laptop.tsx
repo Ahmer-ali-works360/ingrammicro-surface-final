@@ -38,7 +38,7 @@
 //                             </p>
 //                             <Link
 //                                 href="/product-category/2in1s?form_factor=2in1s"
-//                                 className="inline-flex items-center text-[#1D76BC] font-semibold hover:text-[#1660a0] transition-colors"
+//                                 className="inline-flex items-center text-[#1570EF] font-semibold hover:text-[#1660a0] transition-colors"
 //                             >
 //                                 Explore Surface 2-in-1 PCs
 //                                 <svg
@@ -77,7 +77,7 @@
 //                                 </p>
 //                                 <Link
 //                                     href="/product-category/notebooks?form_factor=Notebooks"
-//                                     className="inline-flex items-center text-[#1D76BC] font-semibold hover:text-[#1660a0] transition-colors"
+//                                     className="inline-flex items-center text-[#1570EF] font-semibold hover:text-[#1660a0] transition-colors"
 //                                 >
 //                                     See All Surface Laptops
 //                                     <svg
@@ -107,7 +107,7 @@
 //                             <div className="text-center">
 //                                 <Link
 //                                     href="/product-category/alldevices"
-//                                     className="inline-flex items-center text-[#1D76BC] font-semibold hover:text-[#1660a0] transition-colors"
+//                                     className="inline-flex items-center text-[#1570EF] font-semibold hover:text-[#1660a0] transition-colors"
 //                                 >
 //                                     All Devices
 //                                     <svg
@@ -191,7 +191,7 @@ export default function Laptop() {
                             </p>
                             <Link
                                 href="/product-category/2in1s?form_factor=2in1"
-                                className="inline-flex items-center text-[#1D76BC] font-semibold hover:text-[#1660a0] transition-colors"
+                                className="inline-flex items-center text-[#1570EF] font-semibold hover:text-[#1660a0] transition-colors"
                             >
                                 Explore Surface 2-in-1 PCs
                                 <svg
@@ -239,7 +239,7 @@ export default function Laptop() {
                                 </p>
                                 <Link
                                     href="/product-category/notebooks?form_factor=Laptops"
-                                    className="inline-flex items-center text-[#1D76BC] font-semibold hover:text-[#1660a0] transition-colors"
+                                    className="inline-flex items-center text-[#1570EF] font-semibold hover:text-[#1660a0] transition-colors"
                                 >
                                     See All Surface Laptops
                                     <svg

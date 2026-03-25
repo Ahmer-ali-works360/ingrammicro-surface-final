@@ -464,7 +464,7 @@ export default function Page() {
                                 descriptionSection.scrollIntoView({ behavior: 'smooth' });
                             }
                         }}
-                        className="flex items-center justify-center gap-2 px-5 py-2 border border-[#1D76BC] text-[#1D76BC] rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors"
+                        className="flex items-center justify-center gap-2 px-5 py-2 border border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors"
                     >
                         <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -478,7 +478,7 @@ export default function Page() {
         if (product.post_status !== "Publish") {
             return (
                 <div
-                    className="flex w-56 items-center justify-center gap-2 px-5 py-2 border border-[#1d76bc] text-[#1d76bc] rounded-sm"
+                    className="flex w-56 items-center justify-center gap-2 px-5 py-2 border border-[#1570EF] text-[#1570EF] rounded-sm"
                 >
                     Private
                 </div>
@@ -535,7 +535,7 @@ export default function Page() {
                             e.stopPropagation();
                             router.push(`/product/${product.slug}`);
                         }}
-                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors"
+                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#1570EF] border border-[#1570EF] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors"
                     >
                         Read More
                     </button>
@@ -959,7 +959,7 @@ export default function Page() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-4">{error || "Product not found"}</h2>
                     <button
                         onClick={() => router.back()}
-                        className="px-4 py-2 bg-[#1D76BC] text-white rounded-lg hover:bg-[#1660a0] transition-colors"
+                        className="px-4 py-2 bg-[#1570EF] text-white rounded-lg hover:bg-[#1660a0] transition-colors"
                     >
                         Go Back
                     </button>
@@ -1200,7 +1200,7 @@ export default function Page() {
                                                     setQuantity(selected);
                                                 }
                                             }}
-                                            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1D76BC]"
+                                            className="border border-gray-300 rounded-md px-3 py-1.5 text-sm text-gray-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-[#1570EF]"
                                         >
                                             {[1, 2, 3].map((num) => (
                                                 <option key={num} value={num}>{num}</option>
@@ -1225,7 +1225,7 @@ export default function Page() {
                                                     Please login to join the waitlist
                                                 </p>
                                                 <Link href={`/login/?redirect_to=product/${slug}`}>
-                                                    <button className="px-6 py-3 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660A0] transition-colors">
+                                                    <button className="px-6 py-3 bg-[#1570EF] text-white rounded-md hover:bg-[#1660A0] transition-colors">
                                                         Login to Continue
                                                     </button>
                                                 </Link>
@@ -1244,7 +1244,7 @@ export default function Page() {
                                                     <button
                                                         onClick={handleAddToWaitlist}
                                                         disabled={isAddingToWaitlist}
-                                                        className="px-4 py-2 bg-[#1D76BC] cursor-pointer text-white text-sm rounded-md hover:bg-[#1660A0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 whitespace-nowrap"
+                                                        className="px-4 py-2 bg-[#1570EF] cursor-pointer text-white text-sm rounded-md hover:bg-[#1660A0] disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2 whitespace-nowrap"
                                                     >
                                                         {isAddingToWaitlist ? (
                                                             <>
@@ -1301,7 +1301,7 @@ export default function Page() {
                                             )}
 
                                             {product.post_status !== "Publish" && (
-                                                <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1D76BC]">
+                                                <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1570EF]">
                                                     Private
                                                 </div>
                                             )}

@@ -151,7 +151,7 @@
 //         text-[15px]
 //         leading-[15px]
 //         text-white
-//         bg-[#1D76BC]
+//         bg-[#1570EF]
 //         px-6 py-3
 //         sm:px-6 sm:py-3
 //         md:px-10 md:py-5

@@ -576,7 +576,7 @@ export default function Page() {
             <div className="border-b pb-4">
                 <button
                     onClick={() => toggleFilter(filterKey)}
-                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1D76BC]"
+                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1570EF]"
                 >
                     {title}
                     {openFilters.includes(filterKey) ? (
@@ -597,7 +597,7 @@ export default function Page() {
                                         id={checkboxId}
                                         checked={currentFilterValues.includes(item)}
                                         onChange={() => handleCheckboxChange(item)}
-                                        className="h-4 w-4 text-[#1D76BC] rounded border-gray-300 focus:ring-[#1D76BC]"
+                                        className="h-4 w-4 text-[#1570EF] rounded border-gray-300 focus:ring-[#1570EF]"
                                     />
                                     <label
                                         htmlFor={checkboxId}
@@ -632,7 +632,7 @@ export default function Page() {
             <div className="border-b pb-4">
                 <button
                     onClick={() => toggleFilter(filterKey)}
-                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1D76BC]"
+                    className="flex items-center justify-between w-full text-left font-semibold text-gray-800 hover:text-[#1570EF]"
                 >
                     {title}
                     {openFilters.includes(filterKey) ? (
@@ -653,7 +653,7 @@ export default function Page() {
                                         id={checkboxId}
                                         checked={currentFilterValues.includes(item)}
                                         onChange={() => handleCheckboxChange(item)}
-                                        className="h-4 w-4 text-[#1D76BC] rounded border-gray-300 focus:ring-[#1D76BC] pointer-events-auto"
+                                        className="h-4 w-4 text-[#1570EF] rounded border-gray-300 focus:ring-[#1570EF] pointer-events-auto"
                                     />
                                     <label
                                         htmlFor={checkboxId}
@@ -701,7 +701,7 @@ export default function Page() {
         return (
             <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC] mx-auto"></div>
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1570EF] mx-auto"></div>
                     <p className="mt-4 text-gray-600">Loading...</p>
                 </div>
             </div>
@@ -718,7 +718,7 @@ export default function Page() {
                             {getActiveFilterCount() > 0 && (
                                 <button
                                     onClick={clearFilters}
-                                    className="text-sm text-[#1D76BC] hover:text-[#1660a0]"
+                                    className="text-sm text-[#1570EF] hover:text-[#1660a0]"
                                 >
                                     Clear all
                                 </button>
@@ -775,7 +775,7 @@ export default function Page() {
                                         values.map(value => (
                                             <span
                                                 key={`${key}-${value}`}
-                                                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#1D76BC]/10 text-[#1D76BC] text-sm"
+                                                className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-[#1570EF]/10 text-[#1570EF] text-sm"
                                             >
                                                 {value}
                                                 <button
@@ -789,7 +789,7 @@ export default function Page() {
                                     )}
                                     <button
                                         onClick={clearFilters}
-                                        className="text-sm text-gray-600 hover:text-[#1D76BC]"
+                                        className="text-sm text-gray-600 hover:text-[#1570EF]"
                                     >
                                         Clear all
                                     </button>
@@ -814,7 +814,7 @@ export default function Page() {
                                                     <div className="flex justify-center md:justify-start">
                                                         <Link
                                                             href="/add-device"
-                                                            className="inline-flex items-center justify-center rounded bg-[#1D76BC] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#1660a0]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
+                                                            className="inline-flex items-center justify-center rounded bg-[#1570EF] px-5 py-2 text-sm font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#1660a0]/50 sm:px-4 sm:py-2 sm:text-sm md:px-4 md:py-2 md:text-sm"
                                                         >
                                                             <FaPlus className="me-3" />
                                                             Add New Device
@@ -860,7 +860,7 @@ export default function Page() {
 
                                                         {/* Show Private badge only for admin/shop manager users when product is not published */}
                                                         {product.post_status !== "Publish" && (
-                                                            <div className="absolute sm:top-30 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1D76BC]">
+                                                            <div className="absolute sm:top-30 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1570EF]">
                                                                 Private
                                                             </div>
                                                         )}
@@ -956,7 +956,7 @@ export default function Page() {
                                     {products.length > 0 && (
                                         <button
                                             onClick={clearFilters}
-                                            className="mt-4 text-[#1D76BC] hover:text-[#1660a0] font-medium"
+                                            className="mt-4 text-[#1570EF] hover:text-[#1660a0] font-medium"
                                         >
                                             Clear all filters
                                         </button>
@@ -976,7 +976,7 @@ export default function Page() {
                         {/* {getActiveFilterCount() > 0 && (
                             <button
                                 onClick={clearFilters}
-                                className="text-sm text-[#1D76BC] hover:text-[#1660a0]"
+                                className="text-sm text-[#1570EF] hover:text-[#1660a0]"
                             >
                                 Clear all
                             </button>
@@ -1008,10 +1008,10 @@ export default function Page() {
                 <Drawer
                     // title={
                     //     <div className="flex items-center space-x-2">
-                    //         <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+                    //         <PiShoppingCartThin className="text-[#1570EF]" size={20} />
                     //         <span className="text-lg font-semibold">Your Cart</span>
                     //         {cartCount > 0 && (
-                    //             <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+                    //             <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
                     //                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
                     //             </span>
                     //         )}
@@ -1025,7 +1025,7 @@ export default function Page() {
                 >
                     {cartLoading ? (
                         <div className="flex flex-col items-center justify-center h-full py-12">
-                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC]"></div>
+                            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1570EF]"></div>
                             <p className="mt-4 text-gray-500">Loading cart...</p>
                         </div>
                     ) : cartItems.length === 0 ? (
@@ -1037,7 +1037,7 @@ export default function Page() {
                             </p>
                             {/* <button
                                 onClick={handleContinueShopping}
-                                className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
+                                className="px-6 py-2 bg-[#1570EF] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                             >
                                 Continue
                             </button> */}
@@ -1076,7 +1076,7 @@ export default function Page() {
                                                 {/* Product Details */}
                                                 <div className="flex-1 min-w-0">
                                                     <h4
-                                                        className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
+                                                        className="text-sm font-medium text-gray-900 truncate hover:text-[#1570EF] cursor-pointer transition-colors"
                                                         onClick={() => productSlug && router.push(`/product/${productSlug}`)}
                                                     >
                                                         {productName}
@@ -1123,14 +1123,14 @@ export default function Page() {
                                      */}
                                      <button
                                         onClick={handleCart}
-                                        className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
+                                        className="w-full py-2.5 border-2 cursor-pointer border-[#1570EF] text-[#1570EF] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
                                         View Cart
                                     </button>
                                     <button
                                         onClick={handleCheckout}
                                         disabled={cartUpdating}
-                                        className="w-full py-3 cursor-pointer bg-[#1D76BC] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="w-full py-3 cursor-pointer bg-[#1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
                                     </button>

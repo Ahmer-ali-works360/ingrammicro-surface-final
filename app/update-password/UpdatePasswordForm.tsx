@@ -90,7 +90,7 @@ export default function UpdatePasswordForm() {
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Invalid Reset Link</h1>
             <p className="text-gray-600 mb-6">This password reset link is invalid or has expired.</p>
             <a href="/password-reset"
-              className="inline-block rounded-md bg-[#1D76BC] px-6 py-3 font-semibold text-white hover:bg-[#1660a0]">
+              className="inline-block rounded-md bg-[#1570EF] px-6 py-3 font-semibold text-white hover:bg-[#1660a0]">
               Request New Link
             </a>
           </div>
@@ -153,7 +153,7 @@ export default function UpdatePasswordForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-[#1D76BC] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#41abd6] disabled:opacity-50"
+              className="w-full rounded-md bg-[#1570EF] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#41abd6] disabled:opacity-50"
             >
               {loading ? "Updating..." : "Update Password"}
             </button>

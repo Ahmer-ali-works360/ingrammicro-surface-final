@@ -215,7 +215,7 @@ export default function Page() {
                             onClick={handleSubmit}
                             disabled={submitting}
                             className="px-6 py-2 rounded-xl text-white cursor-pointer"
-                            style={{ backgroundColor: "#1D76BC" }}
+                            style={{ backgroundColor: "#1570EF" }}
                         >
                             {submitting ? "Submitting..." : "Submit"}
                         </button>

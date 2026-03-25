@@ -996,7 +996,7 @@ const renderAllProducts = () => {
                                 <TableCell className="border-l">
                                     <div className="flex items-center justify-between">
                                         <div>
-                                            {order.tracking ? (order.tracking_link ? <Link href={order.tracking_link} target="_blank" className="text-[#1D76BC] underline font-bold cursor-pointer">{order.tracking}</Link> : <span>{order.tracking}</span>) : <span className="text-gray-500">No tracking available</span>}
+                                            {order.tracking ? (order.tracking_link ? <Link href={order.tracking_link} target="_blank" className="text-[#1570EF] underline font-bold cursor-pointer">{order.tracking}</Link> : <span>{order.tracking}</span>) : <span className="text-gray-500">No tracking available</span>}
                                         </div>
                                         {canEditTracking && (
                                             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
@@ -1034,7 +1034,7 @@ const renderAllProducts = () => {
                             <TableRow>
                                 <TableCell className="font-semibold">Return Tracking</TableCell>
                                 <TableCell className="border-l">
-                                    {order.return_tracking ? (order.return_tracking_link ? <Link href={order.return_tracking_link} target="_blank" className="text-[#1D76BC] underline font-bold cursor-pointer">{order.return_tracking}</Link> : <span>{order.return_tracking}</span>) : <span className="text-gray-500">No return tracking available</span>}
+                                    {order.return_tracking ? (order.return_tracking_link ? <Link href={order.return_tracking_link} target="_blank" className="text-[#1570EF] underline font-bold cursor-pointer">{order.return_tracking}</Link> : <span>{order.return_tracking}</span>) : <span className="text-gray-500">No return tracking available</span>}
                                 </TableCell>
                             </TableRow>
                         </TableBody>

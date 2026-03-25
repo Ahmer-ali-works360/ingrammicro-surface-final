@@ -254,7 +254,7 @@ export const emailTemplates = {
                                 <table border="0" cellspacing="0" cellpadding="0" align="center">
                                     <tr>
                                         <td align="center"
-                                            style="background-color:#1D76BC; padding:12px 22px; border-radius:6px;">
+                                            style="background-color:#1570EF; padding:12px 22px; border-radius:6px;">
                                             <a href="https://ingrammicro-surface-final.vercel.app/pending-users${userData.formId ? `?formId=${userData.formId}` : ''}"
                                                 style="color:#ffffff; text-decoration:none; font-size:20px; font-family:Arial, sans-serif; display:inline-block;">
                                                 Review Pending User(s)
@@ -476,7 +476,7 @@ export const emailTemplates = {
                                         Click the link below to reset your password:
                                     </p>
                                     <a href="${data.resetLink}"
-                                        style="color:#1D76BC; font-size:14px; text-decoration:underline;">
+                                        style="color:#1570EF; font-size:14px; text-decoration:underline;">
                                         Reset Password
                                     </a>
                                 </td>
@@ -648,7 +648,7 @@ export const emailTemplates = {
     <p style="color:#475569; margin:0 0 24px; font-size:14px;">Placed On ${formatEmailDate(orderDate)}</p>
 
     <p style="font-size:15px; line-height:1.6; color:#334155; margin:0;">
-    Hello <strong style="color:#1D76BC;">${customerName}</strong>,<br>
+    Hello <strong style="color:#1570EF;">${customerName}</strong>,<br>
     Thank you for your order from <strong>ingrammicro-surface.com</strong>.
     Once your order is approved, you will receive a confirmation email after which
     it will be shipped to your customer.
@@ -1006,7 +1006,7 @@ export const emailTemplates = {
     <td style="padding:0 30px 30px; text-align:center;">
     <p style="margin:0;">
     <a href="https://ingrammicro-surface-final.vercel.app/order-details/${orderNumber}"
-    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+    style="color:#1570EF; font-size:15px; text-decoration:underline;">
     View Order
     </a>
     </p>
@@ -2416,7 +2416,7 @@ export const emailTemplates = {
     <tr>
     <td style="padding:10px 30px 30px; text-align:center;">
     <a href="${fileLink}"
-    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+    style="color:#1570EF; font-size:15px; text-decoration:underline;">
     View Return Label
     </a>
     </td>
@@ -2717,7 +2717,7 @@ export const emailTemplates = {
 <tr>
 <td style="padding:10px 30px 30px; text-align:center;">
 <a href="${fileLink}"
-style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+style="color:#1570EF; font-size:15px; text-decoration:underline;">
 View Return Label
 </a>
 </td>
@@ -2912,7 +2912,7 @@ View Return Label
     <tr>
     <td style="padding:10px 30px 30px; text-align:center;">
     <a href="${fileLink}"
-    style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+    style="color:#1570EF; font-size:15px; text-decoration:underline;">
     View Return Label
     </a>
     </td>
@@ -3062,7 +3062,7 @@ View Return Label
             <tr>
                 <td style="padding:10px; border:1px solid #ddd;">
                     ${product.slug
-                        ? `<a href="${productLink}" style="color:#1D76BC; text-decoration:none;">${product.name}</a>`
+                        ? `<a href="${productLink}" style="color:#1570EF; text-decoration:none;">${product.name}</a>`
                         : product.name
                     }
                 </td>
@@ -3140,7 +3140,7 @@ View Return Label
 
                         <!-- HEADER -->
                         <tr>
-                            <td style="background:#1D76BC; padding:30px; text-align:center;">
+                            <td style="background:#1570EF; padding:30px; text-align:center;">
                                 <h1 style="color:#ffffff; margin:0; font-size:26px;">
                                     Overdue Reminder Notification Order #${orderNumber} (${companyName}) | Ingram Micro Surface
                                 </h1>
@@ -3178,7 +3178,7 @@ View Return Label
                             <td style="padding:0 30px 30px;">
                                 <div style="text-align:center; margin:30px 0;">
                                     <a href="${fileLink}" style="
-                                        background:#1D76BC;
+                                        background:#1570EF;
                                         color:#ffffff;
                                         padding:14px 34px;
                                         text-decoration:none;
@@ -3739,7 +3739,7 @@ View Return Label
 <tr>
 <td style="padding:0px 30px 35px 30px; text-align:center;">
 <a href="${process.env.NEXT_PUBLIC_APP_URL}/login"
-style="color:#1D76BC; font-size:15px; text-decoration:underline;">
+style="color:#1570EF; font-size:15px; text-decoration:underline;">
 Login to Portal
 </a>
 </td>

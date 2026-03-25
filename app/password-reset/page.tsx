@@ -80,7 +80,7 @@ export default function Page() {
 
       {/* Left Info Panel */}
       
-        <div className="flex lg:flex bg-linear-to-b from-[#1D76BC] to-[#1660a0] text-white lg:pl-10 2xl:pl-20 items-center">
+        <div className="flex lg:flex bg-linear-to-b from-[#1570EF] to-[#1660a0] text-white lg:pl-10 2xl:pl-20 items-center">
           <div className="max-w-2xl space-y-5 2xl:space-y-10">
           <div>
               <h2 className="lg:text-[32px] 2xl:text-[40px] font-semibold mb-4">Welcome to Ingram Micro and Microsoft Surface</h2>

@@ -487,8 +487,8 @@ export default function Navbar() {
                           href={finalHref}
                           className={classNames(
                             isActive
-                              ? 'text-[#1D76BC]'
-                              : 'text-black hover:text-[#1D76BC]',
+                              ? 'text-[#1570EF]'
+                              : 'text-black hover:text-[#1570EF]',
                             'rounded-md px-3 py-2 text-sm font-normal transition-colors duration-300 ease-in-out'
                           )}
                         >
@@ -680,7 +680,7 @@ export default function Navbar() {
                               </div>
                               <button
                                 type="submit"
-                                className="ml-2 px-3 py-1 bg-[#1D76BC] text-white rounded-md text-sm font-medium hover:bg-[#1660a0] transition-colors"
+                                className="ml-2 px-3 py-1 bg-[#1570EF] text-white rounded-md text-sm font-medium hover:bg-[#1660a0] transition-colors"
                               >
                                 Search
                               </button>
@@ -715,7 +715,7 @@ export default function Navbar() {
                                             </div>
                                           )}
                                           <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-medium text-gray-900 group-hover:text-[#1D76BC]">
+                                            <p className="text-sm font-medium text-gray-900 group-hover:text-[#1570EF]">
                                               {product.product_name}
                                             </p>
                                             <p className="text-xs text-gray-500">
@@ -742,7 +742,7 @@ export default function Navbar() {
                                       <div className="border-t border-gray-100 pt-2 mt-2">
                                         <button
                                           onClick={handleSeeAllClick}
-                                          className="w-full text-center text-sm cursor-pointer text-[#1D76BC] hover:text-[#1660a0] font-medium py-2"
+                                          className="w-full text-center text-sm cursor-pointer text-[#1570EF] hover:text-[#1660a0] font-medium py-2"
                                         >
                                           See all {totalProducts} products
                                         </button>
@@ -984,8 +984,8 @@ export default function Navbar() {
                       href={finalHref}
                       className={classNames(
                         isActive
-                          ? 'text-[#1D76BC]'
-                          : 'text-black hover:text-[#1D76BC]',
+                          ? 'text-[#1570EF]'
+                          : 'text-black hover:text-[#1570EF]',
                         'block rounded-md px-3 py-2 text-base font-medium transition-colors duration-300 ease-in-out'
                       )}
                     >
@@ -1003,10 +1003,10 @@ export default function Navbar() {
       <Drawer
           // title={
           //     <div className="flex items-center space-x-2">
-          //         <PiShoppingCartThin className="text-[#1D76BC]" size={20} />
+          //         <PiShoppingCartThin className="text-[#1570EF]" size={20} />
           //         <span className="text-lg font-semibold">Your Cart</span>
           //         {cartCount > 0 && (
-          //             <span className="bg-[#1D76BC] text-white text-xs px-2 py-1 rounded-full">
+          //             <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
           //                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
           //             </span>
           //         )}
@@ -1020,7 +1020,7 @@ export default function Navbar() {
       >
           {cartLoading ? (
               <div className="flex flex-col items-center justify-center h-full py-12">
-                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1D76BC]"></div>
+                  <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#1570EF]"></div>
                   <p className="mt-4 text-gray-500">Loading cart...</p>
               </div>
           ) : cartItems.length === 0 ? (
@@ -1032,7 +1032,7 @@ export default function Navbar() {
                   </p>
                   {/* <button
                       onClick={handleContinueShopping}
-                      className="px-6 py-2 bg-[#1D76BC] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
+                      className="px-6 py-2 bg-[#1570EF] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                   >
                       Continue
                   </button> */}
@@ -1068,7 +1068,7 @@ export default function Navbar() {
 
                                       <div className="flex-1 min-w-0">
                                           <h4
-                                              className="text-sm font-medium text-gray-900 truncate hover:text-[#1D76BC] cursor-pointer transition-colors"
+                                              className="text-sm font-medium text-gray-900 truncate hover:text-[#1570EF] cursor-pointer transition-colors"
                                               onClick={() => productSlug && router.push(`/product/${productSlug}`)}
                                           >
                                               {productName}
@@ -1112,14 +1112,14 @@ export default function Navbar() {
                           )} */}
                           <button
                               onClick={handleCart}
-                              className="w-full py-2.5 border-2 cursor-pointer border-[#1D76BC] text-[#1D76BC] font-medium hover:bg-gray-50 transition-colors rounded-md"
+                              className="w-full py-2.5 border-2 cursor-pointer border-[#1570EF] text-[#1570EF] font-medium hover:bg-gray-50 transition-colors rounded-md"
                           >
                               View Cart
                           </button>
                           <button
                               onClick={handleCheckout}
                               disabled={cartUpdating}
-                              className="w-full py-3 cursor-pointer bg-[#1D76BC] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                              className="w-full py-3 cursor-pointer bg-[#1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
                           >
                               {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
                           </button>
@@ -1170,7 +1170,7 @@ export default function Navbar() {
                     </div>
                     <button
                       type="submit"
-                      className="py-2 px-3 bg-[#1D76BC] text-white rounded-lg text-base font-medium hover:bg-[#1660a0] transition-colors"
+                      className="py-2 px-3 bg-[#1570EF] text-white rounded-lg text-base font-medium hover:bg-[#1660a0] transition-colors"
                     >
                       Search
                     </button>
@@ -1217,7 +1217,7 @@ export default function Navbar() {
                                     </div>
                                   )}
                                   <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-gray-900 truncate group-hover:text-[#1D76BC]">
+                                    <p className="text-sm font-medium text-gray-900 truncate group-hover:text-[#1570EF]">
                                       {product.product_name}
                                     </p>
                                     <p className="text-xs text-gray-500">
@@ -1240,7 +1240,7 @@ export default function Navbar() {
                             <div className="border-t border-gray-100 pt-2 mt-2">
                               <button
                                 onClick={handleSeeAllClick}
-                                className="w-full text-center cursor-pointer text-sm text-[#1D76BC] hover:text-[#1660a0] font-medium py-2"
+                                className="w-full text-center cursor-pointer text-sm text-[#1570EF] hover:text-[#1660a0] font-medium py-2"
                               >
                                 See all {totalProducts} products
                               </button>

@@ -481,7 +481,7 @@ if (isLoading) {
     const inputClass = (field: string) =>
         `w-full rounded-lg border px-4 py-3 text-gray-900 focus:outline-none transition text-sm ${errors[field]
             ? "border-red-500 focus:ring-2 focus:ring-red-300"
-            : "border-gray-300 focus:border-[#1D76BC] focus:ring-2 focus:ring-[#1D76BC]/30"
+            : "border-gray-300 focus:border-[#1570EF] focus:ring-2 focus:ring-[#1570EF]/30"
         }`;
 
     return (
@@ -566,21 +566,21 @@ if (isLoading) {
                                 </div>
                             ) : loadingProducts ? (
                                 <div className="flex items-center border border-gray-200 rounded-lg px-4 py-3">
-                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#1D76BC] mr-2"></div>
+                                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#1570EF] mr-2"></div>
                                     <span className="text-sm text-gray-500">Loading product...</span>
                                 </div>
                             ) : (
                                 <div className="space-y-3">
                                     {/* Product radio button */}
                                     {products.length > 0 && (
-                                        <label className={`flex items-start space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 transition ${formData.deviceType === "product" ? "border-[#1D76BC] bg-blue-50" : "border-gray-300"}`}>
+                                        <label className={`flex items-start space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 transition ${formData.deviceType === "product" ? "border-[#1570EF] bg-blue-50" : "border-gray-300"}`}>
                                             <input
                                                 type="radio"
                                                 name="deviceType"
                                                 value="product"
                                                 checked={formData.deviceType === "product"}
                                                 onChange={handleChange}
-                                                className="h-4 w-4 text-[#1D76BC] focus:ring-[#1D76BC] mt-1 shrink-0"
+                                                className="h-4 w-4 text-[#1570EF] focus:ring-[#1570EF] mt-1 shrink-0"
                                             />
                                             <div className="flex-1 min-w-0">
                                                 <span className="font-medium text-gray-700 text-sm block">
@@ -594,14 +594,14 @@ if (isLoading) {
                                     )}
 
                                     {/* Other Product radio button */}
-                                    <label className={`flex items-start space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 transition ${formData.deviceType === "other" ? "border-[#1D76BC] bg-blue-50" : "border-gray-300"}`}>
+                                    <label className={`flex items-start space-x-3 cursor-pointer p-3 border rounded-lg hover:bg-gray-50 transition ${formData.deviceType === "other" ? "border-[#1570EF] bg-blue-50" : "border-gray-300"}`}>
                                         <input
                                             type="radio"
                                             name="deviceType"
                                             value="other"
                                             checked={formData.deviceType === "other"}
                                             onChange={handleChange}
-                                            className="h-4 w-4 text-[#1D76BC] focus:ring-[#1D76BC] mt-1 shrink-0"
+                                            className="h-4 w-4 text-[#1570EF] focus:ring-[#1570EF] mt-1 shrink-0"
                                         />
                                         <div className="flex-1 min-w-0">
                                             <span className="font-medium text-gray-700 text-sm">Other Product</span>
@@ -736,7 +736,7 @@ if (isLoading) {
                     <div className="flex justify-center pt-4">
                         <button
                             type="submit"
-                            className="w-48 rounded-lg bg-[#1D76BC] cursor-pointer px-6 py-2.5 text-base font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-[#1D76BC]/50"
+                            className="w-48 bg-[#1570EF] cursor-pointer px-12 py-3 text-base font-semibold text-white transition-all duration-300 hover:bg-[#1660a0] hover:shadow-lg rounded-md border focus:outline-none focus:ring-4 focus:ring-[#1570EF]/50"
                         >
                             Submit
                         </button>

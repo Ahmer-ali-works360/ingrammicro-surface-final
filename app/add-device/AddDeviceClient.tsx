@@ -1093,7 +1093,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                 type="button"
                                 onClick={() => handleInputChange(field, option)}
                                 className={`px-3 py-1.5 text-sm rounded-md cursor-pointer transition-colors ${formData[field] === option
-                                    ? "bg-[#1D76BC] text-white border border-[#1660a0]"
+                                    ? "bg-[#1570EF] text-white border border-[#1660a0]"
                                     : "bg-gray-100 text-gray-700 hover:bg-gray-200 border border-transparent"
                                     }`}
                             >
@@ -1113,7 +1113,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                 handleCustomInputChange(customField, e.target.value)
                             }
                             className="w-full px-4 py-2 border border-gray-300 rounded-md
-                focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                         />
                         <p className="text-xs text-gray-500 mt-1">
                             Custom value will be saved when you submit the form
@@ -1128,7 +1128,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
                 <div className="text-center">
-                    <Loader2 className="h-8 w-8 animate-spin text-[#1D76BC] mx-auto" />
+                    <Loader2 className="h-8 w-8 animate-spin text-[#1570EF] mx-auto" />
                     <p className="mt-4 text-gray-600">Loading product data...</p>
                 </div>
             </div>
@@ -1201,7 +1201,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                                     accept="image/*"
                                                     onChange={(e) => handleImageUpload(e, 'primary')}
                                                 />
-                                                <span className="text-[#1D76BC] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
+                                                <span className="text-[#1570EF] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
                                                     Click to upload
                                                 </span>
                                             </label>
@@ -1234,7 +1234,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                                 multiple
                                                 onChange={(e) => handleImageUpload(e, 'additional')}
                                             />
-                                            <span className="text-[#1D76BC] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
+                                            <span className="text-[#1570EF] font-medium cursor-pointer hover:text-[#1660a0] transition-colors">
                                                 Click to upload
                                             </span>
                                         </label>
@@ -1291,7 +1291,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     placeholder="Enter product name"
                                     value={formData.productName}
                                     onChange={(e) => handleInputChange('productName', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                     required
                                 />
                             </div>
@@ -1306,7 +1306,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     placeholder="Enter SKU"
                                     value={formData.sku}
                                     onChange={(e) => handleInputChange('sku', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                     required
                                 />
                             </div>
@@ -1340,7 +1340,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     placeholder="Enter technologies (comma separated)"
                                     value={formData.technologies}
                                     onChange={(e) => handleInputChange('technologies', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">Example: Wi-Fi 6, Bluetooth 5.3, vPro</p>
                             </div>
@@ -1351,7 +1351,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                 <select
                                     value={formData.inventoryType}
                                     onChange={(e) => handleInputChange('inventoryType', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 >
                                     <option value="">Select inventory type</option>
                                     {inventoryTypes.map((type) => (
@@ -1368,7 +1368,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     placeholder="Enter total inventory"
                                     value={formData.totalInventory}
                                     onChange={(e) => handleInputChange('totalInventory', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                             </div>
 
@@ -1380,7 +1380,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     placeholder="Enter stock quantity"
                                     value={formData.stockQuantity}
                                     onChange={(e) => handleInputChange('stockQuantity', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                             </div>
 
@@ -1391,7 +1391,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     type="date"
                                     value={formData.currentDate}
                                     onChange={(e) => handleInputChange('currentDate', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                             </div>
 
@@ -1407,7 +1407,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                                 value={option}
                                                 checked={formData.copilotPC === option}
                                                 onChange={(e) => handleRadioChange('copilotPC', e.target.value)}
-                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                                className="text-[#1570EF] focus:ring-[#1660a0]"
                                             />
                                             <span className="text-gray-700">{option}</span>
                                         </label>
@@ -1427,7 +1427,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                                 value={option}
                                                 checked={formData.fiveGEnabled === option}
                                                 onChange={(e) => handleRadioChange('fiveGEnabled', e.target.value)}
-                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                                className="text-[#1570EF] focus:ring-[#1660a0]"
                                             />
                                             <span className="text-gray-700">{option}</span>
                                         </label>
@@ -1447,7 +1447,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                                 value={option}
                                                 checked={formData.postStatus === option}
                                                 onChange={(e) => handleRadioChange('postStatus', e.target.value)}
-                                                className="text-[#1D76BC] focus:ring-[#1660a0]"
+                                                className="text-[#1570EF] focus:ring-[#1660a0]"
                                             />
                                             <span className="text-gray-700">{option}</span>
                                         </label>
@@ -1466,7 +1466,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     value={formData.publishDate}
                                     onChange={(e) => handleInputChange("publishDate", e.target.value)}
                                     className="w-full px-4 py-2 border border-gray-300 rounded-md
-                            focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                            focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                             </div>
 
@@ -1478,7 +1478,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                                     rows={4}
                                     value={formData.description}
                                     onChange={(e) => handleInputChange('description', e.target.value)}
-                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1D76BC]"
+                                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#1570EF]"
                                 />
                                 <p className="text-xs text-gray-500 mt-1">Add details like condition, highlights, notes.</p>
                             </div>
@@ -1489,7 +1489,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
                             <button
                                 type="submit"
                                 disabled={isFormLoading}
-                                className={`px-12 py-3 bg-[#1D76BC] text-white font-medium rounded-md 
+                                className={`px-12 py-3 bg-[#1570EF] text-white font-medium rounded-md 
                   focus:outline-none focus:ring-2 focus:ring-[#1660a0] focus:ring-offset-2
                   transition-colors 
                   ${isFormLoading ? 'cursor-not-allowed opacity-50' : 'hover:bg-[#1660a0] cursor-pointer'}`}

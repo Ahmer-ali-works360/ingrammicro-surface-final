@@ -987,7 +987,7 @@ export default function LogsPage() {
                         <Table>
                             <TableHeader>
                                 {table.getHeaderGroups().map((headerGroup) => (
-                                    <TableRow key={headerGroup.id} className="bg-[#1D76BC] hover:bg-[#1660a0]">
+                                    <TableRow key={headerGroup.id} className="bg-[#1570EF] hover:bg-[#1660a0]">
                                         {headerGroup.headers.map((header) => {
                                             return (
                                                 <TableHead
@@ -1034,7 +1034,7 @@ export default function LogsPage() {
                                         >
                                             {isLoading ? (
                                                 <div className="flex flex-col items-center justify-center py-8">
-                                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1D76BC] mb-4"></div>
+                                                    <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#1570EF] mb-4"></div>
                                                     <p className="text-gray-600">Loading logs...</p>
                                                     <p className="text-gray-400 text-sm mt-1">Please wait while we fetch your data.</p>
                                                 </div>
