@@ -186,7 +186,7 @@ export default function LoginForm() {
       userData: { name: userData?.name, isVerified: userData?.isVerified, loginCount: userData?.login_count }
     }, userId, source);
 
-    toast.success("Login successful!", { style: { background: "black", color: "white" } });
+    // toast.success("Login successful!", { style: { background: "black", color: "white" } });
 
     const redirectTo = searchParams.get("redirect_to");
     const redirectPath = redirectTo ? `/${redirectTo}` : "/";

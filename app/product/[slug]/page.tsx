@@ -511,7 +511,7 @@ export default function Page() {
                     disabled={isUpdating && addingProductId === product.id}
                     className="flex items-center justify-center gap-2 px-9 py-2 cursor-pointer border bg-[#1570EF] text-white rounded-sm hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
                 >
-                    <ShoppingCart className="h-4 w-4" />
+                    {/* <ShoppingCart className="h-4 w-4" /> */}
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                 </button>
             );
@@ -560,22 +560,23 @@ export default function Page() {
         const cartItem = getCartItemForProduct(product.id);
 
         if (isProductInCart) {
-            return (
-                <div className="space-y-2">
-                    <button
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleRemoveFromCart(product.id);
-                        }}
-                        disabled={isUpdating}
-                        className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-red-500 border border-red-500 rounded-sm cursor-pointer hover:bg-red-500 hover:text-white transition-colors disabled:opacity-50"
-                    >
-                        Remove
-                    </button>
-                </div>
-            );
-        } else {
+    return (
+        <div className="space-y-2 flex justify-center">
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
+                className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#1570EF] hover:text-white hover:border-[#1570EF] transition-colors flex items-center justify-center gap-2"
+            >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+                Added to Cart
+            </button>
+        </div>
+    );
+} else {
             return (
                 <button
                     onClick={(e) => {
@@ -584,7 +585,7 @@ export default function Page() {
                         handleAddToCart(product.id);
                     }}
                     disabled={isUpdating && addingProductId === product.id}
-                    className="sm:px-8 px-5 sm:py-2.5 py-1.5 text-sm font-medium text-[#1d76bc] border border-[#1d76bc] rounded-sm cursor-pointer hover:bg-[#1660a0] hover:text-white transition-colors disabled:opacity-50"
+                    className="sm:px-6 px-3 sm:py-2.5 py-1.5 text-sm font-medium text-[#4e5050] border border-[#484a4a] rounded-sm cursor-pointer hover:bg-[#1570EF] hover:text-white hover:border-[#1570EF] transition-colors disabled:opacity-50"
                 >
                     {isUpdating && addingProductId === product.id ? 'Adding...' : 'Add to Cart'}
                 </button>
@@ -1152,7 +1153,7 @@ export default function Page() {
                                             <img
                                                 src="/5g-logo.png"
                                                 alt="5G Enabled"
-                                                className="w-10 h-10 object-contain"
+                                                className="w-8 h-8 object-contain"
                                             />
                                         </div>
                                     )}
@@ -1282,7 +1283,7 @@ export default function Page() {
                                 }
                                 return (
                                     <Link href={`/product/${product.slug}`} key={product.id}>
-                                        <div className="bg-gray-50 border border-gray-300 rounded-lg sm:py-5 p-3 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col">
+                                        <div className="bg-white border border-gray-300 sm:py-3 p-2 overflow-hidden hover:shadow-md transition-shadow duration-300 group relative h-full flex flex-col">
                                             {product.stock_quantity == 0 && (
                                                 <div className="absolute top-4 left-0 z-10 flex items-center gap-1 bg-red-500 text-white text-sm font-semibold px-4 py-2 rounded-br-full rounded-tr-full">
                                                     Out of stock
@@ -1294,23 +1295,23 @@ export default function Page() {
                                                     <img
                                                         src="/5g-logo.png"
                                                         alt="5G Enabled"
-                                                        className="w-10 h-10 object-contain"
+                                                        className="w-8 h-8 object-contain"
                                                     />
                                                 </div>
                                             )}
 
                                             {product.post_status !== "Publish" && (
-                                                <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#41abd6]">
+                                                <div className="absolute sm:top-45 sm:right-3 top-5 z-10 flex items-center gap-1 text-xs text-white font-semibold px-3 py-1 rounded-full rounded-tr-full bg-[#1D76BC]">
                                                     Private
                                                 </div>
                                             )}
 
-                                            <div className="flex items-center justify-center transition-colors h-48 min-h-48 sm:mt-0 -mt-12 relative">
+                                            <div className="flex items-center justify-center transition-colors h-32 min-h-[8rem] sm:mt-0 -mt-5 relative">
                                                 {product.thumbnail ? (
                                                     <img
                                                         src={product.thumbnail}
                                                         alt={product.product_name}
-                                                        className="object-contain h-full w-full p-2"
+                                                        className="object-contain h-full w-full p-2 scale-150"
                                                     />
                                                 ) : (
                                                     <div className="flex items-center justify-center h-full w-full text-gray-400">
@@ -1321,7 +1322,7 @@ export default function Page() {
                                                 )}
                                             </div>
 
-                                            <div className="flex flex-col grow space-y-2 text-center sm:mt-4 -mt-7">
+                                            <div className="flex flex-col grow space-y-2 text-center sm:mt-2 -mt-2">
                                                 <h3 className="text-gray-800 sm:text-md text-sm line-clamp-1 min-h-14 flex items-center justify-center">
                                                     {product.product_name}
                                                 </h3>

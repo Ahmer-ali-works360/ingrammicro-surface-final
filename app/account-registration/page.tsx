@@ -103,7 +103,9 @@ export default function Page() {
   };
 
   return (
-    <div className="w-full flex-1 grid grid-cols-1 lg:grid-cols-2">
+   <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh-145px)]">
+      
 
       {/* Left Info Panel */}
       {/* <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-6 lg:p-8 flex flex-col justify-center overflow-hidden">
@@ -239,6 +241,7 @@ export default function Page() {
         </div>
       </div>
 
+    </div>
     </div>
   );
 }

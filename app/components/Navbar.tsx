@@ -812,12 +812,7 @@ export default function Navbar() {
                               <Link
                                 key={item.name}
                                 href={item.href}
-                                className={classNames(
-                                  isActive
-                                    ? 'bg-[#1D76BC] text-white'
-                                    : 'text-gray-700 hover:bg-gray-100',
-                                  'block px-4 py-2 text-sm transition-colors duration-200'
-                                )}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                                 onClick={() => setIsUserMenuOpen(false)}
                                 onMouseEnter={handleDropdownMouseEnter}
                               >
@@ -833,12 +828,7 @@ export default function Navbar() {
                               <Link
                                 key={item.name}
                                 href={item.href}
-                                className={classNames(
-                                  isActive
-                                    ? 'bg-[#1D76BC] text-white'
-                                    : 'text-gray-700 hover:bg-gray-100',
-                                  'block px-4 py-2 text-sm transition-colors duration-200'
-                                )}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                                 onClick={() => setIsUserMenuOpen(false)}
                                 onMouseEnter={handleDropdownMouseEnter}
                               >
@@ -929,12 +919,7 @@ export default function Navbar() {
                               <Link
                                 key={item.name}
                                 href={item.href!}
-                                className={classNames(
-                                  isActive
-                                    ? 'bg-[#1D76BC] text-white'
-                                    : 'text-gray-700 hover:bg-gray-100',
-                                  'block px-4 py-2 text-sm transition-colors duration-200'
-                                )}
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                                 onClick={() => setIsUserMenuOpen(false)}
                               >
                                 {item.name}
@@ -948,12 +933,7 @@ export default function Navbar() {
                               <Link
                                 key={item.name}
                                 href={item.href}
-                                className={classNames(
-                                  isActive
-                                    ? 'bg-[#1D76BC] text-white'
-                                    : 'text-gray-700 hover:bg-gray-100',
-                                  'block px-4 py-2 text-sm transition-colors duration-200'
-                                )}
+                               className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-200"
                                 onClick={() => setIsUserMenuOpen(false)}
                               >
                                 {item.name}

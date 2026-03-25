@@ -5,7 +5,7 @@ export default function Footer() {
         style={{
           fontFamily: "var(--font-inter), 'Inter', sans-serif",
           fontWeight: "400",
-          fontSize: "clamp(10px, 1.5vw, 12px)",
+          fontSize: "clamp(12px, 1.5vw, 14px)",
           lineHeight: "28px",
           letterSpacing: "-0.5px",
           color: "#9ca3af",
