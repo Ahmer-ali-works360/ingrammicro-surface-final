@@ -24,8 +24,8 @@ export default function StepCard({ icon, title, description }: StepCardProps) {
           style={{
             fontFamily: "var(--font-inter), 'Inter', sans-serif",
             fontWeight: "700",
-            fontSize: "22.75px",
-            lineHeight: "38.85px",
+            fontSize: "18px",
+            lineHeight: "22px",
             letterSpacing: "-0.69px",
             color: "#111827",
           }}
@@ -36,8 +36,8 @@ export default function StepCard({ icon, title, description }: StepCardProps) {
           style={{
             fontFamily: "var(--font-inter), 'Inter', sans-serif",
             fontWeight: "400",
-            fontSize: "16.2px",
-            lineHeight: "24.3px",
+            fontSize: "16px",
+            lineHeight: "24px",
             letterSpacing: "-0.69px",
             color: "#4B5563",
             maxWidth: "420px",

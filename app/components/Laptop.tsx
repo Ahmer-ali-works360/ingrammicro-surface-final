@@ -144,7 +144,7 @@ export default function Laptop() {
   style={{
     fontFamily: "var(--font-inter), 'Inter', sans-serif",
     fontWeight: "500",
-    fontSize: "clamp(20px, 4vw, 46px)",
+    fontSize: "clamp(18px, 4vw, 36px)",
     lineHeight: "1",
     letterSpacing: "0",
     color: "#111827",
@@ -174,7 +174,16 @@ export default function Laptop() {
                             />
                         </div>
                         <div className="text-center">
-                            <h2 className="mb-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
+                            <h2 style={{
+    fontFamily: "var(--font-inter), 'Inter', sans-serif",
+    fontWeight: "500",
+    fontSize: "clamp(16px, 4vw, 26px)",
+    lineHeight: "1",
+    letterSpacing: "0",
+    color: "#111827",
+  }}
+  className="text-center mb-4" 
+                            >
                                 Surface 2-in-1 PCs
                             </h2>
                             <p className="mb-6 text-gray-600">
@@ -213,7 +222,16 @@ export default function Laptop() {
                                 />
                             </div>
                             <div className="text-center">
-                                <h2 className="mb-3 text-2xl font-semibold text-gray-900 sm:text-3xl">
+                                <h2 style={{
+    fontFamily: "var(--font-inter), 'Inter', sans-serif",
+    fontWeight: "500",
+    fontSize: "clamp(16px, 4vw, 26px)",
+    lineHeight: "1",
+    letterSpacing: "0",
+    color: "#111827",
+  }}
+  className="text-center mb-4" 
+                            >
                                     Surface Laptops
                                 </h2>
                                 <p className="mb-6 text-gray-600">

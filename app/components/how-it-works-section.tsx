@@ -78,7 +78,7 @@ export default function HowItWorks() {
   style={{
     fontFamily: "var(--font-inter), 'Inter', sans-serif",
     fontWeight: "500",
-    fontSize: "clamp(20px, 4vw, 46px)",
+    fontSize: "clamp(18px, 4vw, 36px)",
     lineHeight: "1",
     letterSpacing: "0",
     color: "#111827",

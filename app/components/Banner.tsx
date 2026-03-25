@@ -198,7 +198,7 @@ export default function Banner() {
           <h1
             style={{
               fontFamily: "var(--font-inter), 'Inter', sans-serif",
-              fontSize: "clamp(28px, 3.5vw, 60px)",
+              fontSize: "clamp(22px, 3.5vw, 40px)",
               fontWeight: "600",
               lineHeight: "1.325",
               letterSpacing: "0",
@@ -215,7 +215,7 @@ export default function Banner() {
           <p
             style={{
               fontFamily: "var(--font-inter), 'Inter', sans-serif", 
-              fontSize: "clamp(14px, 1.8vw, 18px)",
+              fontSize: "clamp(12px, 1.8vw, 16px)",
               fontWeight: "400",
               lineHeight: "1.35",
               letterSpacing: "0.5",
@@ -252,12 +252,12 @@ export default function Banner() {
               backgroundColor: "#1570EF",
               color: "#ffffff",
               fontFamily: "var(--font-inter), 'Inter', sans-serif",
-              fontSize: "18px",
+              fontSize: "16px",
               fontWeight: "600",
-              letterSpacing: "0.2px",
+              letterSpacing: "0.1px",
               lineHeight: "1",
-              padding: "16px 35px",
-              borderRadius: "10px",
+              padding: "16px 25px",
+              borderRadius: "5px",
               textDecoration: "none",
               transition: "background-color 0.2s ease",
               whiteSpace: "nowrap",
