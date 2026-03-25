@@ -108,29 +108,7 @@ export default function Page() {
       
 
       {/* Left Info Panel */}
-      {/* <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-6 lg:p-8 flex flex-col justify-center overflow-hidden">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold mb-3 max-w-xl">
-          Welcome to Ingram Micro and Microsoft Surface
-        </h2>
-        <p className="text-sm lg:text-base text-white/90 mb-6 max-w-md">
-          Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
-        </p>
-
-        <div className="space-y-4 text-sm">
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoPersonAdd /> Register</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Fill out a quick registration form if not registered yet.</div>
-          </div>
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoCheckmarkSharp /> Approval</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-md">Your registration will be approved by the Program Manager.</div>
-          </div>
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><LuLogIn /> Login</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Sign in to your account once it's approved.</div>
-          </div>
-        </div>
-      </div> */}
+      
         <div className="flex lg:flex bg-linear-to-b from-[#1D76BC] to-[#1660a0] text-white lg:pl-10 2xl:pl-20 items-center">
           <div className="max-w-2xl space-y-5 2xl:space-y-10">
           <div>

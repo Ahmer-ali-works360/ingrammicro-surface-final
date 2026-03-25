@@ -75,37 +75,43 @@ export default function Page() {
     };
 
     return (
-        <div className="min-h-screen flex">
+         <div className="flex-1 flex items-center justify-center w-full bg-[#fbfbfd]">
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-[calc(100vh-145px)]">
 
-            {/* ── LEFT PANEL ── */}
-   <div className="bg-gradient-to-b from-[#1D76BC] to-[#1660a0] text-white p-6 lg:p-8 flex flex-col justify-center overflow-hidden">
-        <h2 className="text-2xl lg:text-3xl xl:text-4xl font-semibold mb-3 max-w-xl">
-          Welcome to Ingram Micro and Microsoft Surface
-        </h2>
-        <p className="text-sm lg:text-base text-white/90 mb-6 max-w-md">
-          Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
-        </p>
+      {/* Left Info Panel */}
+      
+        <div className="flex lg:flex bg-linear-to-b from-[#1D76BC] to-[#1660a0] text-white lg:pl-10 2xl:pl-20 items-center">
+          <div className="max-w-2xl space-y-5 2xl:space-y-10">
+          <div>
+              <h2 className="lg:text-[32px] 2xl:text-[40px] font-semibold mb-4">Welcome to Ingram Micro and Microsoft Surface</h2>
+              <p className="text-white/90 lg:text-[18px] xl:text-[20px] 2xl:text-[22px] lg:max-w-[440px] xl:max-w-[550px] 2xl:max-w-[600px]">
+                Get started by registering your account and follow the simple steps to create and manage your Demo Kits.
+              </p>
+          </div>
+          <div className="space-y-6 lg:space-y-3 2xl:space-y-6 lg:mt-10 2xl:mt-0">
+            <div>
+              <div className="font-semibold text-lg flex gap-2 items-center mt-1"><IoPersonAdd /> Register</div>
+              <div className="text-white/90 text-md mt-1">Fill out a quick registration form if not registered yet.</div>
+            </div>
 
-        <div className="space-y-4 text-sm">
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoPersonAdd /> Register</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Fill out a quick registration form if not registered yet.</div>
+            <div>
+              <div className="font-semibold text-lg flex gap-2 items-center mt-1"><IoCheckmarkSharp /> Approval</div>
+              <div className="text-white/90 text-md mt-1">Your registration will be approved by the Program Manager.</div>
+            </div>
+
+            <div>
+              <div className="font-semibold text-lg flex gap-2 items-center mt-1"><LuLogIn /> Login</div>
+              <div className="text-white/90 text-md mt-1">Sign in to your account once it’s approved.</div>
+            </div>
           </div>
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><IoCheckmarkSharp /> Approval</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-md">Your registration will be approved by the Program Manager.</div>
-          </div>
-          <div>
-            <div className="font-semibold text-base lg:text-lg flex gap-2 items-center"><LuLogIn /> Login</div>
-            <div className="text-white/90 text-sm lg:text-base mt-1 max-w-lg">Sign in to your account once it's approved.</div>
+          
           </div>
         </div>
-      </div>
+
 
             {/* ── RIGHT PANEL ── */}
-<div className="bg-white flex flex-1 items-center justify-center overflow-hidden p-8">
-
-    <div className="w-full max-w-lg border-2 rounded-lg p-8 lg:p-12">
+            <div className="bg-white flex items-center justify-center overflow-hidden p-4">
+                <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-18 p-8">
 
                     {/* Icon */}
                     <div className="flex justify-center mb-6">
@@ -189,6 +195,7 @@ export default function Page() {
                     </form>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

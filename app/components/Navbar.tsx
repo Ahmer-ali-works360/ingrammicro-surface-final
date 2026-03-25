@@ -41,7 +41,7 @@ const menuItems = [
 
 const authMenuItems = [
   { name: 'My Orders', href: '/order-details' },
-  { name: 'Password reset', href: '/password-reset' },
+  { name: 'Password Reset', href: '/password-reset' },
   { name: 'Logout', href: 'logout' },
 ]
 
