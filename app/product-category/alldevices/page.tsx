@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { logActivity } from "@/lib/logger";
 import { PiShoppingCartThin } from "react-icons/pi";
 
+
 // Hardcoded filters (not from database)
 const HARDCODED_FILTERS = {
     copilotPC: ["Yes"],
@@ -746,7 +747,7 @@ export default function Page() {
                 </div>
 
                 {/* Main Content Area (right side of sidebar) */}
-                <div className="flex-1 min-h-screen sm:px-0 px-6">
+                <div className="flex-1 min-h-screen sm:px-0 px-6 py-6">
                     {/* Mobile filter button */}
                     <div className="lg:hidden p-4 flex items-center justify-between gap-3 px-7">
                         {/* Mobile Heading */}
@@ -803,9 +804,9 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-                                    <div className="sm:my-5 my-5 text-center">
+                                    {/* <div className="sm:my-5 my-5 text-center">
                                         <h2 className="text-2xl font-bold text-gray-900">All Devices</h2>
-                                    </div>
+                                    </div> */}
                                     {/* <div className={`flex items-center sm:my-10 my-5 ${!(admin === profile?.role || shopManager === profile?.role) ? 'justify-center' : 'justify-between'}`}> */}
                                     {/* {(admin === profile?.role || shopManager === profile?.role) ? (
                                             <>

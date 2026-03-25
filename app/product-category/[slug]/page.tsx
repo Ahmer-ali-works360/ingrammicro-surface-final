@@ -551,9 +551,40 @@ export default function Page() {
 
             let productsData: Product[] = [];
 
-            if (slug && slug !== "alldevices") {
-                productsData = await fetchProductsBySlug(slug) as Product[];
-            } else {
+if (slug && slug !== "alldevices") {
+    const hasUrlFilters = [...searchParams.keys()]
+        .some(k => k !== 'q' && k !== 'page' && k !== '_');
+
+    // Slug to form_factor mapping
+    const slugToFormFactor: Record<string, string> = {
+        'notebooks': 'Laptops',
+        '2in1s': '2in1',
+    };
+
+    let query = supabase
+        .from("products")
+        .select("*")
+        .order("date", { ascending: false });
+
+    if (hasUrlFilters) {
+        // URL filters apply karo
+        searchParams.forEach((value, key) => {
+            if (key === 'q' || key === 'page' || key === '_') return;
+            const dbColumn = URL_TO_DB_MAPPING[key];
+            if (dbColumn) {
+                const values = value.split(',').map(v => v.trim());
+                if (values.length === 1) query = query.eq(dbColumn, values[0]);
+                else if (values.length > 1) query = query.in(dbColumn, values);
+            }
+        });
+    } else if (slugToFormFactor[slug]) {
+        // Slug se form_factor filter karo
+        query = query.eq('form_factor', slugToFormFactor[slug]);
+    }
+
+    const { data, error } = await query;
+    productsData = error ? [] : (data || []);
+} else {
                 let query = supabase
                     .from("products")
                     .select("*")
@@ -616,12 +647,16 @@ export default function Page() {
             updateFilterOptions(productsData);
 
             const urlFilters = getFiltersFromURL();
-            if (Object.keys(urlFilters).length > 0 && Object.values(filters).every(arr => arr.length === 0)) {
-                setFilters(prev => ({
-                    ...prev,
-                    ...urlFilters
-                }));
-            }
+setFilters(prev => ({
+    formFactor: [],
+    processor: [],
+    screenSize: [],
+    memory: [],
+    storage: [],
+    copilotPC: [],
+    fiveGEnabled: [],
+    ...urlFilters  // URL filters override karen
+}));
 
             const allFilterKeys = [
                 'formFactor',
@@ -926,7 +961,7 @@ export default function Page() {
                 </div>
 
                 {/* Main Content Area */}
-                <div className="flex-1 min-h-screen sm:px-0 px-6">
+                <div className="flex-1 min-h-screen sm:px-0 px-6 py-6">
                     {/* Mobile filter button */}
                     <div className="lg:hidden py-4 px-8 flex items-center justify-between gap-3">
                         <h1 className="text-4xl text-gray-900">
@@ -945,13 +980,13 @@ export default function Page() {
                                 <ProductsGridSkeleton />
                             ) : filteredProducts.length > 0 ? (
                                 <>
-                                    <div className="flex items-center justify-center sm:my-10 my-5">
+                                    {/* <div className="flex items-center justify-center sm:my-10 my-5">
                                         <div className="text-3xl font-semibold">
                                             <span className="capitalize">
                                                 {slug === "notebooks" ? "Laptops" : slug === "2in1s" ? "2in1" : "Devices"}
                                             </span>
                                         </div>
-
+                                     </div> */}
                                         {/* {(admin === profile?.role || shopManager === profile?.role) && (
                                             <div className="">
                                                 <div className="flex justify-center md:justify-start">
@@ -965,7 +1000,7 @@ export default function Page() {
                                                 </div>
                                             </div>
                                         )} */}
-                                    </div>
+                                   
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
                                             if (product.post_status !== "Publish") {
@@ -1156,7 +1191,7 @@ export default function Page() {
                             </p>
                             {/* <button
                                 onClick={handleContinueShopping}
-                                className="px-6 py-2 bg-[#1570EF] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
+                                className="px-6 py-2 bg-[#1d76bc] text-white rounded-md hover:bg-[#1660a0] transition-colors cursor-pointer"
                             >
                                 Continue
                             </button> */}
@@ -1246,10 +1281,10 @@ export default function Page() {
                                         View Cart
                                     </button>
                                     <button
-                                        onClick={handleCheckout}
-                                        disabled={cartUpdating}
-                                        className="w-full py-3 cursor-pointer bg-[1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
-                                    >
+    onClick={handleCheckout}
+    disabled={cartUpdating}
+    className="w-full py-3 cursor-pointer bg-[#1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+>
                                         {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
                                     </button>
                                 </div>
