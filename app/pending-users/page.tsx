@@ -760,26 +760,26 @@ const handleVerifyUser = async (userId: string, email: string) => {
     }
 
     return (
-        <div className="container mx-auto py-10 px-5">
+        <div className="container mx-auto py-3 px-5">
             <div className="flex justify-between items-center mb-6">
                 <div className="flex flex-col">
                     <h1 className="sm:text-3xl text-xl font-bold">
                     </h1>
                 </div>
-                <div className="flex gap-2">
-                    <Button
+                {/* <div className="flex gap-2"> */}
+                    {/* <Button
                         variant="outline"
                         onClick={handleRefresh}
                         disabled={isLoading}
                         className="cursor-pointer"
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
-                    </Button>
-                    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
+                    </Button> */}
+                    {/* <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
-                    </Button>
-                </div>
+                    </Button> */}
+                {/* </div> */}
             </div>
 
             {error && (
@@ -830,7 +830,7 @@ const handleVerifyUser = async (userId: string, email: string) => {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <div className="">
+                    {/* <div className="">
                         <Input
                             placeholder="Search..."
                             value={globalFilter ?? ""}
@@ -839,13 +839,30 @@ const handleVerifyUser = async (userId: string, email: string) => {
                             }}
                             className="pl-8"
                         />
-                    </div>
+
+                        
+                    </div> */}
+
+                    <div className="flex items-center gap-2">
+    <Input
+        placeholder="Search..."
+        value={globalFilter ?? ""}
+        onChange={(event) => {
+            setGlobalFilter(event.target.value);
+        }}
+        className="pl-8"
+    />
+    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer border border-[#9CA3AF] ">
+        <TbFileTypeCsv />
+        Export CSV
+    </Button>
+</div>
                 </div>
                 <div className="overflow-hidden rounded-md border">
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#E5E7EB]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead

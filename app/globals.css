@@ -180,3 +180,7 @@
 .cart-drawer .ant-drawer-header-title {
     flex-direction: row-reverse;
 }
+
+.cart-drawer .ant-drawer-header {
+  border-bottom: none !important;
+}

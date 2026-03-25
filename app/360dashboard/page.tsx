@@ -37,13 +37,13 @@ export default function Page() {
     }
 
 return (
-    <div className="h-screen overflow-hidden bg-gray-50">
-        <div className="w-full" style={{ height: 'calc(100vh - 64px)' }}>
+        <div className="fixed inset-0 bg-gray-50 overflow-hidden">
+        <div className="absolute inset-0 top-16"> {/* top-16 = 64px navbar height */}
             <iframe
                 src="https://lookerstudio.google.com/embed/reporting/e91840aa-eb1a-455d-a8f3-e01ec7f6c938/page/QnVsF"
-                className="w-full h-full"
+                className="w-full h-full block"
                 frameBorder={0}
-                style={{ border: 0, display: 'block' }}
+                style={{ border: 0 }}
                 allowFullScreen
                 sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"
                 loading="lazy"

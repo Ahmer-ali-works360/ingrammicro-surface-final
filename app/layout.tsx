@@ -26,14 +26,16 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        suppressHydrationWarning
-        className={`${inter.variable} font-sans antialiased`}
-      >
+  suppressHydrationWarning
+  className={`${inter.variable} font-sans antialiased flex flex-col min-h-screen`}
+>
         <ToasterClient />
         <AuthProvider>
           <CartProvider>
             <Navbar />
-            {children}
+               <main className="flex-1">   {/* ← yeh wrap karo */}
+              {children}
+            </main>
             <Footer />
           </CartProvider>
         </AuthProvider>

@@ -1,12 +1,12 @@
 export default function Footer() {
   return (
-    <div className="bg-white text-center py-6">
+    <div className="bg-white text-center py-4">
       <h3
         style={{
           fontFamily: "var(--font-inter), 'Inter', sans-serif",
           fontWeight: "400",
-          fontSize: "clamp(14px, 1.5vw, 22px)",
-          lineHeight: "48px",
+          fontSize: "clamp(10px, 1.5vw, 12px)",
+          lineHeight: "28px",
           letterSpacing: "-0.5px",
           color: "#9ca3af",
         }}

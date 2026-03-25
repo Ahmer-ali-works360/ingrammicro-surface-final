@@ -1107,7 +1107,7 @@ export default function UsersList() {
     }
 
     return (
-        <div className="container mx-auto py-10 px-5">
+        <div className="container mx-auto py-3 px-5">
             <div className="flex justify-between items-center mb-6">
                 <div className="flex flex-col">
                     <h1 className="sm:text-3xl text-xl font-bold">
@@ -1118,7 +1118,7 @@ export default function UsersList() {
                         </p>
                     )}
                 </div>
-                <div className="flex gap-2">
+                {/* <div className="flex gap-2">
                     {isUnverifiedOnly && (
                         <Button
                             variant="outline"
@@ -1151,7 +1151,7 @@ export default function UsersList() {
                         <TbFileTypeCsv />
                         Export CSV
                     </Button>
-                </div>
+                </div> */}
             </div>
 
             {error && (
@@ -1202,7 +1202,7 @@ export default function UsersList() {
                             </DropdownMenuContent>
                         </DropdownMenu>
                     </div>
-                    <div className="">
+                    <div className="flex items-center gap-2">
                         <Input
                             placeholder="Search..."
                             value={globalFilter ?? ""}
@@ -1211,13 +1211,27 @@ export default function UsersList() {
                             }}
                             className="pl-8"
                         />
+                        {!isUnverifiedOnly && (
+                        <Button
+                            variant="outline"
+                            disabled={isLoading}
+                            onClick={() => handleViewToggle('pending')}
+                            className="cursor-pointer"
+                        >
+                            {isLoading ? "Loading..." : "View Pending Approvals"}
+                        </Button>
+                    )}
+                        <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer border border-[#9CA3AF] ">
+                            <TbFileTypeCsv />
+                            Export CSV
+                        </Button>
                     </div>
                 </div>
                 <div className="overflow-hidden rounded-md border">
                     <Table>
                         <TableHeader>
                             {table.getHeaderGroups().map((headerGroup) => (
-                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#9CA3AF]">
+                                <TableRow key={headerGroup.id} className="bg-[#E5E7EB] hover:bg-[#E5E7EB]">
                                     {headerGroup.headers.map((header) => {
                                         return (
                                             <TableHead

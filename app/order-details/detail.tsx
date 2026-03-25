@@ -1345,27 +1345,27 @@ try {
   }
 
   return (
-    <div className="container mx-auto py-10 px-5 bg-gr">
+    <div className="container mx-auto py-3 px-5 bg-gr">
       <div className="flex justify-between items-center mb-6">
         <h1 className="sm:text-3xl text-xl font-bold">
         </h1>
-        <div className="flex gap-2">
-          <Button
+        {/* <div className="flex gap-2"> */}
+          {/* <Button
             variant="outline"
             onClick={fetchOrders}
             disabled={isLoading}
             className="cursor-pointer"
           >
             {isLoading ? "Refreshing..." : "Refresh"}
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             onClick={handleExportCSV}
             className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
           >
             <TbFileTypeCsv />
             Export CSV
-          </Button>
-        </div>
+          </Button> */}
+        {/* </div> */}
       </div>
 
       {error && (
@@ -1404,7 +1404,7 @@ try {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="">
+          {/* <div className="flex items-center gap-2">
             <Input
               placeholder="Search..."
               value={globalFilter ?? ""}
@@ -1413,6 +1413,7 @@ try {
               }}
               className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#E5E7EB] transition-all"
             />
+            
             {globalFilter && (
               <button
                 onClick={() => setGlobalFilter("")}
@@ -1421,7 +1422,23 @@ try {
                 <X className="h-4 w-4" />
               </button>
             )}
-          </div>
+            
+          </div> */}
+
+          <div className="flex items-center gap-2">
+    <Input
+        placeholder="Search..."
+        value={globalFilter ?? ""}
+        onChange={(event) => {
+            setGlobalFilter(event.target.value);
+        }}
+        className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#E5E7EB] transition-all"
+    />
+    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer border border-[#9CA3AF]">
+        <TbFileTypeCsv />
+        Export CSV
+    </Button>
+</div>
         </div>
         <div className="overflow-hidden rounded-md">
           <Table>
@@ -1429,7 +1446,7 @@ try {
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#E5E7EB] hover:bg-[#9CA3AF]"
+                  className="bg-[#E5E7EB] hover:bg-[#E5E7EB]"
                 >
                   {headerGroup.headers.map((header) => {
                     return (
