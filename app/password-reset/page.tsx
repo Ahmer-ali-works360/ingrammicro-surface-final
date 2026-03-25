@@ -138,7 +138,7 @@ export default function Page() {
                             <input
                                 id="email"
                                 type="email"
-                                placeholder="Enter your work email"
+                                placeholder="enter your email"
                                 value={email}
                                 onChange={(e) => {
                                     setEmail(e.target.value);
