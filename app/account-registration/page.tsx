@@ -163,7 +163,9 @@ export default function Page() {
       {/* Right: Form Panel */}
       <div className="bg-white flex items-center justify-center overflow-hidden p-4">
         <div className="w-full max-w-xl bg-white border border-gray-200 rounded-xl shadow-sm sm:p-18 p-8">
-          <h2 className="text-2xl font-semibold text-gray-900 text-center mb-5">Registration</h2>
+           <h2 className="text-center text-2xl font-medium text-gray-800 mb-8">
+            Registration
+            </h2>
 
           <form onSubmit={signup} className="space-y-3">
             {/* Email */}
