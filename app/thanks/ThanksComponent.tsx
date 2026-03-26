@@ -54,8 +54,8 @@ export default function ThankYouComp() {
             {/* Back to Homepage Button */}
             <div className="flex justify-center mt-6">
                 <Link href="/">
-                    <Button className="cursor-pointer border bg-[#f7f7f7] border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
-                        <Home className="w-5 h-5" />
+                    <Button  variant="outline" className="cursor-pointer border  border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
+                       
                         Back to Homepage
                     </Button>
                 </Link>
@@ -80,8 +80,8 @@ export default function ThankYouComp() {
             {/* Back to Homepage Button */}
             <div className="flex justify-center mt-6">
                 <Link href="/">
-                    <Button className="cursor-pointer border bg-[#f7f7f7] border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
-                        <Home className="w-5 h-5" />
+                    <Button variant="outline" className="cursor-pointer border  border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
+    
                         Back to Homepage
                     </Button>
                 </Link>
@@ -90,11 +90,13 @@ export default function ThankYouComp() {
     )
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4 overflow-hidden">
-            <div className="w-full max-w-4xl">
-                {/* Render based on URL parameter */}
-                {isWinReport ? renderWinContent() : renderOrderContent()}
-            </div>
+         <div 
+        className="flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4"
+        style={{ minHeight: '100dvh' }}
+    >
+        <div className="w-full max-w-4xl py-6">
+            {isWinReport ? renderWinContent() : renderOrderContent()}
         </div>
+    </div>
     )
 }

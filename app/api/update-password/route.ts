@@ -38,21 +38,20 @@ export async function POST(request: NextRequest) {
         }
 
         // 4. User ID lo from auth
-        const { data: authUsers, error: authError } = await supabaseAdmin.auth.admin.listUsers();
-        if (authError) {
-            return NextResponse.json({ success: false, error: "Failed to fetch user" }, { status: 500 });
-        }
+const { data: dbUser, error: dbError } = await supabaseAdmin
+    .from("users")
+    .select('"userId"')
+    .eq("email", resetRecord.email)
+    .single();
 
-        const authUser = authUsers.users.find(u => u.email === resetRecord.email);
-        if (!authUser) {
-            return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
-        }
-
+if (dbError || !dbUser) {
+    return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
+}
         // 5. Password update karo
-        const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
-            authUser.id,
-            { password }
-        );
+const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+    dbUser["userId"],
+    { password }
+);
 
         if (updateError) {
             return NextResponse.json({ success: false, error: "Failed to update password" }, { status: 500 });
