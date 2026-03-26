@@ -1994,10 +1994,10 @@ addon_sim: has5GAddon,
                   <h2 className="text-md font-bold py-2 px-4">Your Order ({cartItems.length} items)</h2>
                 </div>
 
-                <div className="px-7 py-8">
-                  <div className="space-y-4 mb-6">
+                <div className="px-7 py-4">
+                  <div className="space-y-4 mb-1">
                     {cartItems.map((item) => (
-                      <div key={item.product_id} className="flex justify-between items-center border-b pb-4">
+                      <div key={item.product_id} className="flex justify-between items-center pb-1">
                         <div>
                           <h4 className="font-medium text-gray-800">{item.product?.product_name} <b className="mx-2">x {item.quantity}</b></h4>
                           <p className="text-sm text-gray-500">SKU: {item.product?.sku}</p>

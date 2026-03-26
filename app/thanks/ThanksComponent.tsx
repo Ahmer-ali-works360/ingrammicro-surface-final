@@ -51,6 +51,15 @@ export default function ThankYouComp() {
                     We've sent a confirmation email with all the details.
                 </p>
             </div>
+            {/* Back to Homepage Button */}
+            <div className="flex justify-center mt-6">
+                <Link href="/">
+                    <Button className="cursor-pointer border bg-[#f7f7f7] border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
+                        <Home className="w-5 h-5" />
+                        Back to Homepage
+                    </Button>
+                </Link>
+            </div>
         </>
     )
 
@@ -68,11 +77,20 @@ export default function ThankYouComp() {
                     Win Reported Successfully
                 </p>
             </div>
+            {/* Back to Homepage Button */}
+            <div className="flex justify-center mt-6">
+                <Link href="/">
+                    <Button className="cursor-pointer border bg-[#f7f7f7] border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors">
+                        <Home className="w-5 h-5" />
+                        Back to Homepage
+                    </Button>
+                </Link>
+            </div>
         </>
     )
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4 py-8">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-gray-50 to-white px-4 overflow-hidden">
             <div className="w-full max-w-4xl">
                 {/* Render based on URL parameter */}
                 {isWinReport ? renderWinContent() : renderOrderContent()}
