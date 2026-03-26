@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         });
 
         // 8. Send email via your SMTP API
-        const emailResponse = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
+        fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
@@ -75,11 +75,7 @@ export async function POST(request: NextRequest) {
                 text: template.text,
                 html: template.html,
             }),
-        });
-
-        if (!emailResponse.ok) {
-            return NextResponse.json({ success: false, error: "Failed to send reset email" }, { status: 500 });
-        }
+        }).catch(err => console.error("Email send failed:", err));
 
         return NextResponse.json({ success: true, message: "Password reset email sent" });
 
