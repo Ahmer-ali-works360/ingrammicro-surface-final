@@ -335,22 +335,24 @@ className="w-40 h-40 bg-gray-100 rounded-lg flex items-center justify-center ove
                                             </div>
                                         </div>
 
-                                        {/* Product Details */}
-                                        <div className="sm:w-3/4">
-                                            <Link href={`/product/${item.product?.slug}`}>
-                                                <h3 className="text-md font-semibold text-black mb-2">
-                                                    {item.product?.product_name || 'Product Name Not Available'}
-                                                </h3>
-                                            </Link>
+{/* Product Details */}
+<div className="sm:w-3/4 flex flex-col justify-between py-1">
+    
+        <Link href={`/product/${item.product?.slug}`}>
+            <h3 className="text-md font-semibold text-black mb-2">
+                {item.product?.product_name || 'Product Name Not Available'}
+            </h3>
+        </Link>
 
-                                            {item.product?.sku && (
-                                                <Link href={`/product/${item.product?.slug}`}>
-                                                    <p className="text-sm text-gray-500 mb-2">SKU: <b className='text-gray-500'>{item.product.sku}</b></p>
-                                                </Link>
-                                            )}
+        {item.product?.sku && (
+            <Link href={`/product/${item.product?.slug}`}>
+                <p className="text-sm text-gray-500 mb-2">SKU: <b className='text-gray-500'>{item.product.sku}</b></p>
+            </Link>
+        )}
+    
 
                                             {/* Quantity Controls */}
-                                            <div className="flex items-center gap-3 mb-4">
+                                            <div className="flex items-center gap-3">
                                                 <select
                                                     defaultValue={1}
                                                     onChange={(e) => {
