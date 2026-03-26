@@ -657,7 +657,7 @@ export default function Navbar() {
                       {isSearchOpen && (
                         <div className="absolute right-0 top-full mt-4 w-125 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
                           <form onSubmit={handleSearchSubmit} className="p-4">
-                            <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center justify-between ">
                               <div className="flex items-center space-x-2 flex-1">
                                 <Search className="text-gray-400" size={20} />
                                 <input
@@ -678,12 +678,12 @@ export default function Navbar() {
                                   </button>
                                 )}
                               </div>
-                              <button
+                              {/* <button
                                 type="submit"
                                 className="ml-2 px-3 py-1 bg-[#1570EF] text-white rounded-md text-sm font-medium hover:bg-[#1660a0] transition-colors"
                               >
                                 Search
-                              </button>
+                              </button> */}
                             </div>
 
                             {(searchQuery.trim() && (isSearching || searchResults.length > 0)) && (
@@ -1001,17 +1001,17 @@ export default function Navbar() {
 
       {/* ===== CART DRAWER ===== */}
       <Drawer
-          // title={
-          //     <div className="flex items-center space-x-2">
-          //         <PiShoppingCartThin className="text-[#1570EF]" size={20} />
-          //         <span className="text-lg font-semibold">Your Cart</span>
-          //         {cartCount > 0 && (
-          //             <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
-          //                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
-          //             </span>
-          //         )}
-          //     </div>
-          // }
+          title={
+              <div className="flex items-center space-x-2">
+                  {/* <PiShoppingCartThin className="text-[#1570EF]" size={20} /> */}
+                  <span className="text-lg font-semibold">Your Cart</span>
+                  {/* {cartCount > 0 && (
+                      <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
+                          {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                      </span>
+                  )} */}
+              </div>
+          }
           placement="right"
           onClose={() => setIsCartDrawerOpen(false)}
           open={isCartDrawerOpen}
@@ -1168,12 +1168,12 @@ export default function Navbar() {
                         </button>
                       )}
                     </div>
-                    <button
+                    {/* <button
                       type="submit"
                       className="py-2 px-3 bg-[#1570EF] text-white rounded-lg text-base font-medium hover:bg-[#1660a0] transition-colors"
                     >
                       Search
-                    </button>
+                    </button> */}
                   </div>
 
                   {(searchQuery.trim() && (isSearching || searchResults.length > 0)) && (

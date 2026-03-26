@@ -217,6 +217,13 @@ export default function Page() {
                 {loading ? "Signing up..." : "Register"}
               </button>
             </div>
+            {/* Login Link */}
+            <p className="text-center text-sm text-gray-500 pt-2">
+               Already have an account?{" "}
+              <a href="/login" className="text-[#1570EF] font-medium hover:underline">
+                  Login
+              </a>
+            </p>
           </form>
         </div>
       </div>

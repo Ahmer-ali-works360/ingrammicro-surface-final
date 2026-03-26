@@ -282,6 +282,12 @@ return (
 
               {/* Buttons */}
               <div className="flex gap-4 pt-2 my-8">
+                <Link
+                  href={"/account-registration"}
+                  className="flex-1 flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50"
+                >
+                  Register
+                </Link>
                 <button
                   type="submit"
                   disabled={isloading}
@@ -290,12 +296,12 @@ return (
                   {isloading ? "Please wait..." : "Login"}
                 </button>
 
-                <Link
+                {/* <Link
                   href={"/account-registration"}
                   className="flex-1 flex items-center justify-center rounded-md border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 hover:bg-gray-50"
                 >
                   Register
-                </Link>
+                </Link> */}
               </div>
 
               <Link

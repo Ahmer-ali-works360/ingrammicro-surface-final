@@ -489,22 +489,18 @@ export default function Page() {
         const cartItem = getCartItemForProduct(product.id);
 
         if (isProductInCart) {
-            return (
-                <div className="flex gap-2">
-                    <button
-                        onClick={() => handleRemoveFromCart(product.id)}
-                        disabled={isUpdating}
-                        className="flex items-center gap-3 cursor-pointer justify-center px-5 py-2
-               border border-red-600 text-red-600 rounded-md
-                hover:border-red-700 hover:bg-red-100
-               disabled:opacity-50"
-                    >
-                        <Trash className="h-4 w-4" />
-                        {isUpdating ? 'Removing...' : 'Remove from Cart'}
-                    </button>
-                </div>
-            );
-        } else {
+    return (
+        <button
+            onClick={() => router.push('/cart')}
+            className="flex items-center justify-center gap-2 px-9 py-2 cursor-pointer border border-[#1570EF] text-[#1570EF] rounded-sm hover:bg-[#1570EF] hover:text-white transition-colors"
+        >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+            </svg>
+            Added to Cart
+        </button>
+    );
+} else {
             return (
                 <button
                     onClick={() => handleAddToCart(product.id)}

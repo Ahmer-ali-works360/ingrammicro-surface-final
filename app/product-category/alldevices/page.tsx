@@ -1007,17 +1007,17 @@ export default function Page() {
             {/* Cart Drawer */}
             {isLoggedIn && (
                 <Drawer
-                    // title={
-                    //     <div className="flex items-center space-x-2">
-                    //         <PiShoppingCartThin className="text-[#1570EF]" size={20} />
-                    //         <span className="text-lg font-semibold">Your Cart</span>
-                    //         {cartCount > 0 && (
-                    //             <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
-                    //                 {cartCount} {cartCount === 1 ? 'item' : 'items'}
-                    //             </span>
-                    //         )}
-                    //     </div>
-                    // }
+                    title={
+              <div className="flex items-center space-x-2">
+                  {/* <PiShoppingCartThin className="text-[#1570EF]" size={20} /> */}
+                  <span className="text-lg font-semibold">Your Cart</span>
+                  {/* {cartCount > 0 && (
+                      <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
+                          {cartCount} {cartCount === 1 ? 'item' : 'items'}
+                      </span>
+                  )} */}
+              </div>
+          }
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}
                     open={showCartDrawer}

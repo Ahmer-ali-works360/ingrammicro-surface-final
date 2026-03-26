@@ -336,7 +336,7 @@ className="w-40 h-40 bg-gray-100 rounded-lg flex items-center justify-center ove
                                         </div>
 
 {/* Product Details */}
-<div className="sm:w-3/4 flex flex-col justify-between py-1">
+<div className="sm:w-3/4 flex flex-col justify-around py-1">
     
         <Link href={`/product/${item.product?.slug}`}>
             <h3 className="text-md font-semibold text-black mb-2">
