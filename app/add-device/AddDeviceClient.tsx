@@ -253,7 +253,7 @@ export default function AddDeviceClient() {
 
             if (error || !product) {
                 toast.error("Product not found", {
-                    style: { background: "red", color: "white" }
+                    style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                 });
                 router.push('/add-device');
                 return;
@@ -347,7 +347,7 @@ export default function AddDeviceClient() {
 
         } catch (error) {
             toast.error("Failed to load product for editing", {
-                style: { background: "red", color: "white" }
+                style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
             });
             router.push('/add-device');
         } finally {
@@ -670,7 +670,7 @@ export default function AddDeviceClient() {
             if (emptyFields.length > 0) {
                 const fieldNames = emptyFields.map(field => field.label).join(', ');
                 toast.error(`Please fill in the following required fields: ${fieldNames}`, {
-                    style: { background: "red", color: "white" }
+                    style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                 });
                 setIsFormLoading(false);
                 return;
@@ -708,7 +708,7 @@ export default function AddDeviceClient() {
                 }).join(', ');
 
                 toast.error(`Please enter custom values for: ${fieldNames}`, {
-                    style: { background: "red", color: "white" }
+                    style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                 });
                 setIsFormLoading(false);
                 return;
@@ -717,7 +717,7 @@ export default function AddDeviceClient() {
             // Check if primary image is uploaded (for new products only)
             if (!isEditing && !primaryImage) {
                 toast.error("Please upload a primary image", {
-                    style: { background: "red", color: "white" }
+                    style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                 });
                 setIsFormLoading(false);
                 return;
@@ -728,7 +728,7 @@ export default function AddDeviceClient() {
                 const totalInv = parseInt(formData.totalInventory);
                 if (isNaN(totalInv) || totalInv < 0) {
                     toast.error("Total Inventory must be a valid positive number", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -739,7 +739,7 @@ export default function AddDeviceClient() {
                 const stockQty = parseInt(formData.stockQuantity);
                 if (isNaN(stockQty) || stockQty < 0) {
                     toast.error("Stock Quantity must be a valid positive number", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -753,7 +753,7 @@ export default function AddDeviceClient() {
 
                 if (stockQty > totalInv) {
                     toast.error("Stock quantity cannot be greater than total inventory", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -770,7 +770,7 @@ export default function AddDeviceClient() {
 
                 if (selectedDate > today) {
                     toast.error("Date cannot be in the future", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -831,7 +831,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                 if (pRowSKU) {
                     toast.error("Unable to update the device because a device with the same SKU already exists.", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -917,7 +917,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                 if (error) {
                     toast.error("Failed to update device. Please try again.", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -954,7 +954,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                 if (pRowSKU) {
                     toast.error("Unable to add the device because a device with the same SKU already exists.", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -994,7 +994,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
                 if (error) {
                     toast.error("Failed to add device. Please try again.", {
-                        style: { background: "red", color: "white" }
+                        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
                     });
                     setIsFormLoading(false);
                     return;
@@ -1012,7 +1012,7 @@ const getFieldValue = (field: keyof FormData, customField: keyof CustomInputs): 
 
         } catch (error) {
             toast.error("Failed to process device. Please try again.", {
-                style: { background: "red", color: "white" }
+                style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
             });
             setIsFormLoading(false);
         }

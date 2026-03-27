@@ -66,7 +66,7 @@ export async function POST(request: NextRequest) {
         });
 
         // 8. Send email via your SMTP API
-        fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({

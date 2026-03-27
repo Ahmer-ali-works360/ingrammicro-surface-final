@@ -505,7 +505,7 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
     if (!isValid) {
       // Show toast for validation errors
       toast.error("Please fill in all required fields correctly", {
-        style: { background: "red", color: "white" }
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
 
       // Scroll to first error
@@ -524,7 +524,7 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
     if (!mainProduct) { 
       toast.error("Cart Error", {
         description: "No product found in cart. Please add a product to continue.",
-        style: { background: "red", color: "white" }
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
       return false;
     }
@@ -741,7 +741,7 @@ addon_sim: has5GAddon,
       toast.dismiss(loadingToast);
       toast.error("Order Failed", {
         description: error.message || "Something went wrong. Please try again.",
-        style: { background: "red", color: "white" }
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
 
       await logActivity({

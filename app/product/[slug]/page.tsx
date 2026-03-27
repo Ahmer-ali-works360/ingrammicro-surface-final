@@ -429,7 +429,7 @@ export default function Page() {
             }
 
             toast.error(errorMessage, {
-                style: { background: "red", color: "white" },
+                style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" },
             })
         }
     }

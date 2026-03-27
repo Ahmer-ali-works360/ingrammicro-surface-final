@@ -131,7 +131,7 @@ export default function Page() {
                 },
                 status: 'failed'
             });
-            toast.error("User not found", { style: { background: "red", color: "white" } });
+            toast.error("User not found", { style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" } });
             return;
         }
 
@@ -219,7 +219,7 @@ export default function Page() {
                 status: 'failed'
             });
             toast.error(error.message || "Failed to update profile", { 
-                style: { background: "red", color: "white" } 
+                style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" } 
             });
         } finally {
             setIsUpdating(false);

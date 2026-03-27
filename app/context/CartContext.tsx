@@ -282,7 +282,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
 
         if (product?.sku !== SIM_SKU) {
           toast.error("Only one demo device allowed in cart", {
-            style: { background: "red", color: "white" }
+            style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
           })
           throw new Error("Only one device allowed")
         }
@@ -292,7 +292,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     // For logged-in users, check verification
     if (user?.id && !checkUserVerification()) {
       toast.error('Your account is not verified. Please contact administrator.', {
-        style: { background: "red", color: "white" },
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
       throw new Error('Account not verified');
     }
@@ -420,7 +420,7 @@ if (addedProduct?.five_g_Enabled) {
     // For logged-in users, check verification
     if (user?.id && !checkUserVerification()) {
       toast.error('Your account is not verified. Please contact administrator.', {
-        style: { background: "red", color: "white" },
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
       throw new Error('Account not verified');
     }
@@ -490,7 +490,7 @@ if (removedItem?.product?.sku !== SIM_SKU) {
     // For logged-in users, check verification
     if (user?.id && !checkUserVerification()) {
       toast.error('Your account is not verified. Please contact administrator.', {
-        style: { background: "red", color: "white" },
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
       throw new Error('Account not verified');
     }
@@ -551,7 +551,7 @@ if (removedItem?.product?.sku !== SIM_SKU) {
     // For logged-in users, check verification
     if (user?.id && !checkUserVerification()) {
       toast.error('Your account is not verified. Please contact administrator.', {
-        style: { background: "red", color: "white" },
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" }
       });
       throw new Error('Account not verified');
     }

@@ -348,7 +348,7 @@ useEffect(() => {
             const selectedOrder = orders.find(order => order.order_no === orderNumber);
 
             if (!selectedOrder) {
-                toast.error("Order not found!", { style: { background: "red", color: "white" } });
+                toast.error("Order not found!", { style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" } });
                 return;
             }
 
@@ -414,7 +414,7 @@ useEffect(() => {
 
         } catch (error: any) {
             logError('db', 'win_submission_failed', `Failed to submit win: ${error.message}`, error, profile?.id, source);
-            toast.error(`Error: ${error.message || "Failed to submit win"}`, { style: { background: "red", color: "white" } });
+            toast.error(`Error: ${error.message || "Failed to submit win"}`, { style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" } });
         }
     };
 

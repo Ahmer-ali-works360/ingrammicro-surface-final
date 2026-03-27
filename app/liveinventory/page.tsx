@@ -472,7 +472,7 @@ export default function Page() {
       setError("Failed to update product");
 
       toast.error("Failed to update product", {
-        style: { background: "red", color: "white" },
+        style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" },
       });
     }
   };
@@ -797,7 +797,7 @@ export default function Page() {
             setError("Failed to delete product");
 
             toast.error("Failed to delete product", {
-              style: { background: "red", color: "white" },
+              style: { background: "#f0f9ff", color: "#0369a1", border: "1px solid #bae6fd" },
             });
           }
         };
