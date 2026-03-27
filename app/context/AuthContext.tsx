@@ -33,60 +33,71 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const currentUserId = useRef<string | null>(null); // ✅ Track current user ID
 
     const fetchProfile = async (authUser: User | null) => {
-        if (!authUser) {
-            setProfile(null);
-            setIsLoggedIn(false);
-            currentUserId.current = null;
-            return;
-        }
+        try {
+            if (!authUser) {
+                setProfile(null);
+                setIsLoggedIn(false);
+                currentUserId.current = null;
+                return;
+            }
 
-        // ✅ Same user hai toh dobara fetch mat karo
-        if (currentUserId.current === authUser.id) {
-            return;
-        }
+            // ✅ Same user hai toh dobara fetch mat karo
+            if (currentUserId.current === authUser.id) {
+                return;
+            }
 
-        // Pehle userId se try karo (normal users ke liye fast)
-        const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("userId", authUser.id)
-            .eq("isVerified", true)
-            .single();
+            // Pehle userId se try karo (normal users ke liye fast)
+            const { data, error } = await supabase
+                .from("users")
+                .select("*")
+                .eq("userId", authUser.id)
+                .eq("isVerified", true)
+                .single();
 
-        if (!error && data) {
-            setProfile(data);
-            setIsLoggedIn(true);
-            currentUserId.current = authUser.id; // ✅ Save current user ID
-            return;
-        }
+            if (!error && data) {
+                setProfile(data);
+                setIsLoggedIn(true);
+                currentUserId.current = authUser.id; // ✅ Save current user ID
+                return;
+            }
 
-        // Agar nahi mila toh migrate user ho sakta hai - email se try karo
-        const { data: existingUser } = await supabase
-            .from("users")
-            .select("*")
-            .eq("email", authUser.email)
-            .single();
+            // Agar nahi mila toh migrate user ho sakta hai - email se try karo
+            const { data: existingUser, error: existingError } = await supabase
+                .from("users")
+                .select("*")
+                .eq("email", authUser.email)
+                .single();
 
-        if (existingUser?.userId == null) {
-            await supabase
-                .from('users')
-                .update({ userId: authUser?.id, password: null })
-                .eq('email', authUser.email);
-        }
+            if (existingError && existingError.code !== "PGRST116") {
+                throw existingError;
+            }
 
-        // Update ke baad dobara fetch
-        const { data: updatedUser, error: updatedError } = await supabase
-            .from("users")
-            .select("*")
-            .eq("userId", authUser.id)
-            .eq("isVerified", true)
-            .single();
+            if (existingUser?.userId == null) {
+                await supabase
+                    .from('users')
+                    .update({ userId: authUser?.id, password: null })
+                    .eq('email', authUser.email);
+            }
 
-        if (!updatedError && updatedUser) {
-            setProfile(updatedUser);
-            setIsLoggedIn(true);
-            currentUserId.current = authUser.id; // ✅ Save current user ID
-        } else {
+            // Update ke baad dobara fetch
+            const { data: updatedUser, error: updatedError } = await supabase
+                .from("users")
+                .select("*")
+                .eq("userId", authUser.id)
+                .eq("isVerified", true)
+                .single();
+
+            if (!updatedError && updatedUser) {
+                setProfile(updatedUser);
+                setIsLoggedIn(true);
+                currentUserId.current = authUser.id; // ✅ Save current user ID
+            } else {
+                setProfile(null);
+                setIsLoggedIn(false);
+                currentUserId.current = null;
+            }
+        } catch (error) {
+            console.error("Profile fetch error:", error);
             setProfile(null);
             setIsLoggedIn(false);
             currentUserId.current = null;
@@ -95,41 +106,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const loadUser = async () => {
-            setLoading(true);
+            try {
+                setLoading(true);
 
-            const { data } = await supabase.auth.getSession();
-            const authUser = data.session?.user ?? null;
-            setUser(authUser);
+                const { data } = await supabase.auth.getSession();
+                const authUser = data.session?.user ?? null;
+                setUser(authUser);
 
-            if (authUser) {
-                await fetchProfile(authUser);
-            } else {
+                if (authUser) {
+                    await fetchProfile(authUser);
+                } else {
+                    setIsLoggedIn(false);
+                    setProfile(null);
+                }
+            } catch (error) {
+                console.error("Auth load error:", error);
                 setIsLoggedIn(false);
                 setProfile(null);
+                setUser(null);
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false);
         };
 
         loadUser();
 
+        let loadingTimeout: NodeJS.Timeout;
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setLoading(true); // ✅ Tab switch par loading true karo
+            // Debounce rapid auth state changes
+            clearTimeout(loadingTimeout);
+            setLoading(true);
 
-            const authUser = session?.user ?? null;
-            setUser(authUser);
+            try {
+                const authUser = session?.user ?? null;
+                setUser(authUser);
 
-            if (authUser) {
-                await fetchProfile(authUser);
-            } else {
+                if (authUser) {
+                    await fetchProfile(authUser);
+                } else {
+                    setIsLoggedIn(false);
+                    setProfile(null);
+                }
+            } catch (error) {
+                console.error("Auth state change error:", error);
                 setIsLoggedIn(false);
                 setProfile(null);
+                setUser(null);
+            } finally {
+                loadingTimeout = setTimeout(() => setLoading(false), 300);
             }
-
-            setLoading(false);
         });
 
-        return () => subscription?.unsubscribe();
+        return () => {
+            clearTimeout(loadingTimeout);
+            subscription?.unsubscribe();
+        };
     }, []);
 
     return (
