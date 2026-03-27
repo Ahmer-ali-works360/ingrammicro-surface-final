@@ -1194,7 +1194,7 @@ const renderAllProducts = () => {
 
                         {renderTrackingSection()}
 
-                        {order.shipped_date && !isSubscriber && (
+                        {order.shipped_date && (isAdmin || isSSRole) && (
                             <div>
                                 <Table className="border">
                                     <TableHeader><TableRow><TableHead style={{ backgroundColor: '#E5E7EB', color: 'black' }} colSpan={2}>Win Status</TableHead></TableRow></TableHeader>
