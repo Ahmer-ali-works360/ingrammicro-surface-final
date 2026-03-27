@@ -88,9 +88,9 @@ const ProductsGridSkeleton = () => {
 
     return (
         <div className="w-full lg:max-w-7xl lg:mx-auto lg:px-6">
-            <div className="flex items-center justify-between sm:my-10 my-1">
+            {/* <div className="flex items-center justify-between sm:my-10 my-1">
                 <div className="text-3xl font-semibold">Devices</div>
-            </div>
+            </div> */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                 {[...Array(8)].map((_, index) => (
                     <div key={index} className="bg-white border border-gray-300 sm:py-5 p-3">
