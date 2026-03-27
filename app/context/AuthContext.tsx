@@ -6,8 +6,7 @@ import type { User } from "@supabase/supabase-js";
 
 export type UserProfile = {
     id: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     role: string;
     userId: string;
@@ -32,7 +31,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const [loading, setLoading] = useState(true);
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
-    const fetchProfile = async (authUser: User | null) => {
+
+const fetchProfile = async (authUser: User | null) => {
         if (!authUser) {
             setProfile(null);
             setIsLoggedIn(false);
@@ -72,7 +72,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
-    useEffect(() => {
+
+useEffect(() => {
         const loadUser = async () => {
             setLoading(true);
             const { data } = await supabase.auth.getSession();
