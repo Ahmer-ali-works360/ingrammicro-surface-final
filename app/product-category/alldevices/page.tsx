@@ -480,6 +480,35 @@ export default function Page() {
                 : [...prev, filterType]
         );
     };
+    // Dependent filters - Form Factor change hone par baaki filters update hon
+useEffect(() => {
+    if (products.length === 0) return;
+
+    // Helper function
+    const extractFiltered = (productsList: Product[], key: keyof Product): string[] => {
+        const values = productsList
+            .map(p => p[key])
+            .filter(v => v !== null && v !== undefined && v !== '' &&
+                (typeof v === 'string' ? v.trim() !== '' : true)
+            );
+        return [...new Set(values.map(v => String(v)))].sort();
+    };
+
+    // Agar form factor selected hai toh sirf uss ke products lo
+    const baseProducts = filters.formFactor.length > 0
+        ? products.filter(p => filters.formFactor.includes(p.form_factor))
+        : products;
+
+    // formFactor hamesha full list dikhaye, baaki dependent hon
+    setFilterOptions({
+        formFactor: extractFiltered(products, 'form_factor'),
+        processor: extractFiltered(baseProducts, 'processor'),
+        memory: extractFiltered(baseProducts, 'memory'),
+        storage: extractFiltered(baseProducts, 'storage'),
+        screenSize: extractFiltered(baseProducts, 'screen_size'),
+    });
+
+}, [filters.formFactor, products]);
 
     // Filter products based on selected filters
     const filteredProducts = products.filter(product => {
@@ -854,7 +883,7 @@ export default function Page() {
                                                                 <img
                                                                     src="/5g-logo.png"
                                                                     alt="5G Enabled"
-                                                                    className="w-8 h-8 object-contain"
+                                                                    className="w-6 h-6 object-contain"
                                                                 />
                                                             </div>
                                                         )}

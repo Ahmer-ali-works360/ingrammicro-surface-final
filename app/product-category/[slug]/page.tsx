@@ -557,8 +557,8 @@ if (slug && slug !== "alldevices") {
 
     // Slug to form_factor mapping
     const slugToFormFactor: Record<string, string> = {
-        'notebooks': 'Laptops',
-        '2in1s': '2in1',
+'laptops': 'Laptops',
+'2in1': '2in1',
     };
 
     let query = supabase
@@ -695,6 +695,31 @@ setFilters(prev => ({
                 : [...prev, filterType]
         );
     };
+
+    useEffect(() => {
+    if (products.length === 0) return;
+
+    const extractFiltered = (productsList: Product[], key: keyof Product): string[] => {
+        const values = productsList
+            .map(p => p[key])
+            .filter(v => v !== null && v !== undefined && v !== '' &&
+                (typeof v === 'string' ? v.trim() !== '' : true));
+        return [...new Set(values.map(v => String(v)))].sort();
+    };
+
+    const baseProducts = filters.formFactor.length > 0
+        ? products.filter(p => filters.formFactor.includes(p.form_factor))
+        : products;
+
+    setFilterOptions({
+        formFactor: extractFiltered(products, 'form_factor'),
+        processor: extractFiltered(baseProducts, 'processor'),
+        memory: extractFiltered(baseProducts, 'memory'),
+        storage: extractFiltered(baseProducts, 'storage'),
+        screenSize: extractFiltered(baseProducts, 'screen_size'),
+    });
+
+}, [filters.formFactor, products]);
 
     // Filter products based on selected filters (client-side)
     const filteredProducts = products.filter(product => {
@@ -946,9 +971,10 @@ setFilters(prev => ({
                         ) : (
                             <div className="space-y-4">
                                 {/* Conditionally render Form Factor filter - hide if present in URL */}
-                                {!searchParams.has('form_factor') && (
+                                {/* {!searchParams.has('form_factor') && (
                                     <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
-                                )}
+                                )} */}
+                                <DatabaseFilterSection filterKey="formFactor" title="Form Factor" /> 
                                 <DatabaseFilterSection filterKey="processor" title="Processor" />
                                 <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
                                 <DatabaseFilterSection filterKey="memory" title="Memory" />
@@ -1023,7 +1049,7 @@ setFilters(prev => ({
                                                                 <img
                                                                     src="/5g-logo.png"
                                                                     alt="5G Enabled"
-                                                                    className="w-8 h-8 object-contain"
+                                                                    className="w-6 h-6 object-contain"
                                                                 />
                                                             </div>
                                                         )}
@@ -1143,9 +1169,10 @@ setFilters(prev => ({
                 className="filter-drawer"
             >
                 <div className="space-y-6">
-                    {!searchParams.has('form_factor') && (
+                    {/* {!searchParams.has('form_factor') && (
                         <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
-                    )}
+                    )} */}
+                    <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
                     <DatabaseFilterSection filterKey="processor" title="Processor" />
                     <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
                     <DatabaseFilterSection filterKey="memory" title="Memory" />
