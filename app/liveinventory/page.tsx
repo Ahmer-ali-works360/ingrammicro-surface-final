@@ -1053,19 +1053,20 @@ export default function Page() {
   };
 
   return (
-    <div className="container mx-auto py-10 px-5">
+    <div className="container mx-auto py-3 px-5">
       <div className="flex justify-between items-center mb-6">
         <h1 className="sm:text-3xl text-xl font-bold"></h1>
-        <div className="flex gap-2">
-          <Button
+        </div>
+        {/* <div className="flex gap-2"> */}
+          {/* <Button
             variant="outline"
             onClick={fetchProducts}
             disabled={isLoading}
             className="cursor-pointer"
           >
             {isLoading ? "Refreshing..." : "Refresh"}
-          </Button>
-          <Button
+          </Button> */}
+          {/* <Button
             onClick={handleExportCSV}
             className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
           >
@@ -1080,9 +1081,9 @@ export default function Page() {
               <PlusOutlined />
               Add Product
             </Button>
-          )}
-        </div>
-      </div>
+          )} */}
+        {/* </div> */}
+      
 
       {error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
@@ -1091,75 +1092,93 @@ export default function Page() {
       )}
 
       <div className="w-full">
-        <div className="flex items-center justify-between py-4 gap-4">
-          <div className="">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="ml-auto">
-                  Columns <ChevronDown className="ml-2 h-4 w-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {table
-                  .getAllColumns()
-                  .filter((column) => column.getCanHide())
-                  .map((column) => {
-                    return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value: boolean) =>
-                          column.toggleVisibility(!!value)
-                        }
-                      >
-                        {columnDisplayNames[column.id] || column.id}
-                      </DropdownMenuCheckboxItem>
-                    );
-                  })}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="">
-            <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
-            <Input
-              placeholder="Search..."
-              value={globalFilter ?? ""}
-              onChange={(event) => {
-                setGlobalFilter(event.target.value);
-                logActivity({
-                  type: "ui",
-                  level: "info",
-                  action: "global_search_applied",
-                  message: `Global search applied: ${event.target.value}`,
-                  userId: profile?.id || null,
-                  details: {
-                    searchTerm: event.target.value,
-                    previousTerm: globalFilter,
-                    filteredCount: products.length,
-                    userRole: profile?.role,
-                  },
-                });
-              }}
-              className="pl-8 pr-4 py-2 w-full border-2 focus:border-[#E5E7EB] transition-all"
-            />
-            {globalFilter && (
-              <button
-                onClick={() => setGlobalFilter("")}
-                className="absolute right-2 top-2.5 text-gray-400 hover:text-gray-600"
+<div className="flex items-center justify-between py-4 gap-4">
+  <div>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" className="ml-auto">
+          Columns <ChevronDown className="ml-2 h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {table
+          .getAllColumns()
+          .filter((column) => column.getCanHide())
+          .map((column) => {
+            return (
+              <DropdownMenuCheckboxItem
+                key={column.id}
+                className="capitalize"
+                checked={column.getIsVisible()}
+                onCheckedChange={(value: boolean) =>
+                  column.toggleVisibility(!!value)
+                }
               >
-                <X className="h-4 w-4" />
-              </button>
-            )}
-          </div>
-        </div>
+                {columnDisplayNames[column.id] || column.id}
+              </DropdownMenuCheckboxItem>
+            );
+          })}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  </div>
+  <div className="flex items-center gap-2">
+    <div className="relative">
+      <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-500" />
+      <Input
+        placeholder="Search..."
+        value={globalFilter ?? ""}
+        onChange={(event) => {
+          setGlobalFilter(event.target.value);
+          logActivity({
+            type: "ui",
+            level: "info",
+            action: "global_search_applied",
+            message: `Global search applied: ${event.target.value}`,
+            userId: profile?.id || null,
+            details: {
+              searchTerm: event.target.value,
+              previousTerm: globalFilter,
+              filteredCount: products.length,
+              userRole: profile?.role,
+            },
+          });
+        }}
+        className="pl-8 pr-4 py-2 border-2 focus:border-[#E5E7EB] transition-all"
+      />
+      {globalFilter && (
+        <button
+          onClick={() => setGlobalFilter("")}
+          className="absolute right-2 top-2.5 text-gray-400 hover:text-gray-600"
+        >
+          <X className="h-4 w-4" />
+        </button>
+      )}
+    </div>
+    <Button
+      onClick={handleExportCSV}
+      className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
+    >
+      <TbFileTypeCsv />
+      Export CSV
+    </Button>
+    {isActionAuthorized && (
+      <Button
+        onClick={handleAddProduct}
+        className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer"
+      >
+        <PlusOutlined />
+        Add Product
+      </Button>
+    )}
+  </div>
+</div>
         <div className="overflow-hidden rounded-md border">
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
                 <TableRow
                   key={headerGroup.id}
-                  className="bg-[#E5E7EB] hover:bg-[#9CA3AF]"
+                  className="bg-[#E5E7EB] hover:bg-[#E5E7EB]"
                 >
                   {headerGroup.headers.map((header) => {
                     return (

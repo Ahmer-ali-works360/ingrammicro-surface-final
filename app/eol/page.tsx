@@ -81,7 +81,7 @@ export default function Page() {
                 submittedBy: user.email,
                 submissionDate,
                 items,
-                 note,
+                note,
             });
 
             void Promise.all([
@@ -214,8 +214,7 @@ export default function Page() {
                         <button
                             onClick={handleSubmit}
                             disabled={submitting}
-                            className="px-6 py-2 rounded-xl text-white cursor-pointer"
-                            style={{ backgroundColor: "#1570EF" }}
+                            className="px-8 py-3 rounded-md text-white cursor-pointer bg-[#1570EF] hover:bg-[#1660a0] transition-colors duration-200"
                         >
                             {submitting ? "Submitting..." : "Submit"}
                         </button>
