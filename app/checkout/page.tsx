@@ -65,7 +65,7 @@ export default function Page() {
     zip: "",
     desired_date: "",
     notes: "",
-    isTerms: false
+    // isTerms: false
   });
 
  const mainProductItem = cartItems.find(
@@ -315,9 +315,9 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
       }
     }
 
-    if (name === 'isTerms' && !value) {
-      return "You must agree to the Terms & Conditions";
-    }
+    // if (name === 'isTerms' && !value) {
+    //   return "You must agree to the Terms & Conditions";
+    // }
 
     // Required field validation
     if (value === "" || value === null || value === undefined) {
@@ -483,7 +483,7 @@ if (name === 'wants_5g_sim' && has5GAddon && value === "") {
       // 'isCopilot', 'isSecurity', 'current_protection',
       'company_name',
       'contact_name', 'email', 'address', 'state', 'city', 'zip', 'desired_date',
-      'isTerms'
+      // 'isTerms'
     ];
 
     const newErrors: Record<string, string> = {};
@@ -592,7 +592,7 @@ addon_sim: has5GAddon,
       zip: formData.zip,
       desired_date: desiredDateTimestamp, // Now as timestamp
       notes: formData.notes || null,
-      isTerms: formData.isTerms,
+      // isTerms: formData.isTerms,
       order_date: orderDateTimestamp, // Now as timestamp
       order_month: orderDate.toLocaleString('default', { month: 'long' }),
       order_year: orderDate.getFullYear(),
@@ -1956,7 +1956,7 @@ addon_sim: has5GAddon,
                     </div>
                   </div>
 
-                  <div className="flex items-center mt-8">
+                  {/* <div className="flex items-center mt-8">
                     <input
                       name="isTerms"
                       type="checkbox"
@@ -1984,7 +1984,7 @@ addon_sim: has5GAddon,
                       <span className="capitalize">{errors.isTerms.split(' is')[0]}</span>
                       {errors.isTerms.includes(' is') ? ' is required' : ''}
                     </p>
-                  )}
+                  )} */}
                 </div>
               </div>
 
