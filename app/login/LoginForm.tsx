@@ -107,12 +107,14 @@ export default function LoginForm() {
 
         await handleSuccessfulLogin(newAuthData.user.id, trimmedEmail, startTime, true);
 
-      } catch {
-        toast.error("Authentication service unavailable");
+      } catch (innerErr: any) {
+        console.error("Inner auth error:", innerErr);
+        toast.error(`Authentication service unavailable: ${innerErr.message || String(innerErr)}`);
         setLoading(false);
       }
-    } catch {
-      toast.error("Authentication error. Please try again.");
+    } catch (err: any) {
+      console.error("Outer auth error:", err);
+      toast.error(`Authentication error: ${err.message || String(err)}. Please try again.`);
       setLoading(false);
     }
   };
