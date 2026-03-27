@@ -153,7 +153,7 @@ export default function UpdatePasswordForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full rounded-md bg-[#1570EF] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#41abd6] disabled:opacity-50"
+              className="w-full rounded-md bg-[#1570EF] px-6 py-3 cursor-pointer font-semibold text-white hover:bg-[#1660a0] disabled:opacity-50"
             >
               {loading ? "Updating..." : "Update Password"}
             </button>
