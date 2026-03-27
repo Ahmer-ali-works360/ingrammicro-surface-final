@@ -108,7 +108,7 @@ export default function UpdatePasswordForm() {
       <div className="relative flex items-center justify-center min-h-screen px-3 lg:px-8">
         <div className="w-full max-w-md rounded-2xl border-8 border-gray-100 bg-white px-6 py-14 sm:px-10">
           <div className="text-center mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">
+            <h1 className="text-2xl sm:text-3xl font-medium text-gray-800">
               Set New Password
             </h1>
             <p className="text-gray-600 mt-2">

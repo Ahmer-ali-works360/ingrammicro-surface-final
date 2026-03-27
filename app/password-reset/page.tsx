@@ -124,7 +124,7 @@ export default function Page() {
 
                     {/* Heading */}
                     <div className="text-center mb-8">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+                        <h1 className="text-2xl sm:text-3xl font-medium text-gray-900 mb-2">
                             Reset Password
                         </h1>
                         <p className="text-gray-500 text-sm">

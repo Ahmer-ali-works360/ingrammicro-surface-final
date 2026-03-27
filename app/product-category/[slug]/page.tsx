@@ -130,7 +130,17 @@ const FiltersSidebarSkeleton = () => (
     </div>
 );
 
+import React, { Suspense } from 'react';
+
 export default function Page() {
+    return (
+        <Suspense fallback={<ProductsGridSkeleton />}>
+            <ProductCategoryContent />
+        </Suspense>
+    );
+}
+
+function ProductCategoryContent() {
     const router = useRouter();
     const { profile, isLoggedIn, loading, user } = useAuth();
     const admin = process.env.NEXT_PUBLIC_ADMINISTRATOR;

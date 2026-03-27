@@ -75,6 +75,14 @@ export type User = {
 }
 
 export default function Page() {
+    return (
+        <React.Suspense fallback={<div>Loading...</div>}>
+            <PendingUsersContent />
+        </React.Suspense>
+    );
+}
+
+function PendingUsersContent() {
     const router = useRouter();
     const { profile, isLoggedIn, loading } = useAuth();
     const [users, setUsers] = useState<User[]>([]);

@@ -33,60 +33,74 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const currentUserId = useRef<string | null>(null); // ✅ Track current user ID
 
     const fetchProfile = async (authUser: User | null) => {
-        if (!authUser) {
-            setProfile(null);
-            setIsLoggedIn(false);
-            currentUserId.current = null;
-            return;
-        }
+        try {
+            if (!authUser) {
+                setProfile(null);
+                setIsLoggedIn(false);
+                currentUserId.current = null;
+                return;
+            }
 
-        // ✅ Same user hai toh dobara fetch mat karo
-        if (currentUserId.current === authUser.id) {
-            return;
-        }
+            // ✅ Same user hai toh dobara fetch mat karo
+            if (currentUserId.current === authUser.id) {
+                return;
+            }
 
-        // Pehle userId se try karo (normal users ke liye fast)
-        const { data, error } = await supabase
-            .from("users")
-            .select("*")
-            .eq("userId", authUser.id)
-            .eq("isVerified", true)
-            .single();
+            // Pehle userId se try karo (normal users ke liye fast)
+            const { data, error } = await supabase
+                .from("users")
+                .select("*")
+                .eq("userId", authUser.id)
+                .eq("isVerified", true)
+                .single();
 
-        if (!error && data) {
-            setProfile(data);
-            setIsLoggedIn(true);
-            currentUserId.current = authUser.id; // ✅ Save current user ID
-            return;
-        }
+            if (!error && data) {
+                setProfile(data);
+                setIsLoggedIn(true);
+                currentUserId.current = authUser.id; // ✅ Save current user ID
+                return;
+            }
 
-        // Agar nahi mila toh migrate user ho sakta hai - email se try karo
-        const { data: existingUser } = await supabase
-            .from("users")
-            .select("*")
-            .eq("email", authUser.email)
-            .single();
+            if (!authUser.email) {
+                setProfile(null);
+                setIsLoggedIn(false);
+                currentUserId.current = null;
+                return;
+            }
 
-        if (existingUser?.userId == null) {
-            await supabase
-                .from('users')
-                .update({ userId: authUser?.id, password: null })
-                .eq('email', authUser.email);
-        }
+            // Agar nahi mila toh migrate user ho sakta hai - email se try karo
+            const { data: existingUser } = await supabase
+                .from("users")
+                .select("*")
+                .eq("email", authUser.email)
+                .single();
 
-        // Update ke baad dobara fetch
-        const { data: updatedUser, error: updatedError } = await supabase
-            .from("users")
-            .select("*")
-            .eq("userId", authUser.id)
-            .eq("isVerified", true)
-            .single();
+            if (existingUser?.userId == null) {
+                await supabase
+                    .from('users')
+                    .update({ userId: authUser?.id, password: null })
+                    .eq('email', authUser.email);
+            }
 
-        if (!updatedError && updatedUser) {
-            setProfile(updatedUser);
-            setIsLoggedIn(true);
-            currentUserId.current = authUser.id; // ✅ Save current user ID
-        } else {
+            // Update ke baad dobara fetch
+            const { data: updatedUser, error: updatedError } = await supabase
+                .from("users")
+                .select("*")
+                .eq("userId", authUser.id)
+                .eq("isVerified", true)
+                .single();
+
+            if (!updatedError && updatedUser) {
+                setProfile(updatedUser);
+                setIsLoggedIn(true);
+                currentUserId.current = authUser.id; // ✅ Save current user ID
+            } else {
+                setProfile(null);
+                setIsLoggedIn(false);
+                currentUserId.current = null;
+            }
+        } catch (err) {
+            console.error("Error fetching profile:", err);
             setProfile(null);
             setIsLoggedIn(false);
             currentUserId.current = null;
@@ -96,37 +110,44 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         const loadUser = async () => {
             setLoading(true);
+            try {
+                const { data } = await supabase.auth.getSession();
+                const authUser = data.session?.user ?? null;
+                setUser(authUser);
 
-            const { data } = await supabase.auth.getSession();
-            const authUser = data.session?.user ?? null;
-            setUser(authUser);
-
-            if (authUser) {
-                await fetchProfile(authUser);
-            } else {
-                setIsLoggedIn(false);
-                setProfile(null);
+                if (authUser) {
+                    await fetchProfile(authUser);
+                } else {
+                    setIsLoggedIn(false);
+                    setProfile(null);
+                }
+            } finally {
+                setLoading(false);
             }
-
-            setLoading(false);
         };
 
         loadUser();
 
         const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
-            setLoading(true); // ✅ Tab switch par loading true karo
-
             const authUser = session?.user ?? null;
-            setUser(authUser);
-
-            if (authUser) {
-                await fetchProfile(authUser);
-            } else {
-                setIsLoggedIn(false);
-                setProfile(null);
+            
+            // Only show full loading screen if user is actually changing so it won't flicker unnecessarily
+            if (currentUserId.current !== authUser?.id) {
+                setLoading(true); // ✅ Tab switch par loading true karo
             }
 
-            setLoading(false);
+            try {
+                setUser(authUser);
+
+                if (authUser) {
+                    await fetchProfile(authUser);
+                } else {
+                    setIsLoggedIn(false);
+                    setProfile(null);
+                }
+            } finally {
+                setLoading(false);
+            }
         });
 
         return () => subscription?.unsubscribe();
