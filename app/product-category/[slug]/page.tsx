@@ -130,17 +130,7 @@ const FiltersSidebarSkeleton = () => (
     </div>
 );
 
-import React, { Suspense } from 'react';
-
 export default function Page() {
-    return (
-        <Suspense fallback={<ProductsGridSkeleton />}>
-            <ProductCategoryContent />
-        </Suspense>
-    );
-}
-
-function ProductCategoryContent() {
     const router = useRouter();
     const { profile, isLoggedIn, loading, user } = useAuth();
     const admin = process.env.NEXT_PUBLIC_ADMINISTRATOR;
@@ -561,40 +551,40 @@ function ProductCategoryContent() {
 
             let productsData: Product[] = [];
 
-if (slug && slug !== "alldevices") {
-    const hasUrlFilters = [...searchParams.keys()]
-        .some(k => k !== 'q' && k !== 'page' && k !== '_');
+            if (slug && slug !== "alldevices") {
+                const hasUrlFilters = [...searchParams.keys()]
+                    .some(k => k !== 'q' && k !== 'page' && k !== '_');
 
-    // Slug to form_factor mapping
-    const slugToFormFactor: Record<string, string> = {
-'laptops': 'Laptops',
-'2in1': '2in1',
-    };
+                // Slug to form_factor mapping
+                const slugToFormFactor: Record<string, string> = {
+                    'laptops': 'Laptops',
+                    '2in1': '2in1',
+                };
 
-    let query = supabase
-        .from("products")
-        .select("*")
-        .order("date", { ascending: false });
+                let query = supabase
+                    .from("products")
+                    .select("*")
+                    .order("date", { ascending: false });
 
-    if (hasUrlFilters) {
-        // URL filters apply karo
-        searchParams.forEach((value, key) => {
-            if (key === 'q' || key === 'page' || key === '_') return;
-            const dbColumn = URL_TO_DB_MAPPING[key];
-            if (dbColumn) {
-                const values = value.split(',').map(v => v.trim());
-                if (values.length === 1) query = query.eq(dbColumn, values[0]);
-                else if (values.length > 1) query = query.in(dbColumn, values);
-            }
-        });
-    } else if (slugToFormFactor[slug]) {
-        // Slug se form_factor filter karo
-        query = query.eq('form_factor', slugToFormFactor[slug]);
-    }
+                if (hasUrlFilters) {
+                    // URL filters apply karo
+                    searchParams.forEach((value, key) => {
+                        if (key === 'q' || key === 'page' || key === '_') return;
+                        const dbColumn = URL_TO_DB_MAPPING[key];
+                        if (dbColumn) {
+                            const values = value.split(',').map(v => v.trim());
+                            if (values.length === 1) query = query.eq(dbColumn, values[0]);
+                            else if (values.length > 1) query = query.in(dbColumn, values);
+                        }
+                    });
+                } else if (slugToFormFactor[slug]) {
+                    // Slug se form_factor filter karo
+                    query = query.eq('form_factor', slugToFormFactor[slug]);
+                }
 
-    const { data, error } = await query;
-    productsData = error ? [] : (data || []);
-} else {
+                const { data, error } = await query;
+                productsData = error ? [] : (data || []);
+            } else {
                 let query = supabase
                     .from("products")
                     .select("*")
@@ -657,16 +647,16 @@ if (slug && slug !== "alldevices") {
             updateFilterOptions(productsData);
 
             const urlFilters = getFiltersFromURL();
-setFilters(prev => ({
-    formFactor: [],
-    processor: [],
-    screenSize: [],
-    memory: [],
-    storage: [],
-    copilotPC: [],
-    fiveGEnabled: [],
-    ...urlFilters  // URL filters override karen
-}));
+            setFilters(prev => ({
+                formFactor: [],
+                processor: [],
+                screenSize: [],
+                memory: [],
+                storage: [],
+                copilotPC: [],
+                fiveGEnabled: [],
+                ...urlFilters  // URL filters override karen
+            }));
 
             const allFilterKeys = [
                 'formFactor',
@@ -707,29 +697,29 @@ setFilters(prev => ({
     };
 
     useEffect(() => {
-    if (products.length === 0) return;
+        if (products.length === 0) return;
 
-    const extractFiltered = (productsList: Product[], key: keyof Product): string[] => {
-        const values = productsList
-            .map(p => p[key])
-            .filter(v => v !== null && v !== undefined && v !== '' &&
-                (typeof v === 'string' ? v.trim() !== '' : true));
-        return [...new Set(values.map(v => String(v)))].sort();
-    };
+        const extractFiltered = (productsList: Product[], key: keyof Product): string[] => {
+            const values = productsList
+                .map(p => p[key])
+                .filter(v => v !== null && v !== undefined && v !== '' &&
+                    (typeof v === 'string' ? v.trim() !== '' : true));
+            return [...new Set(values.map(v => String(v)))].sort();
+        };
 
-    const baseProducts = filters.formFactor.length > 0
-        ? products.filter(p => filters.formFactor.includes(p.form_factor))
-        : products;
+        const baseProducts = filters.formFactor.length > 0
+            ? products.filter(p => filters.formFactor.includes(p.form_factor))
+            : products;
 
-    setFilterOptions({
-        formFactor: extractFiltered(products, 'form_factor'),
-        processor: extractFiltered(baseProducts, 'processor'),
-        memory: extractFiltered(baseProducts, 'memory'),
-        storage: extractFiltered(baseProducts, 'storage'),
-        screenSize: extractFiltered(baseProducts, 'screen_size'),
-    });
+        setFilterOptions({
+            formFactor: extractFiltered(products, 'form_factor'),
+            processor: extractFiltered(baseProducts, 'processor'),
+            memory: extractFiltered(baseProducts, 'memory'),
+            storage: extractFiltered(baseProducts, 'storage'),
+            screenSize: extractFiltered(baseProducts, 'screen_size'),
+        });
 
-}, [filters.formFactor, products]);
+    }, [filters.formFactor, products]);
 
     // Filter products based on selected filters (client-side)
     const filteredProducts = products.filter(product => {
@@ -984,7 +974,7 @@ setFilters(prev => ({
                                 {/* {!searchParams.has('form_factor') && (
                                     <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
                                 )} */}
-                                <DatabaseFilterSection filterKey="formFactor" title="Form Factor" /> 
+                                <DatabaseFilterSection filterKey="formFactor" title="Form Factor" />
                                 <DatabaseFilterSection filterKey="processor" title="Processor" />
                                 <DatabaseFilterSection filterKey="screenSize" title="Screen Size" />
                                 <DatabaseFilterSection filterKey="memory" title="Memory" />
@@ -1023,7 +1013,7 @@ setFilters(prev => ({
                                             </span>
                                         </div>
                                      </div> */}
-                                        {/* {(admin === profile?.role || shopManager === profile?.role) && (
+                                    {/* {(admin === profile?.role || shopManager === profile?.role) && (
                                             <div className="">
                                                 <div className="flex justify-center md:justify-start">
                                                     <Link
@@ -1036,7 +1026,7 @@ setFilters(prev => ({
                                                 </div>
                                             </div>
                                         )} */}
-                                   
+
                                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-10">
                                         {filteredProducts.map(product => {
                                             if (product.post_status !== "Publish") {
@@ -1196,16 +1186,16 @@ setFilters(prev => ({
             {isLoggedIn && (
                 <Drawer
                     title={
-              <div className="flex items-center space-x-2">
-                  {/* <PiShoppingCartThin className="text-[#1570EF]" size={20} /> */}
-                  <span className="text-lg font-semibold">Your Cart</span>
-                  {/* {cartCount > 0 && (
+                        <div className="flex items-center space-x-2">
+                            {/* <PiShoppingCartThin className="text-[#1570EF]" size={20} /> */}
+                            <span className="text-lg font-semibold">Your Cart</span>
+                            {/* {cartCount > 0 && (
                       <span className="bg-[#1570EF] text-white text-xs px-2 py-1 rounded-full">
                           {cartCount} {cartCount === 1 ? 'item' : 'items'}
                       </span>
                   )} */}
-              </div>
-          }
+                        </div>
+                    }
                     placement="right"
                     onClose={() => setShowCartDrawer(false)}
                     open={showCartDrawer}
@@ -1309,17 +1299,17 @@ setFilters(prev => ({
                                         </div>
                                     )}
                                      */}
-                                     <button
+                                    <button
                                         onClick={handleCart}
                                         className="w-full py-2.5 border-2 cursor-pointer border-[#1570EF] text-[#1570EF] font-medium hover:bg-gray-50 transition-colors rounded-md"
                                     >
                                         View Cart
                                     </button>
                                     <button
-    onClick={handleCheckout}
-    disabled={cartUpdating}
-    className="w-full py-3 cursor-pointer bg-[#1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
->
+                                        onClick={handleCheckout}
+                                        disabled={cartUpdating}
+                                        className="w-full py-3 cursor-pointer bg-[#1570EF] text-white font-medium hover:bg-[#1660a0] transition-colors rounded-md disabled:opacity-50 disabled:cursor-not-allowed"
+                                    >
                                         {cartUpdating ? 'Processing...' : 'Proceed to Checkout'}
                                     </button>
                                 </div>

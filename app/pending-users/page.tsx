@@ -75,14 +75,6 @@ export type User = {
 }
 
 export default function Page() {
-    return (
-        <React.Suspense fallback={<div>Loading...</div>}>
-            <PendingUsersContent />
-        </React.Suspense>
-    );
-}
-
-function PendingUsersContent() {
     const router = useRouter();
     const { profile, isLoggedIn, loading } = useAuth();
     const [users, setUsers] = useState<User[]>([]);
@@ -242,57 +234,57 @@ function PendingUsersContent() {
     };
 
 
-const handleVerifyUser = async (userId: string, email: string) => {
-    if (approvingId === userId) return; // ✅ double click guard
-    setApprovingId(userId);
-    const startTime = Date.now();
-    try {
-        const { error } = await supabase
-            .from('users')
-            .update({ isVerified: true })
-            .eq('id', userId);
+    const handleVerifyUser = async (userId: string, email: string) => {
+        if (approvingId === userId) return; // ✅ double click guard
+        setApprovingId(userId);
+        const startTime = Date.now();
+        try {
+            const { error } = await supabase
+                .from('users')
+                .update({ isVerified: true })
+                .eq('id', userId);
 
-        if (error) throw error;
+            if (error) throw error;
 
-        const executionTime = Date.now() - startTime;
-        logSuccess(
-            'user',
-            'user_approved',
-            `User approved: ${email}`,
-            {
-                userId,
-                email,
-                executionTime,
-                approvedBy: profile?.email
-            },
-            profile?.id,
-            source
-        );
+            const executionTime = Date.now() - startTime;
+            logSuccess(
+                'user',
+                'user_approved',
+                `User approved: ${email}`,
+                {
+                    userId,
+                    email,
+                    executionTime,
+                    approvedBy: profile?.email
+                },
+                profile?.id,
+                source
+            );
 
-        await sendApprovedEmail(email);
-        toast.success("User approved successfully!");
-        await fetchUsers();
-    } catch (error: any) {
-        const executionTime = Date.now() - startTime;
-        setError('Failed to approve user');
-        logError(
-            'db',
-            'user_approval_failed',
-            `Failed to approve user ${email}`,
-            {
-                error: error.message,
-                userId,
-                email,
-                executionTime
-            },
-            profile?.id,
-            source
-        );
-        toast.error("Failed to approve user");
-    } finally {
-        setApprovingId(null); // ✅ reset
-    }
-};
+            await sendApprovedEmail(email);
+            toast.success("User approved successfully!");
+            await fetchUsers();
+        } catch (error: any) {
+            const executionTime = Date.now() - startTime;
+            setError('Failed to approve user');
+            logError(
+                'db',
+                'user_approval_failed',
+                `Failed to approve user ${email}`,
+                {
+                    error: error.message,
+                    userId,
+                    email,
+                    executionTime
+                },
+                profile?.id,
+                source
+            );
+            toast.error("Failed to approve user");
+        } finally {
+            setApprovingId(null); // ✅ reset
+        }
+    };
 
     // Update useEffect to depend on searchParams
     useEffect(() => {
@@ -473,7 +465,7 @@ const handleVerifyUser = async (userId: string, email: string) => {
             cell: ({ row }) => <div className="text-left ps-2">{row.getValue("name")}</div>,
         },
 
-        
+
         // Email column
         {
             accessorKey: "email",
@@ -775,7 +767,7 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     </h1>
                 </div>
                 {/* <div className="flex gap-2"> */}
-                    {/* <Button
+                {/* <Button
                         variant="outline"
                         onClick={handleRefresh}
                         disabled={isLoading}
@@ -783,7 +775,7 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     >
                         {isLoading ? "Refreshing..." : "Refresh"}
                     </Button> */}
-                    {/* <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
+                {/* <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer">
                         <TbFileTypeCsv />
                         Export CSV
                     </Button> */}
@@ -852,19 +844,19 @@ const handleVerifyUser = async (userId: string, email: string) => {
                     </div> */}
 
                     <div className="flex items-center gap-2">
-    <Input
-        placeholder="Search..."
-        value={globalFilter ?? ""}
-        onChange={(event) => {
-            setGlobalFilter(event.target.value);
-        }}
-        className="pl-8"
-    />
-    <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer border border-[#9CA3AF] ">
-        <TbFileTypeCsv />
-        Export CSV
-    </Button>
-</div>
+                        <Input
+                            placeholder="Search..."
+                            value={globalFilter ?? ""}
+                            onChange={(event) => {
+                                setGlobalFilter(event.target.value);
+                            }}
+                            className="pl-8"
+                        />
+                        <Button onClick={handleExportCSV} className="bg-[#E5E7EB] hover:bg-[#9CA3AF] text-black cursor-pointer border border-[#9CA3AF] ">
+                            <TbFileTypeCsv />
+                            Export CSV
+                        </Button>
+                    </div>
                 </div>
                 <div className="overflow-hidden rounded-md border">
                     <Table>
