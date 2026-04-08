@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import ToasterClient from "./components/ToasterClient";
 import { AuthProvider } from "./context/AuthContext";
 import { CartProvider } from "./context/CartContext";
+import Script from "next/script"; 
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +40,13 @@ export default function RootLayout({
             <Footer />
           </CartProvider>
         </AuthProvider>
+
+          <Script
+          id="tawkto"
+          src="https://embed.tawk.to/646260b0ad80445890ed1274/1h0g4jd2n"
+          strategy="lazyOnload"
+        />
+
       </body>
     </html>
   );
